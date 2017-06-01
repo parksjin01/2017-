@@ -1,0 +1,17 @@
+<html>
+<head>
+	<title>Testing site</title>
+</head>
+<body>
+	{{ video|safe }}
+	{% if form != None %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form|safe }}
+	</form>
+	{% endif %}
+	{% if score != None %}
+		<p>Your score is {{ score }}%</p>
+	{% endif %}
+</body>
+</html>

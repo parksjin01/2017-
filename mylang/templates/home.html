@@ -1,0 +1,31 @@
+<html>
+<head>
+	<title>Test Page</title>
+	<script>
+		function go(urls){
+			var node = document.createElement("input");
+			node.value = urls;
+			document.getElementById("home_form").appendChild(node);
+		}
+	</script>
+</head>
+<body>
+	<a href="/video/">Video</a>
+	<a href="/read/">Read</a>
+	<a href="/login/">Login</a>
+	<a href="/register/">Register</a>
+<div>
+<form id="home_form" method="POST" action="">
+	<table>
+		<tr>
+		{% csrf_token %}
+		{% if recommand is not None %}
+		{% for recommandation in recommand %}
+			{{ recommandation|safe }}
+		{% endfor %}
+		{% endif %}
+		</tr>
+	</table>
+</form>
+</body>
+</html>
