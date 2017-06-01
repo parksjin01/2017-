@@ -1,2 +1,0 @@
-PicoCTF2013 ROP3 --> aslr
-PicoCTF2013 overflow4 --> aslr
