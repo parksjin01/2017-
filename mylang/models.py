@@ -11,17 +11,24 @@ class youtube(models.Model):
 	caption=models.TextField()
 	title=models.CharField(max_length=255, default="Nop!")
 	date=models.DateTimeField(auto_now=True)
-	category = models.CharField(max_length=10, default="1")
+	description = models.TextField(default='')
 
 class history(models.Model):
 	cur = models.URLField(default='')
 	recommand = models.TextField(default='')
+	cur_user = models.TextField(default='')
 
 class tmp_answer(models.Model):
 	answer = models.TextField(default='')
-	cur_date = models.TextField(default='')
+	cur_date = models.IntegerField(default=0)
+	cur_user = models.TextField(default='')
 
 class user_info(models.Model):
 	user_id = models.TextField(default='')
 	user_pw = models.TextField(default='')
 	user_email = models.TextField(default='')
+	level = models.TextField(default='')
+
+class voca(models.Model):
+	foreign = models.TextField(default='')
+	korean = models.TextField(default='')

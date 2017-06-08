@@ -8,3 +8,5 @@ from .models import *
 admin.site.register(youtube)
 admin.site.register(history)
 admin.site.register(tmp_answer)
+admin.site.register(user_info)
+admin.site.register(voca)

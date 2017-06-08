@@ -10,22 +10,19 @@ import BeautifulSoup
 import hashlib
 from pyvirtualdisplay import Display
 import urllib2
+import json
 
 def title(url):
     id = url.split('?v=')[1]
-    html = urllib2.urlopen('https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&key=AIzaSyBf5cfsWLkaCmGPr4jtmyzeX2W0uSmvO1s' %id)
-    html = html.read().split('\n')
-    res = {}
+    html = urllib2.urlopen('https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&key=AIzaSyBf5cfsWLkaCmGPr4jtmyzeX2W0uSmvO1s' %id).read()
+    html = html.split('\n')
+    new_html = []
     for sentence in html:
-        if 'title' in sentence:
-            k, v = sentence.strip(' ').split(': ')[0], sentence.strip(' ').split(': ')[1:]
-            res[k.strip('"')] = (': '.join(v)).strip('",').strip('"')
-        elif 'category' in sentence:
-            k, v = sentence.strip(' ').split(': ')[0], sentence.strip(' ').split(': ')[1:]
-            res[k.strip('"')] = (': '.join(v)).strip('",').strip('"')
-            break
+        if "etag" not in sentence:
+            new_html.append(sentence)
+    html = json.loads('\n'.join(new_html))
+    return [html['items'][0]['snippet']['title'], html['items'][0]['snippet']['description']]
 
-    return res
 
 def url_decode(url):
     i = 0
