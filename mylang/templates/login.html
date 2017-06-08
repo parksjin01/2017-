@@ -4,11 +4,13 @@
 </head>
 <body>
 	<form method="POST" action="">
+	{% csrf_token %}
 	<table>
-	<tr><td>Id: </td><td><input type="text" width=20 id="user_id"></td></tr>
-	<tr><td>Password: </td><td><input type="password" width=20 id="user_pw"></td></tr>
+	<tr><td>Id: </td><td><input type="text" width=20 name="user_id"></td></tr>
+	<tr><td>Password: </td><td><input type="password" width=20 name="user_pw"></td></tr>
 	</table>
 	<button type=submit>Login</button>
+	<button type=button><a href="/find-id/">Find ID/PW</a></button>
 	</form>
 </body>
 </html>

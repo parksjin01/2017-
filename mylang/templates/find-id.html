@@ -1,10 +1,9 @@
 <html>
 <head>
-    <title>Example register page</title>
-    <script src="https://smtpjs.com/smtp.js">
+    <title>Example Id Find</title>
+<script src="https://smtpjs.com/smtp.js">
     </script>
     <script>
-
         function makeid()
         {
             var text = "";
@@ -19,7 +18,8 @@
         var key = makeid();
 
         function go(){
-	    var email = document.getElementById('user_email').value;
+            var email = document.getElementById('user_email').value;
+	    alert(email);
             Email.send("parksjin01@naver.com",
                 email,
                 "This is your confirmation key",
@@ -47,16 +47,14 @@
     </script>
 </head>
 <body>
-<form method=POST action="" id="myform">
-{% csrf_token %}
+<form action="" method="POST" id="myform">
+    {% csrf_token %}
+    <p>We will send your temporary id and password after email confirmation. I recommand you to change id and password</p>
     <table>
-        <tr><td>ID: </td><td><input type="text" width=20 name="user_id" id="user_id"></td></tr>
-        <tr><td>PW: </td><td><input type="password" width=20 name="user_pw" id="user_pw"></td></tr>
-        <tr><td>E-mail: </td><td><input type="email" width=20 name="user_email" id="user_email"></td><td><input type=button onclick="go()" value="Confirm"/></td></tr>
-        <tr><td>Confirm: </td><td><input type="text" width=20 id="user_confirm"></td></tr>
+        <tr><td>Email: </td><td><input type="text" width="20" name="user_email" id="user_email"></td><td><button type="button" onclick="go()">Confirm</button></td></tr>
+        <tr><td>Confirm number: </td><td><input type="text" width="20" id="user_confirm"></td></tr>
     </table>
-    <button type="button" onclick="check()">Register</button>
+    <button type="button" onclick="check()">Find</button>
 </form>
 </body>
 </html>
-
