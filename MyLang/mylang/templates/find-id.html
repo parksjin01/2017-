@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Example Id Find</title>
+<script src="https://smtpjs.com/smtp.js">
+    </script>
+    <script>
+        function makeid()
+        {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 10; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
+        var key = makeid();
+
+        function go(){
+            var email = document.getElementById('user_email').value;
+	    alert(email);
+            Email.send("parksjin01@naver.com",
+                email,
+                "This is your confirmation key",
+                key,
+                "smtp.naver.com",
+                "parksjin01",
+                "FXqy9k]Abj");
+        }
+
+        function check(){
+            var user_key = document.getElementById('user_confirm').value;
+            if (key != user_key)
+            {
+                alert(key+'\n'+user_key);
+                document.getElementById('user_confirm').textContent = '';
+                alert('Your confirmation number is incorrect');
+            }
+            else
+            {
+                document.getElementById('myform').submit();
+            }
+
+        }
+
+    </script>
+</head>
+<body>
+<form action="" method="POST" id="myform">
+    {% csrf_token %}
+    <p>We will send your temporary id and password after email confirmation. I recommand you to change id and password</p>
+    <table>
+        <tr><td>Email: </td><td><input type="text" width="20" name="user_email" id="user_email"></td><td><button type="button" onclick="go()">Confirm</button></td></tr>
+        <tr><td>Confirm number: </td><td><input type="text" width="20" id="user_confirm"></td></tr>
+    </table>
+    <button type="button" onclick="check()">Find</button>
+</form>
+</body>
+</html>

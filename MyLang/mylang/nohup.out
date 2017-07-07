@@ -1,0 +1,123 @@
+Invalid HTTP_HOST header: 'www.baidu.com'. You may need to add u'www.baidu.com' to ALLOWED_HOSTS.
+[08/Jun/2017 01:35:14] "GET http://www.baidu.com/cache/global/img/gs.gif HTTP/1.1" 400 60338
+[08/Jun/2017 01:46:45] code 400, message Bad request version ('MCTP/1.0')
+[08/Jun/2017 01:46:45] "REMOTE HI_SRDK_DEV_GetHddInfo MCTP/1.0" 400 -
+Invalid HTTP_HOST header: 'www.baidu.com'. You may need to add u'www.baidu.com' to ALLOWED_HOSTS.
+[08/Jun/2017 01:47:54] "GET http://www.baidu.com/cache/global/img/gs.gif HTTP/1.1" 400 60338
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 86, in run
+    self.finish_response()
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 128, in finish_response
+    self.write(data)
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 217, in write
+    self._write(data)
+  File "/usr/lib/python2.7/socket.py", line 328, in write
+    self.flush()
+  File "/usr/lib/python2.7/socket.py", line 307, in flush
+    self._sock.sendall(view[write_offset:write_offset+buffer_size])
+error: [Errno 104] Connection reset by peer
+[08/Jun/2017 01:47:54] "GET http://www.baidu.com/cache/global/img/gs.gif HTTP/1.1" 500 59
+[2017-06-08 01:47:54,295] - Broken pipe from ('93.174.93.136', 54204)
+
+Invalid HTTP_HOST header: 'www.baidu.com'. You may need to add u'www.baidu.com' to ALLOWED_HOSTS.
+[08/Jun/2017 02:10:33] "GET http://www.baidu.com/cache/global/img/gs.gif HTTP/1.1" 400 60338
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 86, in run
+    self.finish_response()
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 128, in finish_response
+    self.write(data)
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 217, in write
+    self._write(data)
+  File "/usr/lib/python2.7/socket.py", line 328, in write
+    self.flush()
+  File "/usr/lib/python2.7/socket.py", line 307, in flush
+    self._sock.sendall(view[write_offset:write_offset+buffer_size])
+error: [Errno 104] Connection reset by peer
+[08/Jun/2017 02:10:33] "GET http://www.baidu.com/cache/global/img/gs.gif HTTP/1.1" 500 59
+[2017-06-08 02:10:33,572] - Broken pipe from ('93.174.93.136', 58861)
+
+[08/Jun/2017 02:19:41] "GET /test/ HTTP/1.1" 200 2262
+Invalid HTTP_HOST header: '118.36.9.247:8080'. You may need to add u'118.36.9.247' to ALLOWED_HOSTS.
+[08/Jun/2017 06:05:39] "GET / HTTP/1.1" 400 60004
+[2017-06-08 06:05:39,804] - Broken pipe from ('139.162.79.87', 52820)
+
+Performing system checks...
+
+System check identified no issues (0 silenced).
+June 08, 2017 - 01:10:31
+Django version 1.11.1, using settings 'MyLang.settings'
+Starting development server at http://192.168.0.2:8888/
+Quit the server with CONTROL-C.
+1000
+2000
+3000
+4000
+5000
+6000
+7000
+8000
+9000
+10000
+11000
+12000
+13000
+14000
+15000
+16000
+17000
+18000
+19000
+20000
+21000
+22000
+23000
+24000
+25000
+26000
+27000
+28000
+29000
+30000
+31000
+32000
+33000
+34000
+35000
+36000
+37000
+38000
+39000
+40000
+Unhandled exception in thread started by <function wrapper at 0x7fe0eac73500>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 227, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 125, in inner_run
+    self.check(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 359, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 346, in _run_checks
+    return checks.run_checks(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 81, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/urls.py", line 16, in check_url_config
+    return check_resolver(resolver)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/urls.py", line 26, in check_resolver
+    return check_method()
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 254, in check
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 405, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/knight/MyLang/MyLang/urls.py", line 33, in <module>
+    url(r'^vocabulary/$', vocabulary, name='vocabulary'),
+NameError: name 'vocabulary' is not defined

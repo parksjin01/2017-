@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title>Test Page</title>
+</head>
+<body>
+	<form method=POST action="">
+		{% csrf_token %}
+		<input type=text placeholder="Type url" name=url>
+		<button type=submit>Submit</button>
+	</form>
+</body>
+</html>

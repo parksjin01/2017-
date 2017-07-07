@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Example Id Change</title>
+    <script>
+        function youtube(){
+            window.location.href = window.location.href.split("&e=0")[0]+"&e=1";
+        }
+    </script>
+</head>
+<body>
+<form action="" method="GET" id="myform">
+    
+    <div border=1 >
+	{% if db %}
+	{% for d in db %}
+	<a href={{ d.0 }}>
+		<table>
+		<tr><td rowspan=2><img src={{ d.2 }} width=240 height=160/></td><td>{{ d.1 }}</td></tr>
+		</table>
+	</a>
+	{% endfor %}
+	{% endif %}
+    </div>
+    <div id="extansion">
+        This is all result in our DB, Do you want to search it at google?
+        <button type="button" onclick="youtube()">Search</button>
+    </div>
+    {% if video %}
+    {% for v in video %}
+    <a href={{ v.0 }}>
+    <div>
+        <table>
+            <tr><td rowspan=2><img src={{ v.3 }} width=240 height=160/></td><td>{{ v.1 }}</td></tr>
+            <tr><td>{{ v.2 }}</td></tr>
+        </table>
+    </div>
+    </a>
+    {% endfor %}
+    {% endif %}
+    <script>
+        if (window.location.href.includes('&e=1')){
+            document.getElementById("myform").removeChild(document.getElementById("extansion"));
+        }
+    </script>
+</form>
+</body>
+</html>
+
