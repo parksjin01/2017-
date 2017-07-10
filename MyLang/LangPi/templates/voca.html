@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-<style>
-.tooltip {
+<script>
+	node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+
+        node4.className += " active";
+</script>
+<style xmlns="http://www.w3.org/1999/html">
+.updown {
     position: relative;
     display: inline-block;
 }
 
-.tooltip .tooltiptext {
+.updown .updowntext {
     visibility: hidden;
-    width: 120px;
+    width: 150px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -20,63 +33,83 @@
     z-index: 1;
 }
 
-.tooltip:hover .tooltiptext {
+.updown:hover .updowntext {
     visibility: visible;
 }
 </style>
 {% if result %}
 <p>
-	<h1>당신의 단어시험점수는 {{ result }} 점입니다. </h1>
+	<h1 class="page-header">당신의 단어시험점수는 {{ result }} 점입니다. </h1>
 </p>
 {% for word, answer, user in whole %}
         <div>
                 <p> {{ word.0 }} 
-		<button type=button class="tooltip">UP
-		<span class="tooltiptext">If you press this button, word frequency will be higher</span>
+		<button type=button class="btn btn-default updown"><span class="glyphicon glyphicon-chevron-up"></span>
+		<span class="updowntext">If you press this button, word frequency will be higher</span>
 		</button>
-		<button type=button class="tooltip">DOWN
-		<span class="tooltiptext">***Warning***</br>If you press this button this word will never appear</span>
+		<button type=button class="btn btn-default updown"><span class="glyphicon glyphicon-chevron-down"></span>
+		<span class="updowntext">***Warning***</br>If you press this button this word will never appear</span>
 		</button> </br>
-		<!--{% if user == "1" %}-->
-                <!--<input type=radio value=1 checked="checked" name={{ word.0 }}>{{ word.1 }}<span class="label label-info">사용자 답</span> </br>-->
-		<!--{% elif answer == "1" %}-->
-		<!--<input type=radio value=1 disabled="disabled" name={{ word.0 }}>{{ word.1 }} </br>-->
-		<!--{% else %}-->
-		<!--<input type=radio value=1 disabled="disabled"  name={{ word.0 }}>{{ word.1 }} </br>-->
-		<!--{% endif %}-->
-		<!--{% if user == "2" %}-->
-                <!--<input type=radio value=2  checked="checked"  name={{ word.0 }}>{{ word.2 }} </br>-->
-		<!--{% elif answer == "2" %}-->
-                <!--<input type=radio value=2 disabled="disabled" name={{ word.0 }}>{{ word.2 }} </br>-->
-		<!--{% else %}-->
-		<!--<input type=radio value=2 disabled="disabled"   name={{ word.0 }}>{{ word.2 }} </br>-->
-		<!--{% endif %}-->
-		<!--{% if user == "3" %}-->
-                <!--<input type=radio value=3  checked="checked" name={{ word.0 }}>{{ word.3 }} </br>-->
-		<!--{% elif answer == "3" %}-->
-                <!--<input type=radio value=3 disabled="disabled" name={{ word.0 }}>{{ word.3 }} </br>-->
-		<!--{% else %}-->
-		<!--<input type=radio value=3 disabled="disabled"    name={{ word.0 }}>{{ word.3 }} </br>-->
-		<!--{% endif %}-->
-                <!--{% if word.4 %}-->
-		<!--{% if user == "4" %}-->
-                <!--<input type=radio value=4 checked="checked" name={{ word.0 }}>{{ word.4 }} </br>-->
-		<!--{% elif answer == "4" %}-->
-                <!--<input type=radio value=4 disabled="disabled" name={{ word.0 }}>{{ word.4 }} </br>-->
-		<!--{% else %}-->
-		<!--<input type=radio value=4 disabled="disabled"   name={{ word.0 }}>{{ word.4 }} </br>-->
-		<!--{% endif %}-->
-                <!--{% endif %}-->
-                <!--{% if word.5 %}-->
-		<!--{% if user == "5" %}-->
-                <!--<input type=radio value=5 checked="checked" name={{ word.0 }}>{{ word.5 }} </p>-->
-		<!--{% elif answer == "5" %}-->
-                <!--<input type=radio value=5 disabled="disabled" name={{ word.0 }}>{{ word.5 }} </br>-->
-		<!--{% else %}-->
-		<!--<input type=radio value=5 disabled="disabled"  name={{ word.0 }}>{{ word.5 }} </p>-->
-		<!--{% endif %}-->
-                <!--{% endif %}-->
-        <!--</div>-->
+					<label class="radio-inline">
+					{% if user == "1" and answer == "1" %}
+					<input type=radio value=1 checked="checked" name={{ word.0 }}>{{ word.1 }}<span class="label label-info">사용자 답</span><span class="label label-primary">정답</span> </br>
+		{% elif user == "1" %}
+                <input type=radio value=1 checked="checked" name={{ word.0 }}>{{ word.1 }}<span class="label label-info">사용자 답</span> </br>
+		{% elif answer == "1" %}
+		<input type=radio value=1 disabled="disabled" name={{ word.0 }}>{{ word.1 }}<span class="label label-primary">정답</span> </br>
+		{% else %}
+		<input type=radio value=1 disabled="disabled"  name={{ word.0 }}>{{ word.1 }} </br>
+		{% endif %}
+					</label>
+					<label class="radio-inline">
+					{% if user == "2" and answer == "2" %}
+					<input type=radio value=2 checked="checked" name={{ word.0 }}>{{ word.2 }}<span class="label label-info">사용자 답</span><span class="label label-primary">정답</span> </br>
+		{% elif user == "2" %}
+                <input type=radio value=2  checked="checked"  name={{ word.0 }}>{{ word.2 }}<span class="label label-info">사용자 답</span> </br>
+		{% elif answer == "2" %}
+                <input type=radio value=2 disabled="disabled" name={{ word.0 }}>{{ word.2 }}<span class="label label-primary">정답</span> </br>
+		{% else %}
+		<input type=radio value=2 disabled="disabled"   name={{ word.0 }}>{{ word.2 }} </br>
+		{% endif %}
+						</label>
+					<label class="radio-inline">
+					{% if user == "3" and answer == "3" %}
+					<input type=radio value=3 checked="checked" name={{ word.0 }}>{{ word.3 }}<span class="label label-info">사용자 답</span><span class="label label-primary">정답</span> </br>
+		{% elif user == "3" %}
+                <input type=radio value=3  checked="checked" name={{ word.0 }}>{{ word.3 }}<span class="label label-info">사용자 답</span> </br>
+		{% elif answer == "3" %}
+                <input type=radio value=3 disabled="disabled" name={{ word.0 }}>{{ word.3 }}<span class="label label-primary">정답</span> </br>
+		{% else %}
+		<input type=radio value=3 disabled="disabled"    name={{ word.0 }}>{{ word.3 }} </br>
+		{% endif %}
+						</label>
+                {% if word.4 %}
+					<label class="radio-inline">
+					{% if user == "4" and answer == "4" %}
+					<input type=radio value=4 checked="checked" name={{ word.0 }}>{{ word.4 }}<span class="label label-info">사용자 답</span><span class="label label-primary">정답</span> </br>
+		{% elif user == "4" %}
+                <input type=radio value=4 checked="checked" name={{ word.0 }}>{{ word.4 }}<span class="label label-info">사용자 답</span> </br>
+		{% elif answer == "4" %}
+                <input type=radio value=4 disabled="disabled" name={{ word.0 }}>{{ word.4 }}<span class="label label-primary">정답</span> </br>
+		{% else %}
+		<input type=radio value=4 disabled="disabled"   name={{ word.0 }}>{{ word.4 }} </br>
+		{% endif %}
+					</label>
+                {% endif %}
+                {% if word.5 %}
+					<label class="radio-inline">
+					{% if user == "5" and answer == "5" %}
+					<input type=radio value=5 checked="checked" name={{ word.0 }}>{{ word.5 }}<span class="label label-info">사용자 답</span><span class="label label-primary">정답</span> </br>
+		{% elif user == "5" %}
+                <input type=radio value=5 checked="checked" name={{ word.0 }}>{{ word.5 }}<span class="label label-info">사용자 답</span> </p>
+		{% elif answer == "5" %}
+                <input type=radio value=5 disabled="disabled" name={{ word.0 }}>{{ word.5 }}<span class="label label-primary">정답</span> </br>
+		{% else %}
+		<input type=radio value=5 disabled="disabled"  name={{ word.0 }}>{{ word.5 }} </p>
+			{% endif %}
+		</label>
+                {% endif %}
+        </div>
 {% endfor %}
 {% endif %}
 {% if test %}
@@ -110,7 +143,7 @@
 		</div>
 	</div>
 {% endfor %}
-<button type=submit>채점!!!</button>
+<button type=submit class="btn btn-info">채점!!!</button>
 </form>
 {% endif %}
 {% endblock %}

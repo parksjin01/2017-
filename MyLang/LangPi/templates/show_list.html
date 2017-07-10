@@ -28,6 +28,7 @@
         }
 </script>
 {% if video %}
+<h1 class="page-header">유튜브 비디오 리스트</h1>
 {% for v in video %}
 <a href={{ v.0 }} style="text-decoration:none">
         <!--<table>-->
@@ -54,4 +55,12 @@
 </a>
 {% endfor %}
 {% endif %}
+<div class="col-md-4" style="height: 500px">
+    <div class="thumbnail" style="height:479px; border-style:dashed">
+        <span class="glyphicon glyphicon-plus" style="width:242; height:200"></span>
+        <div class="caption">
+            <h4>Add new video</h4>
+        </div>
+    </div>
+</div>
 {% endblock %}

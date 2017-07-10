@@ -14,17 +14,22 @@
         node3.className += " active";
 </script>
 {% if score == None %}
-	<form method=POST action="" class="form-horizontal">
+<h1 class="page-header">장문 해석</h1>
+	<form method=POST action="">
 		<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />
-		<div class="col-md-6">
-		<textarea name="foreign" class="form-control" rows="30" style="width: 100%"></textarea>
+        <div>
+        <div class="col-md-12 form-group">
+            <div class="col-md-6">
+            <textarea name="foreign" class="form-control" rows="40" style="width: 100%"></textarea>
+            </div>
+            <div class="col-md-6">
+            <textarea name="kor" class="form-control" rows="40" style="width: 100%"></textarea>
+            </div>
+        </div>
+		<div class="col-md-offset-10 form-group" style="padding-top:10%;">
+			<button type=submit class="btn btn-info">Compare</button>
 		</div>
-		<div class="col-md-6">
-		<textarea name="kor" class="form-control" rows="30" style="width: 100%"></textarea>
-		</div>
-		<div class="col-md-offset-10" style="padding-top: 300px">
-			<button type=submit>Compare</button>
-		</div>
+        </div>
 	</form>
 {% endif %}
 
