@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="page-header">Login</h1>
+<form method="POST" action="" class="form-horizontal">
+	{% csrf_token %}
+	<div class="form-group">
+	<!--<table>-->
+	<!--<tr><td>Id: </td><td><input type="text" width=20 name="user_id"></td></tr>-->
+	<!--<tr><td>Password: </td><td><input type="password" width=20 name="user_pw"></td></tr>-->
+	<!--</table>-->
+	<!--<button type=submit>Login</button>-->
+	<!--<button type=button><a href="/find-id/" style="text-decoration:none">Find ID/PW</a></button>-->
+		<label class="col-sm-2 control-label">ID</label>
+		<div class="col-sm-3">
+			<input type="text" name="user_id" class="form-control">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Password</label>
+		<div class="col-sm-3">
+			<input type="password" name="user_pw" class="form-control">
+		</div>
+	</div>
+	<div class="form-group" style="padding-top: 5%; padding-bottom: 17%">
+		<div class="col-sm-offset-6 col-sm-offset-10">
+		<button type="button" class="btn btn-info col-sm-offset-4 col-sm-2">로그인</button>
+		<button class="btn btn-info col-xs-offset-1 col-sm-2">ID/PW 찾기</button>
+		</div>
+	</div>
+	</form>
+{% endblock %}

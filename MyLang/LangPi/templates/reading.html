@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+	node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+
+        node3.className += " active";
+</script>
+{% if score == None %}
+	<form method=POST action="" class="form-horizontal">
+		<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />
+		<div class="col-md-6">
+		<textarea name="foreign" class="form-control" rows="30" style="width: 100%"></textarea>
+		</div>
+		<div class="col-md-6">
+		<textarea name="kor" class="form-control" rows="30" style="width: 100%"></textarea>
+		</div>
+		<div class="col-md-offset-10" style="padding-top: 300px">
+			<button type=submit>Compare</button>
+		</div>
+	</form>
+{% endif %}
+
+{% if score != None %}
+    <div class="col-sm-12">
+        <h3 class="page-header">외국어</h3>
+        <div class="well well-lg">
+            {{ fore }}
+        </div>
+        <h3 class="page-header">한국어</h3>
+        <div class="well well-lg">
+            {{ kor }}
+        </div>
+        <h2 class="page-header" id="similarity">유사도</h2>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ score }};">
+            {{ score }}
+        </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+<script src="https://smtpjs.com/smtp.js">
+    </script>
+    <script>
+
+        function makeid()
+        {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 10; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
+        var key = makeid();
+
+        function go(){
+	    var email = document.getElementById('user_email').value;
+            Email.send("parksjin01@naver.com",
+                email,
+                "This is your confirmation key",
+                key,
+                "smtp.naver.com",
+                "parksjin01",
+                "FXqy9k]Abj");
+        }
+
+        function check(){
+            var user_key = document.getElementById('user_confirm').value;
+	    var node1 = document.getElementById('user_pw');
+            var node2 = document.getElementById('user_re_pw');
+            if (key != user_key)
+            {
+                alert(key+'\n'+user_key);
+                document.getElementById('user_confirm').textContent = '';
+                alert('Your confirmation number is incorrect');
+            }
+	    else if(node1.value != node2.value)
+	    {
+		alert('Your two password is different');
+	    }
+            else
+            {
+                document.getElementById('myform').submit();
+            }
+
+        }
+
+	function same(){
+	    var node1 = document.getElementById('user_pw');
+            var node2 = document.getElementById('user_re_pw');
+        var parent_node = document.getElementById('error_check');
+        var span = document.getElementById('status');
+            if (node1.value != node2.value){
+                parent_node.className = "form-group has-error";
+                span.className = "label label-danger";
+                span.innerHTML = "Two password is not same";
+	    }
+            else if(node1.value == node2.value){
+                parent_node.className = "form-group has-success";
+                span.className = "label label-success";
+                span.innerHTML = "Two password is same";
+	    }
+            else{
+                parent_node.className = "form-group";
+                span.innerHTML = "";
+	    }
+	}
+
+    </script>
+<h1 class="page-header">Register</h1>
+<form method=POST action="" id="myform" class="form-horizontal">
+{% csrf_token %}
+    <!--<table>-->
+        <!--<tr><td>ID: </td><td><input type="text" width=20 name="user_id" id="user_id"></td></tr>-->
+        <!--<tr><td>PW: </td><td><input type="password" width=20 name="user_pw" id="user_pw"></td></tr>-->
+	<!--<tr><td>PW Again: </td><td><input type="password" width=20 id="user_re_pw" onkeyup="same()"></td></tr>-->
+        <!--<tr><td>E-mail: </td><td><input type="email" width=20 name="user_email" id="user_email"></td><td><input type=button onclick="go()" value="Confirm"/></td></tr>-->
+        <!--<tr><td>Confirm: </td><td><input type="text" width=20 id="user_confirm"></td></tr>-->
+    <!--</table>-->
+    <div class="form-group">
+        <label class="col-sm-2 control-label">ID</label>
+        <div class="col-sm-3">
+            <input type="text" name="user_id" id="user_id" class="form-control" placeholder="ID">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-3">
+            <input type="password" name="user_pw" id="user_pw" class="form-control" placeholder="Password">
+        </div>
+    </div>
+    <div class="form-group" id="error_check">
+        <label class="col-sm-2 control-label">Check Password</label>
+        <div class="col-sm-3">
+            <input type="password" id="user_re_pw" onkeyup="same()" class="form-control" placeholder="Confirm password">
+        </div>
+        <span id="status"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">E-mail</label>
+        <div class="col-sm-3">
+            <input type="email" name="user_email" id="user_email" class="form-control" placeholder="E-mail">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Confirm number</label>
+        <div class="col-sm-3">
+            <input type="text" id="user_confirm" class="form-control" placeholder="Confirm number">
+        </div>
+    </div>
+    <div class="form-group" style="padding-top: 8%; padding-bottom: 14%">
+		<div class="col-sm-offset-6 col-sm-offset-10">
+		<button type="button" class="btn btn-info col-sm-offset-4 col-sm-2">회원가입</button>
+		</div>
+	</div>
+</form>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
+{% if result %}
+<p>
+	<h1>당신의 단어시험점수는 {{ result }} 점입니다. </h1>
+</p>
+{% for word, answer, user in whole %}
+        <div>
+                <p> {{ word.0 }} 
+		<button type=button class="tooltip">UP
+		<span class="tooltiptext">If you press this button, word frequency will be higher</span>
+		</button>
+		<button type=button class="tooltip">DOWN
+		<span class="tooltiptext">***Warning***</br>If you press this button this word will never appear</span>
+		</button> </br>
+		<!--{% if user == "1" %}-->
+                <!--<input type=radio value=1 checked="checked" name={{ word.0 }}>{{ word.1 }}<span class="label label-info">사용자 답</span> </br>-->
+		<!--{% elif answer == "1" %}-->
+		<!--<input type=radio value=1 disabled="disabled" name={{ word.0 }}>{{ word.1 }} </br>-->
+		<!--{% else %}-->
+		<!--<input type=radio value=1 disabled="disabled"  name={{ word.0 }}>{{ word.1 }} </br>-->
+		<!--{% endif %}-->
+		<!--{% if user == "2" %}-->
+                <!--<input type=radio value=2  checked="checked"  name={{ word.0 }}>{{ word.2 }} </br>-->
+		<!--{% elif answer == "2" %}-->
+                <!--<input type=radio value=2 disabled="disabled" name={{ word.0 }}>{{ word.2 }} </br>-->
+		<!--{% else %}-->
+		<!--<input type=radio value=2 disabled="disabled"   name={{ word.0 }}>{{ word.2 }} </br>-->
+		<!--{% endif %}-->
+		<!--{% if user == "3" %}-->
+                <!--<input type=radio value=3  checked="checked" name={{ word.0 }}>{{ word.3 }} </br>-->
+		<!--{% elif answer == "3" %}-->
+                <!--<input type=radio value=3 disabled="disabled" name={{ word.0 }}>{{ word.3 }} </br>-->
+		<!--{% else %}-->
+		<!--<input type=radio value=3 disabled="disabled"    name={{ word.0 }}>{{ word.3 }} </br>-->
+		<!--{% endif %}-->
+                <!--{% if word.4 %}-->
+		<!--{% if user == "4" %}-->
+                <!--<input type=radio value=4 checked="checked" name={{ word.0 }}>{{ word.4 }} </br>-->
+		<!--{% elif answer == "4" %}-->
+                <!--<input type=radio value=4 disabled="disabled" name={{ word.0 }}>{{ word.4 }} </br>-->
+		<!--{% else %}-->
+		<!--<input type=radio value=4 disabled="disabled"   name={{ word.0 }}>{{ word.4 }} </br>-->
+		<!--{% endif %}-->
+                <!--{% endif %}-->
+                <!--{% if word.5 %}-->
+		<!--{% if user == "5" %}-->
+                <!--<input type=radio value=5 checked="checked" name={{ word.0 }}>{{ word.5 }} </p>-->
+		<!--{% elif answer == "5" %}-->
+                <!--<input type=radio value=5 disabled="disabled" name={{ word.0 }}>{{ word.5 }} </br>-->
+		<!--{% else %}-->
+		<!--<input type=radio value=5 disabled="disabled"  name={{ word.0 }}>{{ word.5 }} </p>-->
+		<!--{% endif %}-->
+                <!--{% endif %}-->
+        <!--</div>-->
+{% endfor %}
+{% endif %}
+{% if test %}
+<h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요</h1>
+<form method=POST action="">
+{% csrf_token %}
+{% for word in test %}
+{{ forloop.counter }}
+	<div>
+		{{ word.0 }}
+		<div class="form-group">
+			<label class="radio-inline">
+				<input type=radio value=1 name={{ word.0 }}>{{ word.1 }}
+			</label>
+			<label class="radio-inline">
+				<input type=radio value=2 name={{ word.0 }}>{{ word.2 }}
+			</label>
+			<label class="radio-inline">
+				<input type=radio value=3 name={{ word.0 }}>{{ word.3 }}
+			</label>
+			{% if word.4 %}
+			<label class="radio-inline">
+				<input type=radio value=4 name={{ word.0 }}>{{ word.4 }}
+			</label>
+			{% endif %}
+			{% if word.5 %}
+			<label class="radio-inline">
+			<input type=radio value=5 name={{ word.0 }}>{{ word.5 }}
+			</label>
+			{% endif %}
+		</div>
+	</div>
+{% endfor %}
+<button type=submit>채점!!!</button>
+</form>
+{% endif %}
+{% endblock %}

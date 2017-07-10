@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+        node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+
+        node2.className += " active";
+
+        function check(num){
+            var num = num.split('!@#');
+            var id = num[0];
+            var num = Number(num[1]);
+            var node = document.getElementById(id);
+            if (num<500){
+                node.appendChild(document.createTextNode('Easy'));
+            } else if(num<1000){
+                node.appendChild(document.createTextNode('Normal'));
+            }else{
+                node.appendChild(document.createTextNode('Hard'));
+            }
+        }
+</script>
+{% if video %}
+{% for v in video %}
+<a href={{ v.0 }} style="text-decoration:none">
+        <!--<table>-->
+            <!--<tr><td rowspan="3"><img src={{ v.3 }}></td><td>{{ v.1 }}</td></tr>-->
+            <!--<tr><td>{{ v.2 }}</td></tr>-->
+            <!--<tr><td id={{ v.3 }}></td></tr>-->
+	    <!--<script>-->
+		<!--check({{ v.4|safe }});-->
+	    <!--</script>-->
+        <!--</table>-->
+            <div class="col-md-4" style="height: 500px;">
+                <div class="thumbnail" style="height: 479px;">
+                    <img src={{ v.3 }} style="height:200; width:242" alt="404 Can't find image">
+                    <div class="caption">
+                        <h4>{{ v.1 }}</h4>
+                        <p id="{{ v.3 }}"></p>
+                        <p>{{ v.2 }}</p>
+                        <script>
+                            check({{ v.4|safe }});
+                        </script>
+                    </div>
+                </div>
+            </div>
+</a>
+{% endfor %}
+{% endif %}
+{% endblock %}

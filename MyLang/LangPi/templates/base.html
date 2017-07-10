@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script>
+	function logout(){
+            document.cookie = "ic=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "pc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	    document.cookie = "ec=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	    alert("Logout complete");
+        };
+    </script>
+    <title>{{ title }}</title>
+</head>
+<body>
+<header class="navbar-fixed-top" style="background-color: white; height: 10%; width:100%">
+<div class="container-fluid" style="background-color: white">
+    <div class="col-sm-12" id="menu">
+        <a href="/" class="col-sm-9"><h1>ML   <small>MyLang</small></h1></a>
+    </div>
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active" style="padding-left: 2%;" id="home"><a href="/">Home</a></li>
+        <li role="presentation" class="" id="video"><a href="/video/" class="text-center">Listening</a></li>
+        <li role="presentation" class="" id="read"><a href="/read/">Reading</a></li>
+        <li role="presentation" class="" id="voca"><a href="/vocabulary/">Vocabulary</a></li>
+    </ul>
+    <!--<h4 class="col-sm-1"><a href="#">Login</a></h4>-->
+    <!--<h4 class="col-sm-1"><a href="#">Register</a></h4>-->
+    <!--<h4 class="col-sm-1">abcd</h4>-->
+
+</div>
+</header>
+<script>
+    try{
+        var is_login = document.cookie;
+        if (is_login.includes("ic=") && is_login.includes("pc=") && is_login.includes("ec="))
+        {
+        var node1_h4 = document.createElement('h5');
+        var node2_h4 = document.createElement('h5');
+        var node3_h4 = document.createElement('h5');
+        node1_h4.className += "col-sm-1";
+        node2_h4.className += "col-sm-1";
+        node3_h4.className += "col-sm-1";
+        var node1_a = document.createElement('a');
+	    var node2_a = document.createElement('a');
+	    var node3_a = document.createElement('a');
+        node1_a.onclick = logout;
+	    node1_a.href = "/";
+	    node2_a.href = "/change-id/";
+	    node3_a.href = "/mypage/";
+        node1_a.appendChild(document.createTextNode("Logout"));
+	    node2_a.appendChild(document.createTextNode("Change ID/PW"));
+	    node3_a.appendChild(document.createTextNode("Mypage"));
+	    node1_h4.appendChild(node1_a);
+	    node2_h4.appendChild(node2_a);
+	    node3_h4.appendChild(node3_a);
+        document.getElementById("menu").appendChild(node1_h4);
+	    document.getElementById("menu").appendChild(node2_h4);
+	    document.getElementById("menu").appendChild(node3_h4);
+        }else
+        {
+            throw 1;
+        }
+    }catch(Exception){
+        var node1_h4 = document.createElement('h5');
+        var node2_h4 = document.createElement('h5');
+        node1_h4.className += "col-sm-1";
+        node2_h4.className += "col-sm-1";
+        var node1_a = document.createElement('a');
+        var node2_a = document.createElement('a');
+        var upper_node = document.getElementById("menu");
+        node1_a.href = "/login/";
+        node2_a.href = "/register/";
+        node1_a.appendChild(document.createTextNode("Login"));
+        node2_a.appendChild(document.createTextNode("Register"));
+        node1_h4.appendChild(node1_a);
+        node2_h4.appendChild(node2_a);
+        upper_node.appendChild(node1_h4);
+        upper_node.appendChild(node2_h4);
+    }
+</script>
+<div class="container col-sm-12" role="main" style="position: absolute;top: 20%">
+    <div class="container">
+    {% block content %}
+    {% endblock %}
+    </div>
+    <footer style=" width:100% background-color: lightgray; height: 15%">
+    <div class="col-md-offset-2 col-md-offset-8">
+        <h2 class="col-md-2"><a href="https://github.com/parksjin01" style="color: black; text-decoration:none;">Damotorie</a></h2>
+        <div class="col-md-10">
+            <h5><a href="#" class="col-md-12">Copyright</a></h5>
+            <span class="text-center">이 페이지는 <b>***</b>개발팀에 의해 만들어진 교육용 홈페이지입니다.다른 어떤 목적으로도 사용하실수 없습니다.</span>
+        </div>
+    </div>
+</footer>
+</div>
+</body>
+</html>

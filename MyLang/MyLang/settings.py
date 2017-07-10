@@ -25,7 +25,7 @@ SECRET_KEY = '^g73dc5d$864ru0bqiti8*6^m@p4x9!e5&x^$#s(lu7upcju1p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.2', 'mylang.iptime.org']
+ALLOWED_HOSTS = ['192.168.0.2', 'mylang.iptime.org', '127.0.0.1', '192.168.0.122']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mylang',
+    'LangPi',
 ]
 
 MIDDLEWARE = [
