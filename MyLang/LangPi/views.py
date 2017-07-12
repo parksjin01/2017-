@@ -272,7 +272,9 @@ def show_list(request):
 
 def reading(request):
     if request.method == 'POST':
-        print request.POST.get('foreign'), request.POST.get('kor')
+        if len(request.POST.get('foreign')) >= 5000:
+            ctx = {'title':'ML(MyLang) Reading', 'error':'1'}
+            return render(request, 'reading.html', ctx)
         score = read(request.POST.get('foreign'), request.POST.get('kor'))
         try:
             cur_user = request.COOKIES.get('ec')
@@ -286,9 +288,9 @@ def reading(request):
         user.readding_level = cPickle.dumps(reading)
         user.save()
         ctx = {'score': score, 'fore': request.POST.get('foreign'), 'kor': request.POST.get('kor'),
-               'test': request.POST.get('test'), 'title':'ML(MyLang) Reading'}
+               'test': request.POST.get('test'), 'title':'ML(MyLang) Reading', 'error':'0'}
         return render(request, 'reading.html', ctx)
-    ctx = {'title':'ML(MyLang)'}
+    ctx = {'title':'ML(MyLang)', 'error':'0'}
     return render(request, 'reading.html', ctx)
 
 def add_video(request):
