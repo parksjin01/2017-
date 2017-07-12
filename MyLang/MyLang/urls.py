@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^read/$', reading, name='reading'),
     url(r'^mypage/$', mypage, name='mypage'),
     url(r'^vocabulary/$', vocabulary, name='vocabulary'),
+    url(r'test/$', test, name='test'),
 ]

@@ -89,6 +89,9 @@ class Downloader(threading.Thread):
         user.message_box = cPickle.dumps(message_box)
         user.save()
 
+def test(request):
+    return render(request, 'test.html')
+
 # IMG_URL: 유튜브의 썸네일을 가져오는 URL
 # VOD_URL1: 최근 시청한 비디오와 유사한 비디오를 가져오는 URL
 # VOD_URL2: 일반적인 유튜브 검색처럼 검색어로 비디오를 가져오는 URL
@@ -133,11 +136,13 @@ def adder(request, url):
 
 def recommandation(url, num, cur):
     video_id = url.split('?v=')[1]
-    video = youtube_search(video_id=video_id, max_results=num)
+    video = youtube_search(video_id=video_id, max_results=num+10)
     res = []
     fmt = '''<td><a href='%s'"><img src=%s/><span>%s</span></td>'''
     for sentence in video:
-        res.append(fmt % (sentence[0], sentence[3], sentence[1]))
+        tmp = fmt % (sentence[0], sentence[3], sentence[1])
+        if tmp not in cur:
+            res.append(tmp)
     if cur == []:
         return res
     else:
@@ -262,9 +267,9 @@ def show_list(request):
             line = cap.strip().split('\n\n')[-1].split('\n')[0]
         img = IMG_URL % (vod.url.split('?v=')[1])
         tmp_fmt = "'%s'"
-        desctription = vod.description
-        if len(desctription) > 200:
-            description = desctription[:200] + ' ...'
+        description = vod.description
+        if len(description) > 200:
+            description = description[:200] + ' ...'
         video.append(('/video/' + vod.hashed_url, vod.title, description, img, tmp_fmt % (img + '!@#' + line)))
     ctx['video'] = video
     ctx['title'] = 'ML(MyLang) Video List'

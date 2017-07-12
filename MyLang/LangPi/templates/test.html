@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is test page</title>
+</head>
+<body>
+    <p>
+        Hello World.
+    </p>
+    <form method="post" action="http://192.168.0.122:8884/video/">
+        {% csrf_token %}
+        <button type="submit">Go</button>
+    </form>
+</body>
+</html>

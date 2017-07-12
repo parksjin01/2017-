@@ -17,6 +17,8 @@
 .updown {
     position: relative;
     display: inline-block;
+    background-color:white;
+    border: none;
 }
 
 .updown .updowntext {
@@ -44,10 +46,10 @@
 {% for word, answer, user in whole %}
         <div>
                 <p> {{ word.0 }} 
-		<button type=button class="btn btn-default updown"><span class="glyphicon glyphicon-chevron-up"></span>
+		<button type=button class="updown"><span class="glyphicon glyphicon-chevron-up"></span>
 		<span class="updowntext">If you press this button, word frequency will be higher</span>
 		</button>
-		<button type=button class="btn btn-default updown"><span class="glyphicon glyphicon-chevron-down"></span>
+		<button type=button class="updown"><span class="glyphicon glyphicon-chevron-down"></span>
 		<span class="updowntext">***Warning***</br>If you press this button this word will never appear</span>
 		</button> </br>
 					<label class="radio-inline">
