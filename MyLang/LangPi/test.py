@@ -20,3 +20,5 @@ assert 1 == 1
 a = [1, 2, 3, 4, 5]
 a.remove(2)
 print a
+print '1' in 0
+print 'b'

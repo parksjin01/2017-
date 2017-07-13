@@ -618,6 +618,9 @@ def vocabulary(request):
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
         return render(request, 'login_incorrect.html')
+    like_dislike = json.loads(user.like_dislike_voca)
+    if like_dislike == u'0' or like_dislike == 0:
+        like_dislike = {'like':[], 'dislike':[]}
     scores = cPickle.loads(str(user.vocabulary_level))
     levels = []
     if len(scores) != 0:
@@ -640,7 +643,10 @@ def vocabulary(request):
         question = 40
     test = set()
     while len(test) < question:
-        test.add(random.randrange(num))
+        random_number = random.randrange(num)
+        random_voca = pickle.loads(voca.objects.get(id=random_number + 3335).foreign)['en']
+        if ([random_number, random_voca] not in like_dislike['like']) and ([random_number, random_voca] not in like_dislike['dislike']):
+            test.add(random.randrange(num))
     word = []
     answer = []
     for idx in test:

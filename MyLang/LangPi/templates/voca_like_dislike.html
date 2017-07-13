@@ -9,7 +9,7 @@
         form.submit();
     }
 </script>
-<div class="col-md-3">
+<div class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
         <li role="presentation"><a href="/mypage/">Home</a></li>
         <li role="presentation"><a href="/mypage/listening/">Listening</a></li>
@@ -18,7 +18,7 @@
         <li role="presentation"><a href="/mypage/message">Message</a></li>
     </ul>
 </div>
-<div class="col-md-9">
+<div class="col-md-10">
 <div>
     <form method="post" id="char">
         {% csrf_token %}
@@ -32,7 +32,15 @@
         <div class="col-md-11">
             <div class="jumbotron">
                 {% for word in like %}
-                <span style="padding-right:30px; border-radius:3px">{{ word.0 }} {{ word.1 }} <button type="button" style="border-color:#eee; border-style:solid; background-color:inherit" onclick="selection('{{ word.0 }},{{ word.1 }}')"><span class="glyphicon glyphicon-remove"></span> </button> </span>
+                {% if forloop.counter|divisibleby:3 %}
+                <div class="row">
+                    {% endif %}
+                    <div class="col-md-4">
+                        <span style="padding-right:30px; border-radius:3px">{{ word.0 }} {{ word.1 }} <button type="button" style="border-color:#eee; border-style:solid; background-color:inherit" onclick="selection('{{ word.0 }},{{ word.1 }}')"><span class="glyphicon glyphicon-remove"></span> </button> </span>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -40,7 +48,15 @@
         <div class="col-md-11">
             <div class="jumbotron">
                 {% for word in dislike %}
+                {% if forloop.counter|divisibleby:3 %}
+                <div class="row">
+                    {% endif %}
+                    <div class="col-md-4">
                 <span style="padding-right:30px; border-radius:3px">{{ word.0 }} {{ word.1 }} <button type="button" style="border-color:#eee; border-style:solid; background-color:inherit" onclick="selection('{{ word.0 }},{{ word.1 }}')"><span class="glyphicon glyphicon-remove"></span> </button> </span>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
