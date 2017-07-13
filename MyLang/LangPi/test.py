@@ -17,3 +17,6 @@ print json.dumps('''{'en':'Good'}''')
 print json.loads('0')
 print ''.split(',')
 assert 1 == 1
+a = [1, 2, 3, 4, 5]
+a.remove(2)
+print a

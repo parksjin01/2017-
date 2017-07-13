@@ -521,6 +521,17 @@ def mypage_message(request):
 
 def mypage_likedislike(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
+    if request.method == 'POST':
+        selected = request.POST.get('select').split(',')
+        selected = [int(selected[0]), selected[1]]
+        like_dislike = json.loads(user.like_dislike_voca)
+        if selected in like_dislike['like']:
+            like_dislike['like'].remove(selected)
+        elif selected in like_dislike['dislike']:
+            like_dislike['dislike'].remove(selected)
+        print like_dislike
+        user.like_dislike_voca = json.dumps(like_dislike)
+        user.save()
     ctx = {'title': 'ML(MyLang) mypage'}
     error = ''
     voca = []
