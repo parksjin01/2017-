@@ -34,4 +34,9 @@ urlpatterns = [
     url(r'^vocabulary/$', vocabulary, name='vocabulary'),
     url(r'test/$', test, name='test'),
     url(r'process/$', process, name='process'),
+    url(r'^mypage/listening/$', mypage_listening, name='mypage_listening'),
+    url(r'^mypage/reading/$', mypage_reading, name='mypage_reading'),
+    url(r'^mypage/vocabulary/$', mypage_vocabulary, name='mypage_vocabulary'),
+    url(r'mypage/likedislike/$', mypage_likedislike, name='mypage_likedislike'),
+    url(r'^mypage/message/$', mypage_message, name='mypage_message'),
 ]

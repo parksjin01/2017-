@@ -16,3 +16,4 @@ print cPickle.dumps({u'en':u'GOGOGO', u'jp':u'anjfqhkdltozldi'})
 print json.dumps('''{'en':'Good'}''')
 print json.loads('0')
 print ''.split(',')
+assert 1 == 1

@@ -1,31 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<script>
-    function change_active(id)
-    {
-        node1 = document.getElementById("Home");
-        node2 = document.getElementById("Listening");
-        node3 = document.getElementById("Reading");
-        node4 = document.getElementById("Vocabulary");
-        node5 = document.getElementById("Message");
-
-        node1.className="";
-        node2.className="";
-        node3.className="";
-        node4.className="";
-        node5.className="";
-
-        node = document.getElementById(id);
-        node.className="active";
-    }
-</script>
 <div class="col-md-3">
     <ul class="nav nav-pills nav-stacked">
-        <li role="presentation" class="active" id="Home" onclick="change_active('Home')"><a href="mypage/">Home</a></li>
-        <li role="presentation" id="Listening" onclick="change_active('Listening')"><a href="mypage/listening/">Listening</a></li>
-        <li role="presentation" id="Reading" onclick="change_active('Reading')"><a href="mypage/reading/">Reading</a></li>
-        <li role="presentation" id="Vocabulary" onclick="change_active('Vocabulary')"><a href="mypage/vocabulary/">Vocabulary</a></li>
-        <li role="presentation" id="Message" onclick="change_active('Message')"><a href="mypage/message">Message</a></li>
+        <li role="presentation" class="active"><a href="/mypage/">Home</a></li>
+        <li role="presentation"><a href="/mypage/listening/">Listening</a></li>
+        <li role="presentation"><a href="/mypage/reading/">Reading</a></li>
+        <li role="presentation"><a href="/mypage/vocabulary/">Vocabulary</a></li>
+        <li role="presentation"><a href="/mypage/message">Message</a></li>
     </ul>
 </div>
 <div class="col-md-9">
