@@ -21,6 +21,7 @@ import base64
 import threading
 import copy
 import os
+import json
 
 class Score():
     def __init__(self, score, date):
@@ -93,7 +94,8 @@ def test(request):
     return render(request, 'test.html')
 
 def process(request):
-    ctx = {'message':str(request.POST.get('message'))}
+    print request.POST.get('like')
+    ctx = {'like':request.POST.get('like'), 'dislike':request.POST.get('dislike')}
     return render(request, 'processing_data.html', ctx)
 
 # IMG_URL: 유튜브의 썸네일을 가져오는 URL
@@ -405,22 +407,28 @@ def mypage(request):
         listen_scores = pickle.loads(user.listening_level)
         print listen_scores
         assert len(listen_scores) != 0
-        for score in listen_scores:
+        for score in listen_scores[:5]:
             listen.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score.date)), score.score])
+        if len(listen_scores) > 5:
+            listen.append(['...', '...'])
     except:
         error += 'You haven\'t do listening\n'
     try:
         reading_scores = pickle.loads(user.readding_level)
         assert len(reading_scores) != 0
-        for score in reading_scores:
+        for score in reading_scores[:5]:
             reading.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score.date)), score.score])
+        if len(reading_scores) > 5:
+            reading.append(['...', '...'])
     except:
         error += 'You haven\'t do reading\n'
     try:
         voca_scores = pickle.loads(user.vocabulary_level)
         assert len(voca_scores) != 0
-        for score in voca_scores:
+        for score in voca_scores[:5]:
             voca.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score.date)), score.score])
+        if len(voca_scores) > 5:
+            voca.append(['...', '...'])
     except:
         error += 'You haven\'t do voca\n'
     if user.message_box != '':
@@ -429,7 +437,7 @@ def mypage(request):
         message_boxs = []
     message_box = []
     read_message_box = []
-    for message in message_boxs:
+    for message in message_boxs[:5]:
         message_box.append(
             [time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(message.date)), message.content, message.new])
         tmp = copy.deepcopy(message)
@@ -447,6 +455,30 @@ def vocabulary(request):
             user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
         except:
             return render(request, 'login_incorrect.html')
+        if request.POST.get('method') == unicode('1'):
+            like_dislike = json.loads(user.like_dislike_voca)
+            if like_dislike == unicode('0') or like_dislike == str('0') or like_dislike == 0:
+                like_dislike = {'like':[], 'dislike':[]}
+            like = request.POST.get('like').split(',')
+            dislike = request.POST.get('dislike').split(',')
+
+            for word in like:
+                if word == '':
+                    break
+                word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
+                like_dislike['like'].append([word_info.id, word])
+                word_info.save()
+
+            for word in dislike:
+                if word == '':
+                    break
+                word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
+                like_dislike['dislike'].append([word_info.id, word])
+                word_info.save()
+
+            user.like_dislike_voca = json.dumps(like_dislike)
+            user.save()
+            return redirect('/')
         cur_date = request.COOKIES.get('youan')
         tmp = tmp_answer.objects.get(cur_date=cur_date, cur_user=request.COOKIES.get('ec'))
         answer = pickle.loads(tmp.answer)

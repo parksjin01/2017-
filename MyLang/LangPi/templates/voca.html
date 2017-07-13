@@ -51,6 +51,11 @@
             node.value = like.toString();
         }
 
+        function yeah(){
+        alert('평가가 완료되었습니다.\n만약 비추천을 누르신 경우에는 마이페이지에서 다시 추가하실수 있습니다.\n이용해주셔서 감사합니다.\n');
+
+        }
+
 
 </script>
 <style xmlns="http://www.w3.org/1999/html">
@@ -82,14 +87,16 @@
 <p>
 	<h1 class="page-header">당신의 단어시험점수는 {{ result }} 점입니다. </h1>
 </p>
-<form method="post" action="127.0.0.1:8884/process/">
+<form method="post" action="">
+	{% csrf_token %}
+    <input value="1" hidden name="method">
 {% for word, answer, user in whole %}
         <div>
                 <p> {{ word.0 }} 
-		<button onclick='add_like("{{ word.0 }}")' type=button class="updown" style="border-style: solid; border-radius:6px" id=like_{{ word.0 }}><span class="glyphicon glyphicon-chevron-up"></span>
+		<button onclick='add_like("{{ word.0 }}")' type=button class="updown" style="border-color:white; border-style: solid; border-radius:6px" id="like_{{ word.0 }}"><span class="glyphicon glyphicon-chevron-up"></span>
 		<span class="updowntext">If you press this button, word frequency will be higher</span>
 		</button>
-		<button onclick='add_dislike("{{ word.0 }}")' type=button class="updown" style="border-style: solid; border-radius:6px" id=dislike_{{ word.0 }}><span class="glyphicon glyphicon-chevron-down"></span>
+		<button onclick='add_dislike("{{ word.0 }}")' type=button class="updown" style="border-color:white; border-style: solid; border-radius:6px" id="dislike_{{ word.0 }}"><span class="glyphicon glyphicon-chevron-down"></span>
 		<span class="updowntext">***Warning***</br>If you press this button this word will never appear</span>
 		</button> </br>
 					<label class="radio-inline">
@@ -153,14 +160,15 @@
                 {% endif %}
         </div>
 {% endfor %}
-	<button hidden name="like" id="like" value=""></button>
-	<button hidden name="dislike" id="dislike" value=""></button>
-	<button type="submit">평가하기!</button>
+	<input hidden name="like" id="like" value="">
+	<input hidden name="dislike" id="dislike" value="">
+	<button onclick="yeah()" type="submit">평가하기!</button>
 </form>
 {% endif %}
 {% if test %}
 <h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요</h1>
 <form method=POST action="">
+    <input value="0" hidden name="method">
 {% csrf_token %}
 {% for word in test %}
 {{ forloop.counter }}
