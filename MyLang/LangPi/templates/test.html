@@ -8,9 +8,10 @@
     <p>
         Hello World.
     </p>
-    <form method="post" action="http://192.168.0.122:8884/video/">
+    <form method="post" action="http://192.168.0.122:8884/process/">
         {% csrf_token %}
         <button type="submit">Go</button>
+        <input hidden type="text" value="Hello World." name="message">
     </form>
 </body>
 </html>

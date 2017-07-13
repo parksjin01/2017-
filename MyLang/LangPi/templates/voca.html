@@ -12,13 +12,52 @@
         node4.className = "";
 
         node4.className += " active";
+
+        var like = [];
+        var dislike = [];
+
+        function add_like(num){
+            if (like.indexOf(num) < 0)
+                like.push(num);
+            var index = dislike.indexOf(num);
+            if (index > -1)
+                dislike.splice(index, 1);
+            var node_like = document.getElementById('like_'+String(num));
+            var node_dislike = document.getElementById('dislike_'+String(num));
+            node_like.style.borderColor = "skyblue";
+            node_dislike.style.borderColor = "white";
+
+            var node = document.getElementById('like');
+            node.value = like.toString();
+            node = document.getElementById('dislike');
+            node.value = dislike.toString()
+        }
+
+        function add_dislike(num){
+            if (dislike.indexOf(num) < 0)
+                dislike.push(num);
+            var index = like.indexOf(num);
+            if (index > -1)
+                like.splice(index, 1);
+            var node_dislike = document.getElementById('dislike_'+String(num));
+            var node_like = document.getElementById('like_'+String(num));
+
+            node_dislike.style.borderColor = "skyblue";
+            node_like.style.borderColor = "white";
+
+            var node = document.getElementById('dislike');
+            node.value = dislike.toString();
+            node = document.getElementById('like');
+            node.value = like.toString();
+        }
+
+
 </script>
 <style xmlns="http://www.w3.org/1999/html">
 .updown {
     position: relative;
     display: inline-block;
     background-color:white;
-    border: none;
 }
 
 .updown .updowntext {
@@ -43,13 +82,14 @@
 <p>
 	<h1 class="page-header">당신의 단어시험점수는 {{ result }} 점입니다. </h1>
 </p>
+<form method="post" action="127.0.0.1:8884/process/">
 {% for word, answer, user in whole %}
         <div>
                 <p> {{ word.0 }} 
-		<button type=button class="updown"><span class="glyphicon glyphicon-chevron-up"></span>
+		<button onclick='add_like("{{ word.0 }}")' type=button class="updown" style="border-style: solid; border-radius:6px" id=like_{{ word.0 }}><span class="glyphicon glyphicon-chevron-up"></span>
 		<span class="updowntext">If you press this button, word frequency will be higher</span>
 		</button>
-		<button type=button class="updown"><span class="glyphicon glyphicon-chevron-down"></span>
+		<button onclick='add_dislike("{{ word.0 }}")' type=button class="updown" style="border-style: solid; border-radius:6px" id=dislike_{{ word.0 }}><span class="glyphicon glyphicon-chevron-down"></span>
 		<span class="updowntext">***Warning***</br>If you press this button this word will never appear</span>
 		</button> </br>
 					<label class="radio-inline">
@@ -113,6 +153,10 @@
                 {% endif %}
         </div>
 {% endfor %}
+	<button hidden name="like" id="like" value=""></button>
+	<button hidden name="dislike" id="dislike" value=""></button>
+	<button type="submit">평가하기!</button>
+</form>
 {% endif %}
 {% if test %}
 <h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요</h1>

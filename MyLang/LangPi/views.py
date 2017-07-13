@@ -92,6 +92,10 @@ class Downloader(threading.Thread):
 def test(request):
     return render(request, 'test.html')
 
+def process(request):
+    ctx = {'message':str(request.POST.get('message'))}
+    return render(request, 'processing_data.html', ctx)
+
 # IMG_URL: 유튜브의 썸네일을 가져오는 URL
 # VOD_URL1: 최근 시청한 비디오와 유사한 비디오를 가져오는 URL
 # VOD_URL2: 일반적인 유튜브 검색처럼 검색어로 비디오를 가져오는 URL
