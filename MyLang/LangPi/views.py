@@ -144,7 +144,6 @@ def recommandation(url, num, cur):
     video_id = url.split('?v=')[1]
     video = youtube_search(video_id=video_id, max_results=num+10)
     res = []
-    fmt = '''<td><a href='%s'"><img src=%s/><span>%s</span></td>'''
     for sentence in video:
         tmp = [sentence[0], sentence[3], sentence[1]]
         if tmp not in cur:
@@ -224,10 +223,13 @@ def show(request, name):
         recommand = pickle.loads(his.recommand)
         recommand = recommandation(his.cur, 5, recommand)
         his.recommand = pickle.dumps(recommand)
-    print cur_user
+    print type(his.recommand)
     user = user_info.objects.get(user_email=base64.b64decode(cur_user))
-    his.cur_user = cur_user
-    his.save()
+    his.cur_user = unicode(cur_user)
+    try:
+        his.save()
+    except:
+        pass
     caption = vod.caption
     try:
         score = pickle.loads(user.level)
@@ -307,11 +309,18 @@ def reading(request):
     return render(request, 'reading.html', ctx)
 
 def add_video(request):
+    ctx = {'title': 'ML(MyLang)Add video'}
     if request.method == 'POST':
-        url = request.POST.get('url')
-        adder(request, url)
+        if request.POST.get('url') != u'':
+            url = request.POST.get('url')
+            adder(request, url)
+        elif request.POST.get('keyword') != u'':
+            keyword = request.POST.get('keyword')
+            video = youtube_search(video_name=keyword, max_results=40)
+            ctx['video'] = video
+            return render(request, 'add_video.html', ctx)
     else:
-        return render(request, 'add_video.html')
+        return render(request, 'add_video.html', ctx)
 
 def login(request):
     if request.method == 'POST':

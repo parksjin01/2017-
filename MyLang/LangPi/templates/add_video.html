@@ -1,8 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
+    <div>
 	<form method=POST action="">
 		{% csrf_token %}
-		<input type=text placeholder="Type url" name=url>
-		<button type=submit>Submit</button>
+		<div class="col-md-12 panel">
+		<h1 class="page-header">URL로 추가하기</h1>
+		<div class="col-sm-offset-1 col-sm-10">
+                <div class="input-group">
+                    <input type="text", name="url" class="form-control" placeholder="URL">
+                    <span class="input-group-btn">
+                        <button type=submit class="btn btn-default">Search</button>
+                    </span>
+                </div>
+            </div>
+		</div>
+		<div class="col-md-12 panel">
+		<h1 class="page-header">검색어로 추가하기</h1>
+		<div class="col-sm-offset-1 col-sm-10">
+                <div class="input-group">
+                    <input type="text", name="keyword" class="form-control" placeholder="Keyword">
+                    <span class="input-group-btn">
+                        <button type=submit class="btn btn-default">Search</button>
+                    </span>
+                </div>
+		</div>
+		</div>
 	</form>
+    </div>
+	{% if video %}
+    <div style="padding-top: 100px;">
+	{% for v in video %}
+    <a href={{ v.0 }} style="color:black">
+    <div class="col-md-12 panel">
+        <!--<table>-->
+            <!--<tr><td rowspan=2><img src={{ v.3 }} width=240 height=160/></td><td>{{ v.1 }}</td></tr>-->
+            <!--<tr><td>{{ v.2 }}</td></tr>-->
+        <!--</table>-->
+        <div class="col-md-3">
+            <img src="{{ v.3 }}" width="240" height="160">
+        </div>
+        <div class="col-md-8">
+            <h4 class="page-header">{{ v.1 }}</h4>
+            {{ v.2 }}
+        </div>
+    </div>
+    </a>
+    {% endfor %}
+    </div>
+    {% endif %}
 {% endblock %}
