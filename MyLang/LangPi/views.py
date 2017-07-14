@@ -446,6 +446,7 @@ def mypage(request):
     user.message_box = cPickle.dumps(read_message_box)
     user.save()
     ctx = {'listening': listen, 'reading': reading, 'voca': voca, 'message_box': message_box, 'error': error}
+    ctx['title'] = 'ML(MyLang) mypage'
     return render(request, 'mypage.html', ctx)
 
 def mypage_listening(request):
@@ -603,6 +604,7 @@ def vocabulary(request):
         whole = zip(whole_test, whole_answer, user_answer)
         print whole_answer
         ctx = {'result': result, 'whole': whole}
+        ctx['title'] = 'ML(MyLang) Voca result'
         score = Score(int(result), time.time())
         levels = [score] + cPickle.loads(str(user.vocabulary_level))
         user.vocabulary_level = cPickle.dumps(levels)
@@ -679,6 +681,7 @@ def vocabulary(request):
     tmp.cur_user = cur_user
     tmp.save()
     ctx = {'test': word}
+    ctx['title'] = 'ML(MyLang) Voca'
     http = render(request, 'voca.html', ctx)
     http.set_cookie(key="youan", value=cur_date)
     return http
