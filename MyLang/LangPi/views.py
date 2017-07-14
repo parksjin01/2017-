@@ -190,6 +190,7 @@ def show(request, name):
         }
 
         message['score'] = score
+        message['title'] = 'ML(MyLang) Listening score'
         user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
         level = []
         if user.listening_level == '':
@@ -251,10 +252,11 @@ def show(request, name):
     tmp.cur_user = cur_user
     tmp.save()
     message = {
-        'video': '<iframe width="560" height="315" src="https://www.youtube.com/embed/%s" frameborder="0"></iframe>' % url,
-        'form': '<div><h1>Dictation</h1><p name=dictation>%s</p></div><button type="submit">Check</button>' % question,
+        'video': '<h3 class="page-header">Dictation</h3><iframe width="560" height="315" src="https://www.youtube.com/embed/%s" frameborder="0"></iframe>' % url,
+        'form': '<div style="padding-top:30px"><p name=dictation class="dictation">%s</p></div><button type="submit" class="btn btn-primary">Check</button>' % question,
     }
 
+    message['title'] = 'ML(MyLang) Listening'
     # return HttpResponse('\n'.join(message))
     http = render(request, 'dictation.html', message)
     http.set_cookie(key="youan", value=cur_date)

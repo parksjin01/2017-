@@ -47,7 +47,7 @@ def analyze(caption, perc = 10):
 
     for i in range(len(token)):
         if i in question_idx:
-	    tmp = '<input type=text name=blank placeholder=%s size=%d></input>' %(('_'*len(token[i])), len(token[i]))
+	    tmp = '<input type=text name=blank></input>'
             if i<len(token)-1 and (token[i+1] == ',' or token[i+1] == '.'):
                 question += tmp
                 answer.append(token[i])

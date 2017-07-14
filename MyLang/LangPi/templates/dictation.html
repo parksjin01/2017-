@@ -1,8 +1,37 @@
-<html>
-<head>
-	<title>Testing site</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+	node1 = document.getElementById('home');
+    node2 = document.getElementById('video');
+    node3 = document.getElementById('read');
+    node4 = document.getElementById('voca');
+
+    node1.className = "";
+    node2.className = "";
+    node3.className = "";
+    node4.className = "";
+
+    node2.className += " active";
+
+</script>
+
+<style>
+	input {
+	border-bottom-color:#eee;
+	border-top-color:#fff;
+	border-left-color:#fff;
+	border-right-color:#fff;
+	border-style:solid;
+	border-radius:6px;
+	width:100px;
+	font-size:15px
+	}
+	input:focus {
+	outline: none;
+	border-bottom-color:deepskyblue;
+	}
+</style>
 	{{ video|safe }}
 	{% if form != None %}
 	<form action="" method="POST">
@@ -13,5 +42,4 @@
 	{% if score != None %}
 		<p>Your score is {{ score }}%</p>
 	{% endif %}
-</body>
-</html>
+{% endblock %}
