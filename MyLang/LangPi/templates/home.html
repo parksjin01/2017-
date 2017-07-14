@@ -20,16 +20,23 @@
             <div class="page-header">
                 <h4>Recommanded video</h4>
             </div>
-        <table>
-            <tr>
+            <div>
                 {% csrf_token %}
                 {% if recommand is not None %}
                 {% for recommandation in recommand %}
-                {{ recommandation|safe }}
+                <div class="col-md-3">
+                    <a href="{{ recommandation.0 }}" style="text-decoration: none">
+                        <div class="thumbnail" style="height: 300px;">
+                            <img src="{{ recommandation.1 }}" style="height:160; width:168" alt="404 Can't find image">
+                            <div class="caption">
+                            <h4>{{ recommandation.2 }}</h4>
+                    </div>
+                </div>
+                    </a>
+                </div>
                 {% endfor %}
                 {% endif %}
-            </tr>
-        </table>
+            </div>
         </div>
     </div>
     </form>

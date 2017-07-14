@@ -146,7 +146,7 @@ def recommandation(url, num, cur):
     res = []
     fmt = '''<td><a href='%s'"><img src=%s/><span>%s</span></td>'''
     for sentence in video:
-        tmp = fmt % (sentence[0], sentence[3], sentence[1])
+        tmp = [sentence[0], sentence[3], sentence[1]]
         if tmp not in cur:
             res.append(tmp)
     if cur == []:
