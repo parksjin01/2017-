@@ -94,10 +94,10 @@
         <div>
                 <p> {{ word.0 }} 
 		<button onclick='add_like("{{ word.0 }}")' type=button class="updown" style="border-color:white; border-style: solid; border-radius:6px" id="like_{{ word.0 }}"><span class="glyphicon glyphicon-chevron-up"></span>
-		<span class="updowntext">If you press this button, word frequency will be higher</span>
+		<span class="updowntext">추천</span>
 		</button>
 		<button onclick='add_dislike("{{ word.0 }}")' type=button class="updown" style="border-color:white; border-style: solid; border-radius:6px" id="dislike_{{ word.0 }}"><span class="glyphicon glyphicon-chevron-down"></span>
-		<span class="updowntext">***Warning***</br>If you press this button this word will never appear</span>
+		<span class="updowntext">***Warning***</br>비추천</span>
 		</button> </br>
 					<label class="radio-inline">
 					{% if user == "1" and answer == "1" %}
