@@ -20,7 +20,8 @@
 {% if score == None %}
 <h1 class="page-header">장문 해석</h1>
 	<form method=POST action="">
-		<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />
+		<!--<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />-->
+        {% csrf_token %}
         <div>
         <div class="col-md-12 form-group">
             <div class="col-md-6">
