@@ -103,7 +103,12 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">E-mail</label>
         <div class="col-sm-3">
-            <input type="email" name="user_email" id="user_email" class="form-control" placeholder="E-mail">
+        <div class="input-group">
+            <input type="text", id="user_email" name="user_email" class="form-control" placeholder="Email">
+            <span class="input-group-btn">
+                <button type=button class="btn btn-default" onclick="go()">Send</button>
+            </span>
+        </div>
         </div>
     </div>
     <div class="form-group">
@@ -114,7 +119,7 @@
     </div>
     <div class="form-group" style="padding-top: 8%; padding-bottom: 14%">
 		<div class="col-sm-offset-6 col-sm-offset-10">
-		<button type="button" class="btn btn-info col-sm-offset-4 col-sm-2">회원가입</button>
+		<button type="button" class="btn btn-info col-sm-offset-4 col-sm-2" onclick="check()">회원가입</button>
 		</div>
 	</div>
 </form>
