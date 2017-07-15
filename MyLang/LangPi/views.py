@@ -81,7 +81,7 @@ class Downloader(threading.Thread):
         try:
             user = user_info.objects.get(user_email=base64.b64decode(cur_user))
         except:
-            return render(request, 'login_incorrect.html')
+            return render(request, 'login_please.html')
         if user.message_box == '':
             message_box = [message]
         else:
@@ -298,7 +298,7 @@ def reading(request):
         try:
             user = user_info.objects.get(user_email=base64.b64decode(cur_user))
         except:
-            return render(request, 'login_incorrect.html')
+            return render(request, 'login_please.html')
         reading = [Score(score, time.time())] + cPickle.loads(str(user.readding_level))
         user.readding_level = cPickle.dumps(reading)
         user.save()
@@ -569,7 +569,7 @@ def vocabulary(request):
         try:
             user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
         except:
-            return render(request, 'login_incorrect.html')
+            return render(request, 'login_please.html')
         if request.POST.get('method') == unicode('1'):
             like_dislike = json.loads(user.like_dislike_voca)
             if like_dislike == unicode('0') or like_dislike == str('0') or like_dislike == 0:
@@ -630,7 +630,7 @@ def vocabulary(request):
     try:
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
-        return render(request, 'login_incorrect.html')
+        return render(request, 'login_please.html')
     like_dislike = json.loads(user.like_dislike_voca)
     if like_dislike == u'0' or like_dislike == 0:
         like_dislike = {'like':[], 'dislike':[]}
