@@ -1,12 +1,16 @@
-<html>
-<head>
-    <title>Example Id Change</title>
-    <script>
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
 
 	function check(){
             var node1 = document.getElementById('user_pw');
             var node2 = document.getElementById('user_re_pw');
-            if(node1.value != node2.value)
+            if (node1.value.length < 6)
+            {
+                alert("You have to use 6 ore more chars");
+            }
+            else if(node1.value != node2.value )
             {
                 alert('Your two password is different');
             }
@@ -17,31 +21,93 @@
 
         }
 
-
-	function same(){
-            var node1 = document.getElementById('user_pw');
-            var node2 = document.getElementById('user_re_pw');
+    function same(){
+	    var node1 = document.getElementById('user_pw');
+        var node2 = document.getElementById('user_re_pw');
+        var parent_node = document.getElementById('error_check');
+        var span = document.getElementById('status');
             if (node1.value != node2.value){
-                node2.style.backgroundColor="lightpink";
-            }
+                parent_node.className = "form-group has-error";
+                span.className = "label label-danger";
+                span.innerHTML = "Two password is not same";
+	    }
             else if(node1.value == node2.value){
-                node2.style.backgroundColor="lightgreen";
-            }
+                parent_node.className = "form-group has-success";
+                span.className = "label label-success";
+                span.innerHTML = "Two password is same";
+	    }
             else{
-                node2.style.backgroundColor="white";
+                parent_node.className = "form-group";
+                span.innerHTML = "";
+	    }
+	}
+
+	function minimum_length()
+        {
+
+            var parent_node = document.getElementById('valid_check');
+            var span = document.getElementById('pw_status');
+            var node = document.getElementById('user_pw').value;
+            var result = document.getElementById('valid');
+
+            if (node.indexOf(' ') >= 0)
+            {
+                parent_node.className = "form-group has-error";
+                span.className = "label label-danger";
+                span.innerHTML = "You can't use space in password";
+                result.value = '0';
+            }
+
+            else if (node.length <6)
+            {
+                parent_node.className = "form-group has-error";
+                span.className = "label label-danger";
+                span.innerHTML = "You have to user 6 or more chars for password";
+                result.value = '0';
+            }
+
+            else
+            {
+                parent_node.className = "form-group has-success";
+                span.className = "label label-success";
+                span.innerHTML = "";
+                result.value = '1';
             }
         }
+
     </script>
 </head>
 <body>
-<form action="" method="post" id="myform">
+<form action="" method="post" id="myform" class="form-horizontal">
 {% csrf_token %}
-    <table>
-        <tr><td>ID: </td><td><input type="text" width="20" name="user_id" id="user_id"></td></tr>
-        <tr><td>PW: </td><td><input type="password" width="20" name="user_pw" id="user_pw"></td></tr>
-	<tr><td>PW Again: </td><td><input type="password" width="20" name="user_pw" id="user_re_pw" onkeyup="same()"></td></tr>
-    </table>
-    <button type="button" onclick="check()">Change</button>
+    <!--<table>-->
+        <!--<tr><td>ID: </td><td><input type="text" width="20" name="user_id" id="user_id"></td></tr>-->
+        <!--<tr><td>PW: </td><td><input type="password" width="20" name="user_pw" id="user_pw"></td></tr>-->
+	<!--<tr><td>PW Again: </td><td><input type="password" width="20" name="user_pw" id="user_re_pw" onkeyup="same()"></td></tr>-->
+    <!--</table>-->
+    <!--<button type="button" onclick="check()">Change</button>-->
+    <div class="form-group" id="id_duplicate">
+        <label class="col-sm-2 control-label">ID</label>
+        <div class="col-sm-3">
+                <input type="text" name="user_id" id="user_id" class="form-control" placeholder="ID">
+                <span id="id_status"></span>
+        </div>
+    </div>
+    <div class="form-group" id="valid_check">
+        <label class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-3">
+            <input type="password" name="user_pw" onkeyup="minimum_length()" id="user_pw" class="form-control" placeholder="Password">
+        </div>
+        <span id="pw_status"></span>
+    </div>
+    <div class="form-group" id="error_check">
+        <label class="col-sm-2 control-label">Check Password</label>
+        <div class="col-sm-3">
+            <input type="password" id="user_re_pw" onkeyup="same()" class="form-control" placeholder="Confirm password">
+        </div>
+        <span id="status"></span>
+        <input hidden value="" id="valid">
+    </div>
+    <button type="submit" onclick="check()" class="btn btn-info col-md-offset-7">변경</button>
 </form>
-</body>
-</html>
+{% endblock %}

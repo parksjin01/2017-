@@ -478,6 +478,7 @@ def change_id(request):
         user.user_id = next_id
         user.user_pw = next_pw
         user.save()
+        return redirect('/')
     return render(request, 'change-id.html')
 
 def search(request):
