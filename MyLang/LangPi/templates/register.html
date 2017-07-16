@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<script src="https://smtpjs.com/smtp.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
     <script>
 
         function duplication_check()
@@ -82,7 +81,6 @@
         },
         dataType: 'json',
         success: function (data) {
-        alert("이메일 인증번호가 발송되었습니다. 최대 10분정도 시간이 걸릴수 있습니다.");
           if (data.is_taken) {
             valid.value == "3";
             parent_node.className="form-group has-error";
@@ -90,6 +88,7 @@
             state_node.innerHTML = "Email is already exist";
           }
           else{
+          alert("이메일 인증번호가 발송되었습니다. 최대 10분정도 시간이 걸릴수 있습니다.");
           key = data.key;
           }
         },

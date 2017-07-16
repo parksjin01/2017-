@@ -1,33 +1,35 @@
-<html>
-<head>
-    <title>Example Id Find</title>
-<script src="https://smtpjs.com/smtp.js">
-    </script>
+{% extends 'base.html' %}
+{% block content %}
     <script>
-        function makeid()
+        var key = 0;
+
+        function go()
         {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for( var i=0; i < 10; i++ )
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-            return text;
+        var email = document.getElementById('user_email').value;
+	    var parent_node = document.getElementById('email_check');
+	    var state_node = document.getElementById('email_status');
+            $.ajax({
+            url: 'ajax/validate_mail/',
+        data: {
+          'email': email
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+          alert("이메일 인증번호가 발송되었습니다. 최대 10분정도 시간이 걸릴수 있습니다.");
+          key = data.key;
+          }
+          else{
+          parent_node.className="form-group has-error";
+            state_node.className = "label label-danger";
+            state_node.innerHTML = "Email is already exist";
+          }
+        },
+        error:function(e){
+            alert(e.responseText);
         }
-
-        var key = makeid();
-
-        function go(){
-            var email = document.getElementById('user_email').value;
-	    alert(email);
-            Email.send("parksjin01@naver.com",
-                email,
-                "This is your confirmation key",
-                key,
-                "smtp.naver.com",
-                "parksjin01",
-                "FXqy9k]Abj");
-        }
+      });
+      }
 
         function check(){
             var user_key = document.getElementById('user_confirm').value;
@@ -39,22 +41,36 @@
             }
             else
             {
+                alert("임시 아이디와 비밀번호가 메일로 발송됩니다.");
                 document.getElementById('myform').submit();
             }
 
         }
 
     </script>
-</head>
-<body>
-<form action="" method="POST" id="myform">
+<form action="" method="POST" id="myform" class="form-horizontal">
     {% csrf_token %}
-    <p>We will send your temporary id and password after email confirmation. I recommand you to change id and password</p>
-    <table>
-        <tr><td>Email: </td><td><input type="text" width="20" name="user_email" id="user_email"></td><td><button type="button" onclick="go()">Confirm</button></td></tr>
-        <tr><td>Confirm number: </td><td><input type="text" width="20" id="user_confirm"></td></tr>
-    </table>
-    <button type="button" onclick="check()">Find</button>
+    <div><p>회원가입시 사용한 이메일을 통해 임시 아이디와 비밀번호를 보내드립니다. 이메일 확인을 해주세요.</p>
+    <div class="form-group" id="email_check">
+        <label class="col-sm-2 control-label">E-mail</label>
+        <div class="col-sm-3">
+        <div class="input-group">
+            <input type="text", id="user_email" name="user_email" class="form-control" placeholder="Email">
+            <input hidden id="valid" value="0">
+            <span class="input-group-btn">
+                <button type=button class="btn btn-default" onclick="go()">Send</button>
+            </span>
+        </div>
+            <span id="email_status"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Confirm number</label>
+        <div class="col-sm-3">
+            <input type="text" id="user_confirm" class="form-control" placeholder="Confirm number">
+        </div>
+    </div>
+    <button type="submit" onclick="check()" class="btn btn-info col-md-offset-7">찾기</button>
+    </div>
 </form>
-</body>
-</html>
+{% endblock %}

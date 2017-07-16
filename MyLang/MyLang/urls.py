@@ -21,7 +21,7 @@ urlpatterns = [
     url('^$', home, name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', login, name='login'),
-    url(r'^find-id/', find_id, name='find_id'),
+    url(r'^find-id/$', find_id, name='find_id'),
     url(r'^change-id/', change_id, name='change_id'),
     url(r'^register/$',register, name='register'),
     url(r'^search/', search, name='search'),
@@ -44,4 +44,5 @@ urlpatterns = [
     url(r'get_listen_score/$', get_listen_score, name='get_listen_score'),
     url(r'register/ajax/validate_username/', id_check, name="id_check"),
     url(r'register/ajax/validate_mail/', email_check, name="email_check"),
+    url(r'find-id/ajax/validate_mail/', email_check_v2, name="email_check_v2"),
 ]
