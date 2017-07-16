@@ -70,9 +70,10 @@
     width: 150px;
     background-color: black;
     color: #fff;
-    text-align: center;
+    text-align: left;
     border-radius: 6px;
     padding: 5px 0;
+    font-size: 12px;
 
     /* Position the tooltip */
     position: absolute;
@@ -85,7 +86,8 @@
 </style>
 {% if result %}
 <p>
-	<h1 class="page-header">당신의 단어시험점수는 {{ result }} 점입니다. </h1>
+	<h1 class="page-header">당신의 단어시험점수는 {{ result }} 점입니다. 	     <small><span class="glyphicon glyphicon-info-sign updown"><span class="updowntext"><div style="padding:10px;"><span class="glyphicon glyphicon-chevron-up"></span>은 추천 버튼으로 단어의
+	등장빈도가 증가하고 <span class="glyphicon glyphicon-chevron-down"></span>은 비추천 버튼으로 단어가 아예 등장하지 않게 됩니다. <br></div></span></span></small></h1>
 </p>
 <form method="post" action="">
 	{% csrf_token %}
@@ -166,7 +168,7 @@
 </form>
 {% endif %}
 {% if test %}
-<h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요</h1>
+<h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요     <small><span class="glyphicon glyphicon-info-sign updown"><span class="updowntext"><div style="padding:10px;">여기서는 단어시험을 볼수 있습니다.<br></div></span></span></small></h1>
 <form method=POST action="">
     <input value="0" hidden name="method">
 {% csrf_token %}

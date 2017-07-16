@@ -99,9 +99,9 @@ def get_voca_score(request):
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
         return render(request, 'login_please.html')
-    voca_scores = pickle.loads(user.vocabulary_level)
+    voca_scores = pickle.loads(user.vocabulary_level)[:30][::-1]
     data = []
-    for idx in range(len(voca_scores[:30])):
+    for idx in range(len(voca_scores)):
         data.append({"close": voca_scores[idx].score, "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)
@@ -115,9 +115,9 @@ def get_read_score(request):
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
         return render(request, 'login_please.html')
-    read_scores = pickle.loads(user.readding_level)
+    read_scores = pickle.loads(user.readding_level)[:30][::-1]
     data = []
-    for idx in range(len(read_scores[:30])):
+    for idx in range(len(read_scores)):
         data.append({"close": read_scores[idx].score.strip('%'), "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)
@@ -131,9 +131,9 @@ def get_listen_score(request):
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
         return render(request, 'login_please.html')
-    listen_scores = pickle.loads(user.listening_level)
+    listen_scores = pickle.loads(user.listening_level)[:30][::-1]
     data = []
-    for idx in range(len(listen_scores[:30])):
+    for idx in range(len(listen_scores)):
         data.append({"close": listen_scores[idx].score, "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)

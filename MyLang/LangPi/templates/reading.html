@@ -1,5 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<style xmlns="http://www.w3.org/1999/html">
+.updown {
+    position: relative;
+    display: inline-block;
+    background-color:white;
+}
+
+.updown .updowntext {
+    visibility: hidden;
+    width: 150px;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 0;
+    margin: 20px;
+    font-size:12px;
+
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.updown:hover .updowntext {
+    visibility: visible;
+}
+</style>
+
 <script>
 	node1 = document.getElementById('home');
     node2 = document.getElementById('video');
@@ -18,7 +48,7 @@
 
 </script>
 {% if score == None %}
-<h1 class="page-header">장문 해석</h1>
+<h1 class="page-header">장문 해석     <small><span class="glyphicon glyphicon-info-sign updown"><span class="updowntext"><div style="padding:10px;">여기서는 독해 연습을 할 수 있습니다. 왼쪽 박스에 외국어 글을 입력하고 오른쪽 박스에 한국어 해석을 입력하면 해석의 정확도 평가를 해줍니다. 일반적으로 번역일을 하시는 분들의 정확도가 약 85%정도 입니다.<br></div></span></span></small></h1>
 	<form method=POST action="">
 		<!--<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />-->
         {% csrf_token %}
