@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import *
 from .Listening.caption_util import *
 from .reading import *
@@ -89,6 +89,54 @@ class Downloader(threading.Thread):
         print message_box
         user.message_box = cPickle.dumps(message_box)
         user.save()
+
+def get_voca_score(request):
+    try:
+        cur_user = request.COOKIES.get('ec')
+    except:
+        return render(request, 'login_please.html')
+    try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    voca_scores = pickle.loads(user.vocabulary_level)
+    data = []
+    for idx in range(len(voca_scores[:30])):
+        data.append({"close": voca_scores[idx].score, "date": idx+1})
+    # data = data[::-1]
+    return JsonResponse(data, safe=False)
+
+def get_read_score(request):
+    try:
+        cur_user = request.COOKIES.get('ec')
+    except:
+        return render(request, 'login_please.html')
+    try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    read_scores = pickle.loads(user.readding_level)
+    data = []
+    for idx in range(len(read_scores[:30])):
+        data.append({"close": read_scores[idx].score.strip('%'), "date": idx+1})
+    # data = data[::-1]
+    return JsonResponse(data, safe=False)
+
+def get_listen_score(request):
+    try:
+        cur_user = request.COOKIES.get('ec')
+    except:
+        return render(request, 'login_please.html')
+    try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    listen_scores = pickle.loads(user.listening_level)
+    data = []
+    for idx in range(len(listen_scores[:30])):
+        data.append({"close": listen_scores[idx].score, "date": idx+1})
+    # data = data[::-1]
+    return JsonResponse(data, safe=False)
 
 def test(request):
     return render(request, 'test.html')
