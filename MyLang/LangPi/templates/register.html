@@ -1,19 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-<script src="https://smtpjs.com/smtp.js">
-    </script>
+<script src="https://smtpjs.com/smtp.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script>
 
-        function makeid()
+        function duplication_check()
         {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for( var i=0; i < 10; i++ )
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-            return text;
+            var id_node = document.getElementById('user_id');
+            var valid = document.getElementById('valid');
+            var state_node = document.getElementById('id_status');
+            var parent_node = document.getElementById('id_duplicate');
+            $.ajax({
+            url: 'ajax/validate_username/',
+        data: {
+          'username': id_node.value
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            valid.value == "1";
+            parent_node.className="form-group has-error";
+            state_node.className = "label label-danger";
+            state_node.innerHTML = "ID is already exist";
+          }
+          else {
+          valid.value == "4";
+          parent_node.className = "form-group has-success";
+          state_node.className = "label label-success";
+          state_node.innerHTML = "You can use that ID";
+          }
+        },
+        error:function(e){
+            alert(e.responseText);
         }
+      });
+      }
 
         function minimum_length()
         {
@@ -48,17 +69,34 @@
             }
         }
 
-        var key = makeid();
+        var key = 0;
 
         function go(){
 	    var email = document.getElementById('user_email').value;
-            Email.send("parksjin01@naver.com",
-                email,
-                "This is your confirmation key",
-                key,
-                "smtp.naver.com",
-                "parksjin01",
-                "FXqy9k]Abj");
+	    var parent_node = document.getElementById('email_check');
+	    var state_node = document.getElementById('email_status');
+            $.ajax({
+            url: 'ajax/validate_mail/',
+        data: {
+          'email': email
+        },
+        dataType: 'json',
+        success: function (data) {
+        alert("이메일 인증번호가 발송되었습니다. 최대 10분정도 시간이 걸릴수 있습니다.");
+          if (data.is_taken) {
+            valid.value == "3";
+            parent_node.className="form-group has-error";
+            state_node.className = "label label-danger";
+            state_node.innerHTML = "Email is already exist";
+          }
+          else{
+          key = data.key;
+          }
+        },
+        error:function(e){
+            alert(e.responseText);
+        }
+      });
         }
 
         function check(){
@@ -67,9 +105,14 @@
             var node2 = document.getElementById('user_re_pw');
             var valid = document.getElementById('valid');
 
-            if (valid.value != '1')
+            if (valid.value == '0')
             {
                 alert("Your password is invalid\nYou have to enter 6 or more chars");
+            }
+
+            else if (valid.value == "1")
+            {
+                alert("Your password is duplicated with others");
             }
 
             else if (key != user_key)
@@ -120,10 +163,16 @@
         <!--<tr><td>E-mail: </td><td><input type="email" width=20 name="user_email" id="user_email"></td><td><input type=button onclick="go()" value="Confirm"/></td></tr>-->
         <!--<tr><td>Confirm: </td><td><input type="text" width=20 id="user_confirm"></td></tr>-->
     <!--</table>-->
-    <div class="form-group">
+    <div class="form-group" id="id_duplicate">
         <label class="col-sm-2 control-label">ID</label>
         <div class="col-sm-3">
-            <input type="text" name="user_id" id="user_id" class="form-control" placeholder="ID">
+            <div class="input-group">
+                <input type="text" name="user_id" id="user_id" class="form-control" placeholder="ID">
+                <span class="input-group-btn">
+                    <button type=button class="btn btn-default" onclick="duplication_check()">Check</button>
+            </span>
+            </div>
+            <span id="id_status"></span>
         </div>
     </div>
     <div class="form-group" id="valid_check">
@@ -140,7 +189,7 @@
         </div>
         <span id="status"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="email_check">
         <label class="col-sm-2 control-label">E-mail</label>
         <div class="col-sm-3">
         <div class="input-group">
@@ -150,6 +199,7 @@
                 <button type=button class="btn btn-default" onclick="go()">Send</button>
             </span>
         </div>
+            <span id="email_status"></span>
         </div>
     </div>
     <div class="form-group">

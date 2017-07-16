@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^login/', login, name='login'),
     url(r'^find-id/', find_id, name='find_id'),
     url(r'^change-id/', change_id, name='change_id'),
-    url(r'^register/',register, name='register'),
+    url(r'^register/$',register, name='register'),
     url(r'^search/', search, name='search'),
     url(r'^video/add/$', add_video, name='add_video'),
     url(r'^video/add/(?P<url>[0-9a-zA-Z_\-+=]+)/$', adder, name='adder'),
@@ -42,4 +42,6 @@ urlpatterns = [
     url(r'get_voca_score/$', get_voca_score, name='get_voca_score'),
     url(r'get_read_score/$', get_read_score, name='get_read_score'),
     url(r'get_listen_score/$', get_listen_score, name='get_listen_score'),
+    url(r'register/ajax/validate_username/', id_check, name="id_check"),
+    url(r'register/ajax/validate_mail/', email_check, name="email_check"),
 ]
