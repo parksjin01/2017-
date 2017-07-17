@@ -44,13 +44,27 @@ class Downloader(threading.Thread):
         url = self.url
         request = self.request
         hashed_url = ''
+        try:
+            cur_user = request.COOKIES.get('ec')
+        except:
+            return render(request, 'login_please.html')
+        try:
+            user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+        except:
+            return render(request, 'login_please.html')
         if 'http' not in url:
             url = 'https://www.youtube.com/watch?v=' + url
         try:
+            user_youtube = json.loads(user.youtube)
             vod = youtube.objects.get(url=url)
             vod.date = datetime.now()
             vod.save()
-            message = Message('비디오가 이미 추가되어있습니다.', time.time(), 1)
+            if url in user_youtube:
+                message = Message('비디오가 이미 추가되어있습니다.', time.time(), 1)
+            else:
+                user_youtube.append(url)
+                user.youtube = json.dumps(user_youtube)
+                message = Message('비디오가 추가되었습니다. 바로 <a href=/video/' + vod.hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1)
         except Exception, e:
             vod = youtube()
             titles = title(url)
@@ -74,14 +88,6 @@ class Downloader(threading.Thread):
                 vod.date = datetime.now()
                 vod.save()
                 message = Message('비디오가 추가되었습니다. 바로 <a href=/video/' + hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1)
-        try:
-            cur_user = request.COOKIES.get('ec')
-        except:
-            return render(request, 'login_please.html')
-        try:
-            user = user_info.objects.get(user_email=base64.b64decode(cur_user))
-        except:
-            return render(request, 'login_please.html')
         if user.message_box == '':
             message_box = [message]
         else:
@@ -225,6 +231,18 @@ def youtube_search(video_id=0, video_name='', max_results=5):
 # Parameter
 # ->url: 추가하려는 유튜브의 url
 def adder(request, url):
+    try:
+        cur_user = request.COOKIES.get('ec')
+    except:
+        return render(request, 'login_please.html')
+    try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    user_youtube = json.loads(user.youtube)
+    vod = youtube.objects.get(url='https://www.youtube.com/watch?v=' + url)
+    if 'https://www.youtube.com/watch?v='+url in user_youtube:
+        return redirect('/video/'+vod.hashed_url)
     downloader = Downloader(request, url)
     downloader.start()
     ctx = {'message': '검색하신 동영상에 맞는 자막을 찾아 다운로드받고 있습니다. 다소 시간이 걸리는 관계로 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.'}
@@ -239,10 +257,10 @@ def recommandation(url, num, cur):
         if tmp not in cur:
             res.append(tmp)
     if cur == []:
-        return res
+        return res[:num]
     else:
         print cur
-        return res + cur[:-num]
+        return res[:num] + cur[:20-num]
 
 def home(request):
     message = {}
@@ -358,7 +376,18 @@ def show_list(request):
     tube = youtube.objects.order_by('-date').all()
     ctx = {}
     video = []
+    try:
+        cur_user = request.COOKIES.get('ec')
+    except:
+        return render(request, 'login_please.html')
+    try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    user_youtube = json.loads(user.youtube)
     for vod in tube:
+        if vod.url not in user_youtube:
+            continue
         cap = vod.caption
         line = 0
         if '\r\n' in cap:

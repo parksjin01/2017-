@@ -32,6 +32,8 @@ class user_info(models.Model):
 	readding_level = models.TextField(default='0')
 	message_box = models.TextField(default='')
 	like_dislike_voca = models.TextField(default = '')
+	extended_voca = models.TextField(default='[]')
+	youtube = models.TextField(default='[]')
 
 class voca(models.Model):
 	foreign = models.TextField(default='')
