@@ -66,14 +66,14 @@ def caption_from_downsub(youtube):
     tag = tag.split('<br />')[:-1]
     for tmp_tag in tag:
         if 'English' in tmp_tag:
-	    soup = BeautifulSoup.BeautifulSoup(tmp_tag)
-	    a = soup.findAll('a')[0]
+            soup = BeautifulSoup.BeautifulSoup(tmp_tag)
+            a = soup.findAll('a')[0]
             driver = g_driver
             driver.get('http://downsub.com/'+a['href'])
             time.sleep(5)
-            driver.close()
-            driver.quit()
             break
+        driver.close()
+        driver.quit()
     flist = os.listdir(file_path)
     for i in flist:
         if '[DownSub.com]' in i:

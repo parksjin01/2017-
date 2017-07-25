@@ -45,4 +45,5 @@ urlpatterns = [
     url(r'register/ajax/validate_username/', id_check, name="id_check"),
     url(r'register/ajax/validate_mail/', email_check, name="email_check"),
     url(r'find-id/ajax/validate_mail/', email_check_v2, name="email_check_v2"),
+    url(r'add/vocabulary/', add_voca, name="add_voca"),
 ]

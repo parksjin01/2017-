@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+	node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+
+        node4.className += " active";
+    function add(){
+        var node = document.getElementById("add_number");
+        var space = document.getElementById("forms");
+        var idx = 0;
+        var tmp = 0;
+        var tmp_label1 = 0;
+        var tmp_input1 = 0;
+        var tmp_label2 = 0;
+        var tmp_input2 = 0;
+        var tmp_div1 = 0;
+        var tmp_div2 = 0;
+        space.remove();
+        space = document.createElement("div");
+        space.setAttribute("id", "forms");
+        node = node.value;
+        for (idx; idx<node; idx++)
+        {
+            tmp = document.createElement("div");
+            tmp.className = "form-group";
+            tmp_div1 = document.createElement("div");
+            tmp_div2 = document.createElement("div");
+            tmp_div1.className = "col-md-4";
+            tmp_div2.className = "col-md-4";
+            tmp_label1 = document.createElement("label");
+            tmp_label2 = document.createElement("label");
+            tmp_label1.innerHTML = "단어";
+            tmp_label2.innerHTML = "뜻";
+            tmp_label1.className = "col-md-1 control-label";
+            tmp_label2.className = "col-md-1 control-label";
+            tmp_input1 = document.createElement("input");
+            tmp_input2 = document.createElement("input");
+            tmp_input1.setAttribute("name", "word"+String(idx+1));
+            tmp_input2.setAttribute("name", "mean"+String(idx+1));
+            tmp_input1.setAttribute("type", "text");
+            tmp_input2.setAttribute("type", "text");
+            tmp_input1.className = "form-control";
+            tmp_input2.className = "form-control";
+            tmp_div1.appendChild(tmp_input1);
+            tmp_div2.appendChild(tmp_input2);
+            tmp.appendChild(tmp_label1);
+            tmp.appendChild(tmp_div1);
+            tmp.appendChild(tmp_label2);
+            tmp.appendChild(tmp_div2);
+            space.appendChild(tmp);
+        }
+        tmp_div1 = document.createElement("div");
+        tmp_div1.className = "col-md-offset-8";
+        tmp_input1 = document.createElement("button");
+        tmp_input1.className = "btn btn-info";
+        tmp_input1.innerHTML = "추가";
+        tmp_div1.appendChild(tmp_input1);
+        space.appendChild(tmp_div1);
+        document.getElementById("user_form").appendChild(space);
+    }
+</script>
+<form class="form-horizontal" id="user_form" method="post">
+{% csrf_token %}
+    <div class="form-group">
+        <label>추가할 단어 갯수</label>
+        <input type="number" value="1" max="10" min="1" id="add_number" onchange="add()" style="border:none; width:40px;" name="number">
+    </div>
+    <div id="forms">
+        <div class="form-group">
+        <label class="col-md-1 control-label">단어</label>
+        <div class="col-md-4">
+            <input type="text", name="word1" class="form-control">
+        </div>
+        <label class="col-md-1 control-label">뜻</label>
+        <div class="col-md-4">
+            <input type="text", name="mean1" class="form-control">
+        </div>
+        </div>
+        <div class="col-md-offset-8">
+        <button class="btn btn-info" onclick="alert('단어가 추가되었습니다.')">추가</button>
+    </div>
+    </div>
+</form>
+{% endblock %}

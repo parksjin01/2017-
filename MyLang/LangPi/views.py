@@ -22,6 +22,7 @@ import threading
 import copy
 import os
 import json
+import urllib
 
 class Score():
     def __init__(self, score, date):
@@ -208,6 +209,7 @@ VOD_URL2 = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%s&maxRe
 # Return
 # ->(url, 제목, 설명, 썸네일 url)
 def youtube_search(video_id=0, video_name='', max_results=5):
+    video_name = urllib.quote_plus(video_name.encode('utf-8'))
     if video_id != 0:
         html = urllib2.urlopen(VOD_URL1 % (max_results, video_id)).read()
     elif video_name != '':
@@ -240,12 +242,17 @@ def adder(request, url):
     except:
         return render(request, 'login_please.html')
     user_youtube = json.loads(user.youtube)
-    vod = youtube.objects.get(url='https://www.youtube.com/watch?v=' + url)
     if 'https://www.youtube.com/watch?v='+url in user_youtube:
+        vod = youtube.objects.get(url='https://www.youtube.com/watch?v=' + url)
         return redirect('/video/'+vod.hashed_url)
     downloader = Downloader(request, url)
     downloader.start()
     ctx = {'message': '검색하신 동영상에 맞는 자막을 찾아 다운로드받고 있습니다. 다소 시간이 걸리는 관계로 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.'}
+    user_youtube.append(url)
+    print user_youtube
+    print url
+    user.youtube = json.dumps(user_youtube)
+    user.save()
     return render(request, 'user_message.html', ctx)
 
 def recommandation(url, num, cur):
@@ -317,6 +324,10 @@ def show(request, name):
     except:
         return render(request, 'login_please.html')
     try:
+        user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+    except:
+        return render(request, 'login_please.html')
+    try:
         his = history.objects.filter(cur_user=cur_user)[0]
     except:
         his = history()
@@ -332,7 +343,6 @@ def show(request, name):
         recommand = recommandation(his.cur, 5, recommand)
         his.recommand = pickle.dumps(recommand)
     print type(his.recommand)
-    user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     his.cur_user = unicode(cur_user)
     try:
         his.save()
@@ -432,11 +442,13 @@ def add_video(request):
     if request.method == 'POST':
         if request.POST.get('url') != u'':
             url = request.POST.get('url')
-            adder(request, url)
+            return adder(request, url)
         elif request.POST.get('keyword') != u'':
             keyword = request.POST.get('keyword')
             video = youtube_search(video_name=keyword, max_results=40)
             ctx['video'] = video
+            return render(request, 'add_video.html', ctx)
+        else:
             return render(request, 'add_video.html', ctx)
     else:
         return render(request, 'add_video.html', ctx)
@@ -655,14 +667,19 @@ def mypage_likedislike(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     if request.method == 'POST':
         selected = request.POST.get('select').split(',')
-        selected = [int(selected[0]), selected[1]]
-        like_dislike = json.loads(user.like_dislike_voca)
-        if selected in like_dislike['like']:
-            like_dislike['like'].remove(selected)
-        elif selected in like_dislike['dislike']:
-            like_dislike['dislike'].remove(selected)
-        print like_dislike
-        user.like_dislike_voca = json.dumps(like_dislike)
+        try:
+            selected = [int(selected[0]), selected[1]]
+            like_dislike = json.loads(user.like_dislike_voca)
+            if selected in like_dislike['like']:
+                like_dislike['like'].remove(selected)
+            elif selected in like_dislike['dislike']:
+                like_dislike['dislike'].remove(selected)
+            user.like_dislike_voca = json.dumps(like_dislike)
+        except:
+            user_word = json.loads(user.extended_voca)
+            if selected in user_word:
+                user_word.remove(selected)
+            user.extended_voca = json.dumps(user_word)
         user.save()
     ctx = {'title': 'ML(MyLang) mypage'}
     error = ''
@@ -678,8 +695,15 @@ def mypage_likedislike(request):
     except:
         error += "아직 추천단어/비추천단어를 설정하지 않으셨습니다."
 
+    try:
+        user_word = json.loads(user.extended_voca)
+        assert len(user_word) != 0
+
+    except:
+        error += "아직 단어를 추가하지 않으셨습니다."
     ctx['like'] = like
     ctx['dislike'] = dislike
+    ctx['word'] = user_word
     ctx['error'] = error
 
     return render(request, 'voca_like_dislike.html', ctx)
@@ -698,18 +722,24 @@ def vocabulary(request):
             dislike = request.POST.get('dislike').split(',')
 
             for word in like:
-                if word == '':
-                    break
-                word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
-                like_dislike['like'].append([word_info.id, word])
-                word_info.save()
+                try:
+                    if word == '':
+                        break
+                    word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
+                    like_dislike['like'].append([word_info.id, word])
+                    word_info.save()
+                except:
+                    pass
 
             for word in dislike:
-                if word == '':
-                    break
-                word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
-                like_dislike['dislike'].append([word_info.id, word])
-                word_info.save()
+                try:
+                    if word == '':
+                        break
+                    word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
+                    like_dislike['dislike'].append([word_info.id, word])
+                    word_info.save()
+                except:
+                    pass
 
             user.like_dislike_voca = json.dumps(like_dislike)
             user.save()
@@ -751,6 +781,7 @@ def vocabulary(request):
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
     except:
         return render(request, 'login_please.html')
+    user_word = json.loads(user.extended_voca)
     like_dislike = json.loads(user.like_dislike_voca)
     if like_dislike == u'0' or like_dislike == 0:
         like_dislike = {'like':[], 'dislike':[]}
@@ -776,19 +807,29 @@ def vocabulary(request):
         question = 40
     test = set()
     while len(test) < question:
-        random_number = random.randrange(num)
-        random_voca = pickle.loads(voca.objects.get(id=random_number + 3335).foreign)['en']
-        if ([random_number, random_voca] not in like_dislike['like']) and ([random_number, random_voca] not in like_dislike['dislike']):
-            test.add(random.randrange(num))
+        random_number = random.randrange(num+len(user_word))
+        if random_number < num:
+            random_voca = pickle.loads(voca.objects.get(id=random_number + 3335).foreign)['en']
+            if ([random_number, random_voca] not in like_dislike['like']) and ([random_number, random_voca] not in like_dislike['dislike']):
+                test.add(random_number)
+        else:
+            test.add(random_number)
     word = []
     answer = []
     for idx in test:
         tmp = []
-        tmp.append(pickle.loads(voca.objects.get(id=idx + 3335).foreign)['en'])
+        if idx < num:
+            tmp.append(pickle.loads(voca.objects.get(id=idx + 3335).foreign)['en'])
+        else:
+            tmp.append(user_word[idx-num][0])
         meaning = []
-        whole_meaning = pickle.loads(voca.objects.get(id=idx + 3335).korean)
-        tmp_meaning = pickle.loads(voca.objects.get(id=idx + 3335).korean)[
-            random.randrange(len(pickle.loads(voca.objects.get(id=idx + 3335).korean)))]
+        if idx < num:
+            whole_meaning = pickle.loads(voca.objects.get(id=idx + 3335).korean)
+            tmp_meaning = pickle.loads(voca.objects.get(id=idx + 3335).korean)[
+                random.randrange(len(pickle.loads(voca.objects.get(id=idx + 3335).korean)))]
+        else:
+            whole_meaning = user_word[idx-num][1]
+            tmp_meaning = user_word[idx-num][1]
         meaning.append(tmp_meaning)
         while len(meaning) < example:
             rand = random.randrange(num)
@@ -814,3 +855,30 @@ def vocabulary(request):
     http = render(request, 'voca.html', ctx)
     http.set_cookie(key="youan", value=cur_date)
     return http
+
+def add_voca(request):
+    if request.method == 'POST':
+        word = []
+        final = []
+        try:
+            cur_user = request.COOKIES.get('ec')
+        except:
+            return render(request, 'login_please.html')
+        try:
+            user = user_info.objects.get(user_email=base64.b64decode(cur_user))
+        except:
+            return render(request, 'login_please.html')
+        number = int(request.POST.get("number"))
+        for i in range(1, number+1):
+            word.append([request.POST.get("word"+str(i)), request.POST.get("mean"+str(i))])
+        for w in word:
+            try:
+                voca.objects.get(foreign__contains="V%s\n" %w[0])
+            except:
+                final.append(w)
+        user_word = json.loads(user.extended_voca)
+        user_word += final
+        user.extended_voca = json.dumps(user_word)
+        user.save()
+        return render(request, 'home.html')
+    return render(request, 'add_voca.html')

@@ -164,7 +164,10 @@
 {% endfor %}
 	<input hidden name="like" id="like" value="">
 	<input hidden name="dislike" id="dislike" value="">
-	<button onclick="yeah()" type="submit">평가하기!</button>
+	<div class="col-md-offset-8">
+		<a href="/add/vocabulary" class="col-md-4"><button class="btn btn-info" type="button">단어추가</button></a>
+		<button onclick="yeah()" type="submit" class="btn btn-info">평가하기!</button>
+	</div>
 </form>
 {% endif %}
 {% if test %}
@@ -199,7 +202,10 @@
 		</div>
 	</div>
 {% endfor %}
-<button type=submit class="btn btn-info">채점!!!</button>
+	<div class="col-md-offset-8">
+		<a href="/add/vocabulary" class="col-md-4"><span class="btn btn-info">단어추가</span></a>
+		<button type=submit class=" btn btn-info">채점!!!</button>
+	</div>
 </form>
 {% endif %}
 {% endblock %}
