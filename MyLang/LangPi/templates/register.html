@@ -17,13 +17,13 @@
         dataType: 'json',
         success: function (data) {
           if (data.is_taken) {
-            valid.value == "1";
+            valid.value = "1";
             parent_node.className="form-group has-error";
             state_node.className = "label label-danger";
             state_node.innerHTML = "ID is already exist";
           }
           else {
-          valid.value == "4";
+          valid.value = "4";
           parent_node.className = "form-group has-success";
           state_node.className = "label label-success";
           state_node.innerHTML = "You can use that ID";
@@ -64,7 +64,7 @@
                 parent_node.className = "form-group has-success";
                 span.className = "label label-success";
                 span.innerHTML = "";
-                result.value = '1';
+                result.value = '4';
             }
         }
 
@@ -82,7 +82,7 @@
         dataType: 'json',
         success: function (data) {
           if (data.is_taken) {
-            valid.value == "3";
+            valid.value = "3";
             parent_node.className="form-group has-error";
             state_node.className = "label label-danger";
             state_node.innerHTML = "Email is already exist";
@@ -111,7 +111,7 @@
 
             else if (valid.value == "1")
             {
-                alert("Your password is duplicated with others");
+                alert("Your ID is duplicated with others");
             }
 
             else if (key != user_key)

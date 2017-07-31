@@ -27,11 +27,15 @@ class user_info(models.Model):
 	user_id = models.TextField(default='')
 	user_pw = models.TextField(default='')
 	user_email = models.TextField(default='')
-	listening_level = models.TextField(default='')
-	vocabulary_level = models.TextField(default='0')
-	readding_level = models.TextField(default='0')
-	message_box = models.TextField(default='')
-	like_dislike_voca = models.TextField(default = '')
+	listening_level = models.TextField(default='''(lp0
+.''')
+	vocabulary_level = models.TextField(default='''(lp0
+.''')
+	readding_level = models.TextField(default='''(lp0
+.''')
+	message_box = models.TextField(default='''(lp0
+.''')
+	like_dislike_voca = models.TextField(default = '{"like":[], "dislike":[]}')
 	extended_voca = models.TextField(default='[]')
 	youtube = models.TextField(default='[]')
 
