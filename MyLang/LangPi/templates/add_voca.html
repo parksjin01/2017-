@@ -13,6 +13,29 @@
         node4.className = "";
 
         node4.className += " active";
+
+    function submit()
+    {
+        var form = document.getElementById("user_form");
+        var tags = document.getElementsByTagName("input");
+        var valid = 1;
+        for(idx = 2; idx < tags.length; idx++)
+        {
+            const regex = /[!@#$%^&*()_\-+=\{\}\[\]\\:;\"',.\/\<\>\/\?0-9]+/;
+            if(regex.exec(tags[idx].value))
+            {
+                valid = 0;
+            }
+        }
+        if (valid == 1)
+        {
+            alert("단어가 추가되었습니다");
+            form.submit();
+        }
+        else
+            alert("숫자/특수문자/공백은 사용하실수 없습니다.");
+    }
+
     function add(){
         var node = document.getElementById("add_number");
         var space = document.getElementById("forms");
@@ -60,13 +83,15 @@
         }
         tmp_div1 = document.createElement("div");
         tmp_div1.className = "col-md-offset-8";
-        tmp_input1 = document.createElement("button");
+        tmp_input1 = document.createElement("span");
         tmp_input1.className = "btn btn-info";
         tmp_input1.innerHTML = "추가";
+        tmp_input1.onclick = submit;
         tmp_div1.appendChild(tmp_input1);
         space.appendChild(tmp_div1);
         document.getElementById("user_form").appendChild(space);
     }
+
 </script>
 <form class="form-horizontal" id="user_form" method="post">
 {% csrf_token %}
@@ -86,7 +111,7 @@
         </div>
         </div>
         <div class="col-md-offset-8">
-        <button class="btn btn-info" onclick="alert('단어가 추가되었습니다.')">추가</button>
+        <span class="btn btn-info" onclick="submit()">추가</span>
     </div>
     </div>
 </form>

@@ -23,7 +23,8 @@ def add_voca(request):
             return render(request, "login_please.html")
         number = int(request.POST.get("number"))
         for i in range(1, number+1):
-            word.append([request.POST.get("word"+str(i)), request.POST.get("mean"+str(i))])
+            if [request.POST.get("word"+str(i)), request.POST.get("mean"+str(i))] != [u"", u""]:
+                word.append([request.POST.get("word"+str(i)), request.POST.get("mean"+str(i))])
         for w in word:
             try:
                 voca.objects.get(foreign__contains="V%s\n" %w[0])

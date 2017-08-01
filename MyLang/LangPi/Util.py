@@ -129,7 +129,6 @@ def mypage_listening(request):
 
 def mypage(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
-    ctx = {'title': 'ML(MyLang) mypage'}
     error = ''
     listen = []
     reading = []
@@ -141,7 +140,8 @@ def mypage(request):
             listen.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score.date)), score.score])
         if len(listen_scores) > 5:
             listen.append(['...', '...'])
-    except:
+    except Exception, e:
+        print e
         error += 'You haven\'t do listening\n'
     try:
         reading_scores = pickle.loads(user.readding_level)
@@ -178,4 +178,5 @@ def mypage(request):
     user.save()
     ctx = {'listening': listen, 'reading': reading, 'voca': voca, 'message_box': message_box, 'error': error}
     ctx['title'] = 'ML(MyLang) mypage'
+    print ctx
     return render(request, 'mypage.html', ctx)
