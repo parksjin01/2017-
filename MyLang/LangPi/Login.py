@@ -30,7 +30,7 @@ def login(request):
             return http
         except Exception, e:
             message = {'error': 'Incorrect Id or Password', 'title':'ML(MyLanguage) Login'}
-            return render(request, 'login.html', message, message)
+            return render(request, 'login.html', message)
     return render(request, 'login.html', {'title':'ML(MyLanguage) Login'})
 
 def register(request):
@@ -65,7 +65,7 @@ def find_id(request):
             msg['Subject'] = 'Your temporary ID and Password'
             smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
             smtp.ehlo()
-            smtp.login('parksjin01', 'FXqy9k]Abj')
+            smtp.login('parksjin01', 'Sj199402')
             smtp.sendmail('parksjin01@naver.com', [request.POST.get('user_email')], msg.as_string())
             smtp.close()
             user.user_id = tmp_id

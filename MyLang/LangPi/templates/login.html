@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if error %}
+	<script>
+		alert("없는 아이디이거나 비밀번호입니다.");
+	</script>
+{% endif %}
 <h1 class="page-header">Login</h1>
 <form method="POST" action="" class="form-horizontal">
 	{% csrf_token %}

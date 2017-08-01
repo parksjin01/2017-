@@ -2,7 +2,8 @@
 {% block content %}
 
     <script>
-
+    var valid_id = "";
+    var valid_email = "";
         function duplication_check()
         {
             var id_node = document.getElementById('user_id');
@@ -24,6 +25,7 @@
           }
           else {
           valid.value = "4";
+          valid_id = id_node.value;
           parent_node.className = "form-group has-success";
           state_node.className = "label label-success";
           state_node.innerHTML = "You can use that ID";
@@ -89,6 +91,7 @@
           }
           else{
           alert("이메일 인증번호가 발송되었습니다. 최대 10분정도 시간이 걸릴수 있습니다.");
+          valid_email = email;
           key = data.key;
           }
         },
@@ -104,7 +107,17 @@
             var node2 = document.getElementById('user_re_pw');
             var valid = document.getElementById('valid');
 
-            if (valid.value == '0')
+            if(valid_id != document.getElementById("user_id").innerHTML)
+            {
+                alert("You should check ID duplication");
+            }
+
+            else if(valid_email != document.getElementById("user_email").innerHTML)
+            {
+                alert("You shoud check email duplication");
+            }
+
+            else if (valid.value == '0')
             {
                 alert("Your password is invalid\nYou have to enter 6 or more chars");
             }
