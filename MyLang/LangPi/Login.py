@@ -6,6 +6,7 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 import email.utils
+import json
 
 def get_current_user(request):
     try:
@@ -54,6 +55,9 @@ def find_id(request):
         tmp_id = ''
         tmp_pw = ''
         try:
+            with open('./LangPi/Secret', 'r') as f:
+                data = f.read()
+            data = json.loads(data)
             user = user_info.objects.get(user_email=request.POST.get('user_email'))
             for i in range(10):
                 tmp_id += key_pool[random.randrange(0, len(key_pool))]
@@ -65,7 +69,7 @@ def find_id(request):
             msg['Subject'] = 'Your temporary ID and Password'
             smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
             smtp.ehlo()
-            smtp.login('parksjin01', 'Sj199402')
+            smtp.login(data['id'], data['pw'])
             smtp.sendmail('parksjin01@naver.com', [request.POST.get('user_email')], msg.as_string())
             smtp.close()
             user.user_id = tmp_id

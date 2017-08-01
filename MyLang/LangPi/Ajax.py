@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import Login
 import pickle
 from django.shortcuts import render
+import json
 
 def email_check_v2(request):
     data = {'is_taken': user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists()}
@@ -14,6 +15,9 @@ def email_check_v2(request):
     for i in range(10):
         key += chr(random.randrange(0x21, 0x7f))
     data['key'] = key
+    with open('./LangPi/Secret', 'r') as f:
+        secret = f.read()
+    secret = json.loads(secret)
     if user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists() == True:
         message = 'Your validation key: %s\n' % (key)
         msg = MIMEText(message)
@@ -22,7 +26,7 @@ def email_check_v2(request):
         msg['Subject'] = 'Your temporary ID and Password'
         smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
         smtp.ehlo()
-        smtp.login('parksjin01', 'FXqy9k]Abj')
+        smtp.login(secret['id'], secret['pw'])
         smtp.sendmail('parksjin01@naver.com', [request.GET.get('email')], msg.as_string())
         smtp.close()
     return JsonResponse(data)
@@ -33,6 +37,9 @@ def email_check(request):
     for i in range(10):
         key += chr(random.randrange(0x21, 0x7f))
     data['key'] = key
+    with open('./LangPi/Secret', 'r') as f:
+        secret = f.read()
+    secret = json.loads(secret)
     if user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists() == False:
         message = 'Your validation key: %s\n' % (key)
         msg = MIMEText(message)
@@ -41,7 +48,7 @@ def email_check(request):
         msg['Subject'] = 'Your temporary ID and Password'
         smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
         smtp.ehlo()
-        smtp.login('parksjin01', 'FXqy9k]Abj')
+        smtp.login(secret['id'], secret['pw'])
         smtp.sendmail('parksjin01@naver.com', [request.GET.get('email')], msg.as_string())
         smtp.close()
     return JsonResponse(data)

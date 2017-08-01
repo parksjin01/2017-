@@ -329,6 +329,8 @@ def reading(request):
             ctx = {'title':'ML(MyLang) Reading', 'error':'1'}
             return render(request, 'reading.html', ctx)
         score = read(request.POST.get('foreign'), request.POST.get('kor'))
+        if score[0] == u'-':
+            score = u'0%'
         user = Login.get_current_user(request)
         if user == -1:
             return render(request, "login_please.html")
