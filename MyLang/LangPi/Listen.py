@@ -2,11 +2,9 @@
 
 from .Listening.caption_util import *
 import Login
-import urllib2
-import urllib
-import json
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import youtube, tmp_answer, history, user_info
+from download_caption import *
 import threading
 import binascii
 import time
@@ -14,6 +12,7 @@ import pickle
 import base64
 import datetime
 import Util
+
 
 class Downloader(threading.Thread):
     def __init__(self, request, url):
@@ -28,12 +27,12 @@ class Downloader(threading.Thread):
         user = Login.get_current_user(request)
         if user == -1:
             return render(request, "login_please.html")
-        if 'http' not in url:
+        if u'http' not in url:
             url = 'https://www.youtube.com/watch?v=' + url
         try:
             user_youtube = json.loads(user.youtube)
             vod = youtube.objects.get(url=url)
-            vod.date = datetime.now()
+            vod.date = datetime.datetime.now()
             vod.save()
             if url in user_youtube:
                 message = ['비디오가 이미 추가되어있습니다.', time.time(), 1]
@@ -61,7 +60,7 @@ class Downloader(threading.Thread):
                 vod.url = url
                 vod.hashed_url = hashed_url
                 vod.caption = content
-                vod.date = datetime.now()
+                vod.date = datetime.datetime.now()
                 vod.save()
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
         if user.message_box == '':

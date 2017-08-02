@@ -10,8 +10,13 @@ import BeautifulSoup
 import hashlib
 from pyvirtualdisplay import Display
 import urllib2
+import urllib
 import json
 import platform
+
+URL1 = 'http://downsub.com/?url='
+URL2 = 'http://downsub.com'
+country = {'en':'English', 'ja':'Japan', 'ko':'Korea'}
 
 def title(url):
     id = url.split('?v=')[1]
@@ -40,49 +45,26 @@ def url_decode(url):
             i += 1
     return res
 
-def caption_from_downsub(youtube):
-    display = Display(visible=0, size=(800, 800))
-    display.start()
-    file_path = '/Volumes/UUI/2017-/MyLang/LangPi'
-    chrome_options = webdriver.ChromeOptions()
-    prefs = {"download.default_directory" : file_path}
-    chrome_options.add_experimental_option("prefs",prefs)
-    if platform.system() == 'Darwin':
-        path = '/Volumes/UUI/2017-/MyLang/webdriver/osx/chromedriver'
-    else:
-        path = '/Volumes/UUI/2017-/MyLang/webdriver/linux/chromedriver'
-    while True:
-        driver = webdriver.Chrome(executable_path=path, chrome_options=chrome_options)
-        driver.get('http://downsub.com/?url='+youtube)
-        html = driver.page_source
-        if 'div' in html:
-            g_driver = driver
-            break
-        driver.close()
-        driver.quit()
-    soup = BeautifulSoup.BeautifulSoup(html)
-    tag = soup.findAll('div', attrs={'id':'show'})
-    tag = str(tag)
-    tag = tag.split('<br />')[:-1]
-    for tmp_tag in tag:
-        if 'English' in tmp_tag:
-            soup = BeautifulSoup.BeautifulSoup(tmp_tag)
-            a = soup.findAll('a')[0]
-            driver = g_driver
-            driver.get('http://downsub.com/'+a['href'])
-            time.sleep(5)
-            break
-        driver.close()
-        driver.quit()
-    flist = os.listdir(file_path)
-    for i in flist:
-        if '[DownSub.com]' in i:
-            title = i
-            break
-    print file_path+'/'+title
-    with open(file_path+'/'+title, 'rt') as f:
-        data = f.read()
-    os.remove(file_path+'/'+title)
-    return data, str(hashlib.sha256(youtube).hexdigest())
-
 # print caption_from_downsub('https://www.youtube.com/watch?v=zHZ6bNvzzJ4')
+
+def caption_from_downsub(youtube, lang='en'):
+    if len(lang) == 2:
+        lang = country[lang]
+    request = urllib2.Request(URL1+urllib.quote_plus(youtube))
+    request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
+    html = urllib2.urlopen(request).read()
+    soup = BeautifulSoup.BeautifulSoup(html)
+    tags = str(soup.findAll('div', attrs={'id':'show'})[0])
+    tags = tags.split('<br />')
+    href = ''
+    for line in tags:
+        if lang in line:
+            soup = BeautifulSoup.BeautifulSoup(line)
+            a = soup.findAll('a')[0]
+            href = a['href']
+            break
+    print href
+    request = urllib2.Request(URL2+href)
+    request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
+    html = urllib2.urlopen(request).read()
+    return html, str(hashlib.sha256(youtube).hexdigest())

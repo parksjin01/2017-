@@ -8,12 +8,6 @@ import json
 import time
 import cPickle
 
-class Score():
-    def __init__(self, score, date):
-        self.score = score
-        self.date = date
-
-
 def add_voca(request):
     if request.method == 'POST':
         word = []
@@ -112,7 +106,7 @@ def voca_exam(request):
     levels = []
     if len(scores) != 0:
         for i in scores[:5]:
-            levels.append(i.score)
+            levels.append(i[0])
         level = sum(map(int, levels)) / len(levels)
     else:
         level = 70
