@@ -92,9 +92,9 @@ def voca_exam(request):
         print whole_answer
         ctx = {'result': result, 'whole': whole}
         ctx['title'] = 'ML(MyLang) Voca result'
-        score = Score(int(result), time.time())
-        levels = [score] + cPickle.loads(str(user.vocabulary_level))
-        user.vocabulary_level = cPickle.dumps(levels)
+        score = [int(result), time.time()]
+        levels = [score] + json.loads(str(user.vocabulary_level))
+        user.vocabulary_level = json.dumps(levels)
         user.save()
         tmp.delete()
         return render(request, 'voca.html', ctx)
@@ -108,7 +108,7 @@ def voca_exam(request):
     like_dislike = json.loads(user.like_dislike_voca)
     if like_dislike == u'0' or like_dislike == 0:
         like_dislike = {'like':[], 'dislike':[]}
-    scores = cPickle.loads(str(user.vocabulary_level))
+    scores = json.loads(str(user.vocabulary_level))
     levels = []
     if len(scores) != 0:
         for i in scores[:5]:
