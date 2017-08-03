@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import base64
 from .models import user_info
 from django.shortcuts import render, redirect
@@ -35,10 +37,11 @@ def login(request):
     return render(request, 'login.html', {'title':'ML(MyLanguage) Login'})
 
 def register(request):
+    ctx = {'title':'회원가입'}
     if request.method == 'POST':
         try:
             user_info.objects.get(user_email=request.POST.get('user_email'))
-            message = {'error': 'Email address is already inuse'}
+            message = {'error': 'Email address is already inuse', 'title':'Error'}
             return render(request, 'register.html', message)
         except:
             new_user = user_info()
@@ -47,9 +50,10 @@ def register(request):
             new_user.user_email = request.POST.get('user_email')
             new_user.save()
             return redirect('/login/')
-    return render(request, 'register.html')
+    return render(request, 'register.html', ctx)
 
 def find_id(request):
+    ctx = {'title':"아이디/비밀번호 찾기"}
     if request.method == 'POST':
         key_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         tmp_id = ''
@@ -78,9 +82,11 @@ def find_id(request):
         except Exception, e:
             pass
         return redirect('/')
-    return render(request, 'find-id.html')
+    return render(request, 'find-id.html', ctx)
 
 def change_id(request):
+    ctx = {'title':'아이디 변경'}
+    ctx['user_id'] = get_current_user(request).user_id
     if request.method == 'POST':
         next_id = request.POST.get('user_id')
         next_pw = hashlib.md5(request.POST.get('user_pw')).hexdigest()
@@ -90,4 +96,4 @@ def change_id(request):
         user.user_pw = next_pw
         user.save()
         return redirect('/')
-    return render(request, 'change-id.html')
+    return render(request, 'change-id.html', ctx)

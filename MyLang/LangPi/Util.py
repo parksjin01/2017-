@@ -29,8 +29,8 @@ def mypage_likedislike(request):
             user.extended_voca = json.dumps(user_word)
         user.save()
     ctx = {'title': 'ML(MyLang) mypage'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     error = ''
-    voca = []
     try:
         like_dislike = json.loads(user.like_dislike_voca)
         assert like_dislike != 0
@@ -58,6 +58,7 @@ def mypage_likedislike(request):
 def mypage_message(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     if user.message_box != '':
         print user.message_box
         message_boxs = json.loads(user.message_box)
@@ -81,6 +82,7 @@ def mypage_message(request):
 def mypage_vocabulary(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     error = ''
     voca = []
     try:
@@ -99,6 +101,7 @@ def mypage_vocabulary(request):
 def mypage_reading(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     error = ''
     reading = []
     try:
@@ -117,6 +120,7 @@ def mypage_reading(request):
 def mypage_listening(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     error = ''
     listen = []
     try:
@@ -182,6 +186,7 @@ def mypage(request):
     user.save()
     ctx = {'listening': listen, 'reading': reading, 'voca': voca, 'message_box': message_box, 'error': error}
     ctx['title'] = 'ML(MyLang) mypage'
+    ctx['user_id'] = Login.get_current_user(request).user_id
     print ctx
     return render(request, 'mypage.html', ctx)
 
@@ -191,6 +196,7 @@ def home(request):
     try:
         user_email = request.COOKIES.get('ec')
         answers = tmp_answer.objects.filter(cur_user=user_email)
+        message['user_id'] = Login.get_current_user(request).user_id
         for answer in answers:
             answer.delete()
     except Exception, e:
@@ -220,6 +226,7 @@ def recommandation(url, num, cur):
 
 def write(request):
     ctx = {'title': '글쓰기', 'authority':'0'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     if request.method == "POST":
         user = Login.get_current_user(request)
         memo = board()
@@ -238,6 +245,7 @@ def write(request):
 def bullet_board(request):
     href = "/board/show?date=%s&id=%s"
     ctx = {'title': '게시판'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     ctx['category'] = request.GET.get('c')
     memo = board.objects.filter(category__exact=ctx['category'])
     message = []
@@ -249,6 +257,7 @@ def bullet_board(request):
 
 def show_memo(request):
     ctx = {'title': '게시판'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     href = "/board/edit?date=%s&id=%s"
     date = request.GET.get('date')
     id = request.GET.get('id')
@@ -267,6 +276,7 @@ def show_memo(request):
 
 def edit(request):
     ctx = {'title': '게시판'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     date = request.GET.get('date')
     id = request.GET.get('id')
     memo = board.objects.get(date=date, author=id)
@@ -292,6 +302,7 @@ def mypage_board(request):
     user = Login.get_current_user(request)
     href = "/board/show?date=%s&id=%s"
     ctx = {'title': '게시판'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     memo = board.objects.filter(author__exact=user.user_id)
     message = []
     for tmp in memo:

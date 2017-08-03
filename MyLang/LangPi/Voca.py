@@ -1,3 +1,5 @@
+# -*- encoding:utf-8 -*-
+
 from .models import voca, tmp_answer, user_info
 import pickle
 import random
@@ -9,6 +11,8 @@ import time
 import cPickle
 
 def add_voca(request):
+    ctx = {'title': '단어 추가'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     if request.method == 'POST':
         word = []
         final = []
@@ -28,14 +32,16 @@ def add_voca(request):
         user_word += final
         user.extended_voca = json.dumps(user_word)
         user.save()
-        return render(request, 'home.html')
-    return render(request, 'add_voca.html')
+        return render(request, 'home.html', ctx)
+    return render(request, 'add_voca.html', ctx)
 
 def voca_exam(request):
     if request.method == 'POST':
+        ctx = {"title":"단어 시험"}
         user = Login.get_current_user(request)
         if user == -1:
             return render(request, "login_please.html")
+        ctx['user_id'] = Login.get_current_user(request).user_id
         if request.POST.get('method') == unicode('1'):
             like_dislike = json.loads(user.like_dislike_voca)
             if like_dislike == unicode('0') or like_dislike == str('0') or like_dislike == 0:
@@ -169,6 +175,7 @@ def voca_exam(request):
     tmp.save()
     ctx = {'test': word}
     ctx['title'] = 'ML(MyLang) Voca'
+    ctx['user_id'] = Login.get_current_user(request).user_id
     http = render(request, 'voca.html', ctx)
     http.set_cookie(key="youan", value=cur_date)
     return http

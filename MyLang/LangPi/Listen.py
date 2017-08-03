@@ -117,7 +117,8 @@ def adder(request, url):
         return redirect('/video/'+vod.hashed_url)
     downloader = Downloader(request, url)
     downloader.start()
-    ctx = {'message': '검색하신 동영상에 맞는 자막을 찾아 다운로드받고 있습니다. 다소 시간이 걸리는 관계로 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.'}
+    ctx = {'message': '검색하신 동영상에 맞는 자막을 찾아 다운로드받고 있습니다. 다소 시간이 걸리는 관계로 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.', 'title':'자막 다운로드중'}
+    ctx['user_id'] = Login.get_current_user(request).user_id
     user_youtube.append(url)
     print user_youtube
     print url
@@ -137,11 +138,11 @@ def dictation(request, name):
         print score
         message = {
             'video': '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + vod.url.split('?v=')[
-                1] + '"frameborder="0"></iframe>',
+                1] + '"frameborder="0"></iframe>', 'title':'듣기 평가'
         }
 
         message['score'] = score
-        message['title'] = 'ML(MyLang) Listening score'
+        message['user_id'] = Login.get_current_user(request).user_id
         user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
         level = []
         if user.listening_level == '':
@@ -209,6 +210,7 @@ def dictation(request, name):
     }
 
     message['title'] = 'ML(MyLang) Listening'
+    message['user_id'] = Login.get_current_user(request).user_id
     # return HttpResponse('\n'.join(message))
     http = render(request, 'dictation.html', message)
     http.set_cookie(key="youan", value=cur_date)
@@ -239,11 +241,14 @@ def video_list(request):
         video.append(('/video/' + vod.hashed_url, vod.title, description, img, tmp_fmt % (img + '!@#' + line)))
     ctx['video'] = video
     ctx['title'] = 'ML(MyLang) Video List'
+    ctx['user_id'] = Login.get_current_user(request).user_id
     return render(request, 'show_list.html', ctx)
 
 def add_video(request):
     ctx = {'title': 'ML(MyLang)Add video'}
     if request.method == 'POST':
+        if Login.get_current_user(request) != -1:
+            ctx['user_id'] = Login.get_current_user(request).user_id
         if request.POST.get('url') != u'':
             url = request.POST.get('url')
             return adder(request, url)
@@ -255,12 +260,16 @@ def add_video(request):
         else:
             return render(request, 'add_video.html', ctx)
     else:
+        if Login.get_current_user(request) != -1:
+            ctx['user_id'] = Login.get_current_user(request).user_id
         return render(request, 'add_video.html', ctx)
 
 def search(request):
     key, extend = request.GET.get('key'), request.GET.get('e')
     context = {}
     db = youtube.objects.filter(title__contains=key)
+    if Login.get_current_user(request) != -1:
+        context['user_id'] = Login.get_current_user(request).user_id
     if len(db) > 0:
         tmp_db = []
         for d in db:

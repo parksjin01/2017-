@@ -22,4 +22,6 @@ def reading(request):
                'test': request.POST.get('test'), 'title':'ML(MyLang) Reading', 'error':'0'}
         return render(request, 'reading.html', ctx)
     ctx = {'title':'ML(MyLang)', 'error':'0'}
+    if Login.get_current_user(request) != -1:
+        ctx['user_id'] = Login.get_current_user(request).user_id
     return render(request, 'reading.html', ctx)
