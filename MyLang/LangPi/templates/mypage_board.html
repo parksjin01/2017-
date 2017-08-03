@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+        node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+        node5 = document.getElementById('board');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+        node5.className = "";
+        node1.className += " active";
+
+</script>
+
+<div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation"><a href="/mypage/">Home</a></li>
+        <li role="presentation"><a href="/mypage/listening/">Listening</a></li>
+        <li role="presentation"><a href="/mypage/reading/">Reading</a></li>
+        <li role="presentation"><a href="/mypage/vocabulary/">Vocabulary</a></li>
+        <li role="presentation"><a href="/mypage/message">Message</a></li>
+        <li role="presentation" class="active"><a href="/mypage/board">Board</a></li>
+    </ul>
+</div>
+<div class="col-md-10">
+<div>
+        <table class="table table-striped table-bordered">
+            <tr><th class="col-md-8">제목</th><th class="col-md-2">날짜</th><th>글쓴이</th></tr>
+            {% if memo %}
+            {% for m in memo %}
+                <tr>
+                    {% if m.0 %}
+                    <td><a href={{ m.3|safe }}>{{ m.0 }}</a></td>
+                    {% endif %}
+                    {% if m.1 %}
+                        <td>{{ m.1 }}</td>
+                    {% endif %}
+                    {% if m.2 %}
+                        <td>{{ m.2 }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+</div>
+</div>
+{% endblock %}

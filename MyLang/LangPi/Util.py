@@ -2,12 +2,13 @@
 
 import base64
 from django.shortcuts import render, redirect
-from .models import user_info, tmp_answer, history
+from .models import user_info, tmp_answer, history, board
 import json
 import pickle
 import time
 import copy
 import Listen
+import Login
 
 def mypage_likedislike(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
@@ -186,6 +187,7 @@ def mypage(request):
 
 def home(request):
     message = {}
+    message['title'] = 'ML(MyLanguage)'
     try:
         user_email = request.COOKIES.get('ec')
         answers = tmp_answer.objects.filter(cur_user=user_email)
@@ -199,7 +201,6 @@ def home(request):
         h = history.objects.filter(cur_user=request.COOKIES.get('ec'))[0]
         recommand = pickle.loads(h.recommand)
         message['recommand'] = recommand
-        message['title'] = 'ML(MyLanguage)'
     finally:
         return render(request, 'home.html', message)
 
@@ -216,3 +217,85 @@ def recommandation(url, num, cur):
     else:
         print cur
         return res[:num] + cur[:20-num]
+
+def write(request):
+    ctx = {'title': '글쓰기', 'authority':'0'}
+    if request.method == "POST":
+        user = Login.get_current_user(request)
+        memo = board()
+        memo.title = request.POST.get('title')
+        memo.text = request.POST.get('content')
+        memo.author = user.user_id
+        memo.date = str(time.time())
+        memo.category = request.POST.get('category')
+        if memo.category == 'notice' and (memo.author != "parksjin01" and memo.author != "damotorie"):
+            ctx['authority'] = '1'
+            return render(request, 'write.html', ctx)
+        memo.save()
+        return redirect('/')
+    return render(request, 'write.html', ctx)
+
+def bullet_board(request):
+    href = "/board/show?date=%s&id=%s"
+    ctx = {'title': '게시판'}
+    ctx['category'] = request.GET.get('c')
+    memo = board.objects.filter(category__exact=ctx['category'])
+    message = []
+    for tmp in memo:
+        message.append([tmp.title, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(tmp.date))), tmp.author,
+                        href % (tmp.date, tmp.author)])
+    ctx['memo'] = message
+    return render(request, 'board.html', ctx)
+
+def show_memo(request):
+    ctx = {'title': '게시판'}
+    href = "/board/edit?date=%s&id=%s"
+    date = request.GET.get('date')
+    id = request.GET.get('id')
+    memo = board.objects.get(date=date, author=id)
+    if request.method == "POST":
+        user = Login.get_current_user(request)
+        if memo.author == user.user_id:
+            memo.delete()
+            return redirect('/')
+    ctx['Title'] = memo.title
+    ctx['Content'] = memo.text
+    ctx['Date'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(date)))
+    ctx['Author'] = memo.author
+    ctx['href'] = href % (date, id)
+    return render(request, 'show_memo.html', ctx)
+
+def edit(request):
+    ctx = {'title': '게시판'}
+    date = request.GET.get('date')
+    id = request.GET.get('id')
+    memo = board.objects.get(date=date, author=id)
+    if request.method == "POST":
+        user = Login.get_current_user(request)
+        memo.title = request.POST.get('title')
+        memo.text = request.POST.get('content')
+        memo.author = user.user_id
+        memo.date = str(time.time())
+        memo.category = request.POST.get('category')
+        if memo.category == 'notice' and (memo.author != "parksjin01" and memo.author != "damotorie"):
+            ctx['authority'] = '1'
+            return render(request, 'write.html', ctx)
+        memo.save()
+        return redirect('/')
+    ctx['Title'] = memo.title
+    ctx['Content'] = memo.text
+    ctx['category'] = memo.category
+    ctx['authority'] = "0"
+    return render(request, 'edit_memo.html', ctx)
+
+def mypage_board(request):
+    user = Login.get_current_user(request)
+    href = "/board/show?date=%s&id=%s"
+    ctx = {'title': '게시판'}
+    memo = board.objects.filter(author__exact=user.user_id)
+    message = []
+    for tmp in memo:
+        message.append([tmp.title, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(tmp.date))), tmp.category,
+                        href % (tmp.date, tmp.author)])
+    ctx['memo'] = message
+    return render(request, 'mypage_board.html', ctx)

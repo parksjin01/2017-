@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+    node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+        node5 = document.getElementById('board');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+        node5.className = "";
+        node5.className += " active";
+
+    function go(){
+    var title_node = document.getElementById('title');
+    var content_node = document.getElementById('content');
+    var form_node = document.getElementById('form');
+    if(title_node.value == "" )
+        alert("제목을 입력하지 않으셨습니다.");
+    else if(content_node.value == "")
+        alert("본문을 입력하지 않으셨습니다.");
+    else
+        form_node.submit();
+    }
+</script>
+{% if authority == "1" %}
+<script>
+    alert("권한이 없습니다.");
+</script>
+{% endif %}
+<div class="container">
+    <form id="form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <h3 class="page-header">Title</h3>
+            <input type="text" placeholder="Title" class="form-control" name="title" id="title">
+        </div>
+        <div class="form-group">
+            <h3 class="page-header">Description</h3>
+            <textarea rows="40" placeholder="Content" class="form-control" name="content" id="content"></textarea>
+        </div>
+        <h3 class="page-header">Category</h3>
+        <div class="form-group col-md-2">
+            <select name="category" class="form-control">
+                <option value="notice">공지사항</option>
+                <option value="free">자유게시판</option>
+                <option value="qa">Q&A</option>
+                <option value="2dev">개발자에게</option>
+            </select>
+        </div>
+        <br>
+        <br>
+        <span class="btn btn-info col-md-offset-8" onclick="go()">작성</span>
+    </form>
+</div>
+{% endblock %}

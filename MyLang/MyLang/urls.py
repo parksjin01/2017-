@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^mypage/vocabulary/$', mypage_vocabulary, name='mypage_vocabulary'),
     url(r'mypage/likedislike/$', mypage_likedislike, name='mypage_likedislike'),
     url(r'^mypage/message/$', mypage_message, name='mypage_message'),
+    url(r'^mypage/board/$', mypage_board, name='mypage_board'),
     url(r'get_voca_score/$', get_voca_score, name='get_voca_score'),
     url(r'get_read_score/$', get_read_score, name='get_read_score'),
     url(r'get_listen_score/$', get_listen_score, name='get_listen_score'),
@@ -46,4 +47,8 @@ urlpatterns = [
     url(r'register/ajax/validate_mail/', email_check, name="email_check"),
     url(r'find-id/ajax/validate_mail/', email_check_v2, name="email_check_v2"),
     url(r'add/vocabulary/', add_voca, name="add_voca"),
+    url(r'board/edit', edit, name='edit'),
+    url(r'board/show', show_memo, name='show_menu'),
+    url(r'board/write', write, name='write'),
+    url(r'board/', bullet_board, name='board'),
 ]

@@ -6,9 +6,10 @@ import Listen
 import Read
 import Voca
 import Util
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from .Listening.caption_util import *
+import time
 
 def login(request):
     return Login.login(request)
@@ -54,6 +55,18 @@ def recommandation(url, num, cur):
 def home(request):
     return Util.home(request)
 
+def bullet_board(request):
+    return Util.bullet_board(request)
+
+def show_memo(request):
+    return Util.show_memo(request)
+
+def edit(request):
+    return Util.edit(request)
+
+def write(request):
+    return Util.write(request)
+
 def dictation(request, name):
     return Listen.dictation(request, name)
 
@@ -86,6 +99,9 @@ def mypage_message(request):
 
 def mypage_likedislike(request):
     return Util.mypage_likedislike(request)
+
+def mypage_board(request):
+    return Util.mypage_board(request)
 
 def voca_exam(request):
     return Voca.voca_exam(request)

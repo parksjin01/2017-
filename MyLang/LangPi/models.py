@@ -40,3 +40,11 @@ class voca(models.Model):
 	korean = models.TextField(default='')
 	like = models.IntegerField(default=0)
 	dislike = models.IntegerField(default=0)
+
+class board(models.Model):
+	title = models.TextField()
+	text = models.TextField()
+	author = models.CharField(max_length=256)
+	date = models.TextField()
+	comment = models.TextField()
+	category = models.TextField()
