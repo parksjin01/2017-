@@ -41,6 +41,14 @@
 	</form>
 	{% endif %}
 	{% if score != None %}
+<br>
+<br>
+<br>
+<h1 class="page-header">Result</h1>
+		{{ result|safe }}
+<br>
+<br>
+<h1 class="page-header">Score</h1>
 		<p>Your score is {{ score }}%</p>
 	{% endif %}
 {% endblock %}

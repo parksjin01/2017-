@@ -120,8 +120,6 @@ def adder(request, url):
     ctx = {'message': '검색하신 동영상에 맞는 자막을 찾아 다운로드받고 있습니다. 다소 시간이 걸리는 관계로 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.', 'title':'자막 다운로드중'}
     ctx['user_id'] = Login.get_current_user(request).user_id
     user_youtube.append(url)
-    print user_youtube
-    print url
     user.youtube = json.dumps(user_youtube)
     user.save()
     return render(request, 'user_message.html', ctx)
@@ -132,13 +130,23 @@ def dictation(request, name):
         cur_date = request.COOKIES.get('youan')
         tmp = tmp_answer.objects.get(cur_date=cur_date, cur_user=request.COOKIES.get('ec'))
         answer = tmp.answer
+        question = tmp.question
         answer = pickle.loads(binascii.unhexlify(answer))
         user = request.POST.getlist('blank')
         score = check_answer(user, answer)
-        print score
+        idx = 0
+        for correct in answer:
+            if correct == user[idx]:
+                tmp_idx = question.index('<input type=text name=blank></input>')
+                question = question[:tmp_idx]+('<span style="border-bottom: solid; border-bottom-color: deepblue;">%s</span>' %user[idx])+question[tmp_idx+36:]
+            else:
+                tmp_idx = question.index('<input type=text name=blank></input>')
+                question = question[:tmp_idx] + (
+                '<span style="border-bottom: solid; border-bottom-color: deeppink;">%s</span>' % user[idx]) + question[tmp_idx+36:]
+            idx += 1
         message = {
             'video': '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + vod.url.split('?v=')[
-                1] + '"frameborder="0"></iframe>', 'title':'듣기 평가'
+                1] + '"frameborder="0"></iframe>', 'title':'듣기 평가', 'result': question
         }
 
         message['score'] = score
@@ -200,6 +208,7 @@ def dictation(request, name):
     answer = binascii.hexlify(pickle.dumps(answer))
     tmp = tmp_answer()
     tmp.answer = answer
+    tmp.question = question
     cur_date = int(time.time())
     tmp.cur_date = cur_date
     tmp.cur_user = base64.b64encode(user.user_email)

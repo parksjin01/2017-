@@ -20,6 +20,7 @@ class history(models.Model):
 
 class tmp_answer(models.Model):
 	answer = models.TextField(default='')
+	question = models.TextField(default='')
 	cur_date = models.IntegerField(default=0)
 	cur_user = models.TextField(default='')
 
