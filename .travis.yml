@@ -1,5 +1,4 @@
 language: python
-os: osx
 dist: trusty
 sudo: required
 python:
