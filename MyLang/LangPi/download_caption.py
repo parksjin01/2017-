@@ -3,16 +3,11 @@
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
-from selenium import webdriver
-import time
-import os
 import BeautifulSoup
 import hashlib
-from pyvirtualdisplay import Display
 import urllib2
 import urllib
 import json
-import platform
 
 URL1 = 'http://downsub.com/?url='
 URL2 = 'http://downsub.com'
