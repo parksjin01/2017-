@@ -27,11 +27,6 @@
     }
     }
 </script>
-{% if authority == "1" %}
-<script>
-    alert("글작성자가 아니여서 삭제하실수 없습니다.");
-</script>
-{% endif %}
 <div class="container">
         <div>
             <h3 class="page-header">Title</h3>
@@ -56,7 +51,16 @@
         </div>
         <br>
         <br>
-    <a href="{{ href }}"><span class="btn btn-info col-md-offset-8">수정</span></a><span style="padding-left:40px;"><span class="btn btn-info" onclick="go()">삭제</span></span>
+    {% if authority == "0" %}
+        <a href="{{ href }}"><span class="btn btn-info col-md-offset-8">수정</span></a>
+    {% else %}
+        <a href="#"><span class="btn btn-info col-md-offset-8" onclick="alert('글을 수정할 권한이 없습니다.');">수정</span></a>
+    {% endif %}
+    {% if authority == "0" %}
+        <span style="padding-left:40px;"><span class="btn btn-info" onclick="go()">삭제</span></span>
+    {% else %}
+        <span style="padding-left:40px;"><span class="btn btn-info" onclick="alert('글을 삭제할 권리가 없습니다.');">삭제</span></span>
+    {% endif %}
     <form id="form" method="post">
         {% csrf_token %}
     </form>

@@ -278,7 +278,11 @@ def show_memo(request):
     ctx['Content'] = memo.text
     ctx['Date'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(date)))
     ctx['Author'] = memo.author
-    ctx['href'] = href % (date, id)
+    if memo.author == Login.get_current_user(request).user_id:
+        ctx['authority'] = '0'
+        ctx['href'] = href % (date, id)
+    else:
+        ctx['authority'] = '1'
     return render(request, 'show_memo.html', ctx)
 
 def edit(request):
