@@ -45,10 +45,26 @@
         <h3 class="page-header">Category</h3>
         <div class="form-group col-md-2">
             <select name="category" class="form-control">
-                <option value="notice">공지사항</option>
-                <option value="free">자유게시판</option>
-                <option value="qa">Q&A</option>
-                <option value="2dev">개발자에게</option>
+                {% if category == "notice" %}
+                    <option value="notice" selected="selected">공지사항</option>
+                {% else %}
+                    <option value="notice">공지사항</option>
+                {% endif %}
+                {% if category == "free" %}
+                    <option value="free" selected="selected">자유게시판</option>
+                {% else %}
+                    <option value="free">자유게시판</option>
+                {% endif %}
+                {% if category == "qa" %}
+                    <option value="qa" selected="selected">Q&A</option>
+                {% else %}
+                    <option value="qa">Q&A</option>
+                {% endif %}
+                {% if category == "2dev" %}
+                    <option value="2dev" selected="selected">개발자에게</option>
+                {% else %}
+                    <option value="2dev">개발자에게</option>
+                {% endif %}
             </select>
         </div>
         <br>

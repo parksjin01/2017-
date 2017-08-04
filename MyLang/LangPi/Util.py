@@ -226,7 +226,10 @@ def recommandation(url, num, cur):
 
 def write(request):
     ctx = {'title': '글쓰기', 'authority':'0'}
+    if Login.get_current_user(request) == -1:
+        return render(request, 'login_please.html')
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['category'] = request.GET.get('c')
     if request.method == "POST":
         user = Login.get_current_user(request)
         memo = board()
@@ -244,8 +247,10 @@ def write(request):
 
 def bullet_board(request):
     href = "/board/show?date=%s&id=%s"
+    write_href = "/board/write?c=%s"
     ctx = {'title': '게시판'}
-    ctx['user_id'] = Login.get_current_user(request).user_id
+    if Login.get_current_user(request) != -1:
+        ctx['user_id'] = Login.get_current_user(request).user_id
     ctx['category'] = request.GET.get('c')
     memo = board.objects.filter(category__exact=ctx['category'])
     message = []
@@ -253,11 +258,13 @@ def bullet_board(request):
         message.append([tmp.title, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(tmp.date))), tmp.author,
                         href % (tmp.date, tmp.author)])
     ctx['memo'] = message
+    ctx['write'] = write_href %ctx['category']
     return render(request, 'board.html', ctx)
 
 def show_memo(request):
     ctx = {'title': '게시판'}
-    ctx['user_id'] = Login.get_current_user(request).user_id
+    if Login.get_current_user(request) != -1:
+        ctx['user_id'] = Login.get_current_user(request).user_id
     href = "/board/edit?date=%s&id=%s"
     date = request.GET.get('date')
     id = request.GET.get('id')
@@ -276,10 +283,16 @@ def show_memo(request):
 
 def edit(request):
     ctx = {'title': '게시판'}
+    ctx['authority'] = '0'
+    if Login.get_current_user(request) == -1:
+        return render(request, 'login_please.html')
+    user = Login.get_current_user(request)
     ctx['user_id'] = Login.get_current_user(request).user_id
     date = request.GET.get('date')
     id = request.GET.get('id')
     memo = board.objects.get(date=date, author=id)
+    if memo.author != user.user_id:
+        ctx['authority'] = '1'
     if request.method == "POST":
         user = Login.get_current_user(request)
         memo.title = request.POST.get('title')
@@ -295,11 +308,12 @@ def edit(request):
     ctx['Title'] = memo.title
     ctx['Content'] = memo.text
     ctx['category'] = memo.category
-    ctx['authority'] = "0"
     return render(request, 'edit_memo.html', ctx)
 
 def mypage_board(request):
     user = Login.get_current_user(request)
+    if Login.get_current_user(request) == -1:
+        return render(request, 'login_please.html')
     href = "/board/show?date=%s&id=%s"
     ctx = {'title': '게시판'}
     ctx['user_id'] = Login.get_current_user(request).user_id

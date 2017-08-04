@@ -40,7 +40,13 @@
             {% endif %}
         </ul>
     </div>
-    <a href="/board/write" style="color: write; text-decoration: none"><span class="col-md-offset-10 btn btn-info">글쓰기</span></a>
+    {% if category == "notice"%}
+        {% if user_id == "parksjin01" or user_id == "damotorie" %}
+            <a href={{ write }} style="color: write; text-decoration: none"><span class="col-md-offset-10 btn btn-info">글쓰기</span></a>
+        {% endif %}
+    {% else %}
+        <a href={{ write }} style="color: write; text-decoration: none"><span class="col-md-offset-10 btn btn-info">글쓰기</span></a>
+    {% endif %}
     <br>
     <br>
     <div>
