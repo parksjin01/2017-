@@ -173,6 +173,98 @@
 {% endif %}
 {% if test %}
 <h1 class="page-header">다음 단어의 뜻에 해당하는 버튼을 눌러주세요     <small><span class="glyphicon glyphicon-info-sign updown"><span class="updowntext"><div style="padding:10px;">여기서는 단어시험을 볼수 있습니다.<br></div></span></span></small></h1>
+<form method="get" action="/vocabulary/" id="form">
+	<div class="col-sm-offset-8 col-sm-2" style="padding-bottom:30px;" onchange="document.getElementById('form').submit()">
+            <label>외국어</label>
+            <select name="category" class="form-control">
+				{% if lang == "de" %}
+                	<option value="de" selected="selected">독일어</option>
+				{% else %}
+					<option value="de">독일어</option>
+				{% endif %}
+				{% if lang == "la" %}
+                	<option value="la" selected="selected">라틴어</option>
+				{% else %}
+					<option value="la">라틴어</option>
+				{% endif %}
+				{% if lang == "ru" %}
+                	<option value="ru" selected="selected">러시아어</option>
+				{% else %}
+					<option value="ru">러시아어</option>
+				{% endif %}
+				{% if lang == "mn" %}
+                	<option value="mn" selected="selected">몽골어</option>
+				{% else %}
+					<option value="mn">몽골어</option>
+				{% endif %}
+				{% if lang == "vi" %}
+                	<option value="vi" selected="selected">베트남어</option>
+				{% else %}
+					<option value="vi">베트남어</option>
+				{% endif %}
+				{% if lang == "sv" %}
+                	<option value="sv" selected="selected">스웨덴어</option>
+				{% else %}
+					<option value="sv">스웨덴어</option>
+				{% endif %}
+				{% if lang == "es" %}
+                	<option value="es" selected="selected">스페인어</option>
+				{% else %}
+					<option value="es">스페인어</option>
+				{% endif %}
+				{% if lang == "en" %}
+                	<option value="en" selected="selected">영어</option>
+				{% else %}
+					<option value="en">영어</option>
+				{% endif %}
+				{% if lang == "ja" %}
+                	<option value="ja" selected="selected">일본어</option>
+				{% else %}
+					<option value="ja">일본어</option>
+				{% endif %}
+				{% if lang == "zh-CN" %}
+                	<option value="zh-CN" selected="selected">중국어</option>
+				{% else %}
+					<option value="zh-CN">중국어</option>
+				{% endif %}
+				{% if lang == "it" %}
+                	<option value="it" selected="selected">이탈리아어</option>
+				{% else %}
+					<option value="it">이탈리아어</option>
+				{% endif %}
+				{% if lang == "cs" %}
+                	<option value="cs" selected="selected">체코어</option>
+				{% else %}
+					<option value="cs">체코어</option>
+				{% endif %}
+				{% if lang == "th" %}
+                	<option value="th" selected="selected">태국어</option>
+				{% else %}
+					<option value="th">태국어</option>
+				{% endif %}
+				{% if lang == "pt" %}
+                	<option value="pt" selected="selected">포르투칼어</option>
+				{% else %}
+					<option value="pt">포르투칼어</option>
+				{% endif %}
+				{% if lang == "fr" %}
+                	<option value="fr" selected="selected">프랑스어</option>
+				{% else %}
+					<option value="fr">프랑스어</option>
+				{% endif %}
+				{% if lang == "hi" %}
+                	<option value="hi" selected="selected">힌디어</option>
+				{% else %}
+					<option value="hi">힌디어</option>
+				{% endif %}
+            </select>
+        </div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+</form>
 <form method=POST action="">
     <input value="0" hidden name="method">
 {% csrf_token %}

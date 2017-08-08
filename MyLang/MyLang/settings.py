@@ -25,7 +25,7 @@ SECRET_KEY = '^g73dc5d$864ru0bqiti8*6^m@p4x9!e5&x^$#s(lu7upcju1p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.2', 'mylang.iptime.org', '127.0.0.1', '192.168.0.122', '192.168.43.41', '192.168.5.111']
+ALLOWED_HOSTS = ['192.168.0.2', 'mylang.iptime.org', '127.0.0.1', '192.168.0.122', '192.168.43.41', '192.168.5.111', '192.168.5.196']
 
 
 # Application definition

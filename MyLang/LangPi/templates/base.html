@@ -10,7 +10,7 @@
             document.cookie = "ic=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             document.cookie = "pc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 	    document.cookie = "ec=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-	    alert("Logout complete");
+	    alert("로그아웃이 완료되었습니다.");
         };
     </script>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
@@ -23,11 +23,11 @@
         <a href="/" class="col-sm-9" style="text-decoration: none;"><h1>ML   <small>MyLang</small></h1></a>
     </div>
     <ul class="nav nav-pills">
-        <li role="presentation" class="active" style="padding-left: 2%;" id="home"><a href="/">Home</a></li>
-        <li role="presentation" class="" id="video"><a href="/video/" class="text-center">Listening</a></li>
-        <li role="presentation" class="" id="read"><a href="/read/">Reading</a></li>
-        <li role="presentation" class="" id="voca"><a href="/vocabulary/">Vocabulary</a></li>
-        <li role="presentation" class="" id="board"><a href="/board?c=notice">Board</a> </li>
+        <li role="presentation" class="active" style="padding-left: 2%;" id="home"><a href="/">홈</a></li>
+        <li role="presentation" class="" id="video"><a href="/video/" class="text-center">듣기</a></li>
+        <li role="presentation" class="" id="read"><a href="/read/">읽기</a></li>
+        <li role="presentation" class="" id="voca"><a href="/vocabulary/?category=en">단어</a></li>
+        <li role="presentation" class="" id="board"><a href="/board?c=notice">게시판</a> </li>
     </ul>
     <!--<h4 class="col-sm-1"><a href="#">Login</a></h4>-->
     <!--<h4 class="col-sm-1"><a href="#">Register</a></h4>-->
@@ -53,9 +53,9 @@
 	    node1_a.href = "/";
 	    node2_a.href = "/change-id/";
 	    node3_a.href = "/mypage/";
-        node1_a.appendChild(document.createTextNode("Logout"));
-	    node2_a.appendChild(document.createTextNode("Change ID/PW"));
-	    node3_a.appendChild(document.createTextNode("{{ user_id }}"));
+        node1_a.appendChild(document.createTextNode("로그아웃"));
+	    node2_a.appendChild(document.createTextNode("아이디/비밀번호 변경"));
+	    node3_a.appendChild(document.createTextNode("{{ user_id }}의 정보"));
 	    node1_h4.appendChild(node1_a);
 	    node2_h4.appendChild(node2_a);
 	    node3_h4.appendChild(node3_a);
@@ -76,8 +76,8 @@
         var upper_node = document.getElementById("menu");
         node1_a.href = "/login/";
         node2_a.href = "/register/";
-        node1_a.appendChild(document.createTextNode("Login"));
-        node2_a.appendChild(document.createTextNode("Register"));
+        node1_a.appendChild(document.createTextNode("로그인"));
+        node2_a.appendChild(document.createTextNode("회원가입"));
         node1_h4.appendChild(node1_a);
         node2_h4.appendChild(node2_a);
         upper_node.appendChild(node1_h4);

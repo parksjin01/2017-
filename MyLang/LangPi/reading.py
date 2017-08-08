@@ -25,13 +25,11 @@ def Translate_from_URL(url, src, dst, select = "Google"):
         div = soup.findAll('p')
         for txt in div:
             res.append(txt.text)
-    print Translate(str('\n'.join(res)), src, dst, select)
 
-def read(string='', user_answer=''):
+def read(string='', user_answer='', lang='en'):
     answer = []
-    answer.append(unicode(Translate(string, 'en', 'ko')))
-    tmp = Translate(string, 'en', 'ja').replace(u'', ' ')
-    print tmp
+    answer.append(unicode(Translate(string, lang, 'ko')))
+    tmp = Translate(string, lang, 'ja').replace(u'', ' ')
     answer.append(unicode(Translate(tmp, 'ja', 'ko')))
     return str(int(math.log(DOC_comp.comp_bleu(answer, unicode(user_answer))*100+0.5, 100)*100))+'%'
     # print str(int((math.log(int(DOC_comp.comp_bleu(answer, unicode(user_answer))*100), 8)+(1-math.log(100, 8)))*100))+'%'

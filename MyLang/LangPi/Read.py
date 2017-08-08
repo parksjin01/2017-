@@ -9,7 +9,7 @@ def reading(request):
         if len(request.POST.get('foreign')) >= 5000:
             ctx = {'title':'ML(MyLang) Reading', 'error':'1'}
             return render(request, 'reading.html', ctx)
-        score = read(request.POST.get('foreign'), request.POST.get('kor'))
+        score = read(request.POST.get('foreign'), request.POST.get('kor'), request.POST.get('category'))
         if score[0] == u'-':
             score = u'0%'
         user = Login.get_current_user(request)

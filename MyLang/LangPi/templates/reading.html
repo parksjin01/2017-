@@ -52,6 +52,29 @@
 {% if score == None %}
 <h1 class="page-header">장문 해석     <small><span class="glyphicon glyphicon-info-sign updown"><span class="updowntext"><div style="padding:10px;">여기서는 독해 연습을 할 수 있습니다. 왼쪽 박스에 외국어 글을 입력하고 오른쪽 박스에 한국어 해석을 입력하면 해석의 정확도 평가를 해줍니다. 일반적으로 번역일을 하시는 분들의 정확도가 약 92%정도 입니다.<br></div></span></span></small></h1>
 	<form method=POST action="">
+        <div class="col-sm-offset-8 col-sm-2" style="padding-bottom:30px;">
+            <label>외국어</label>
+            <select name="category" class="form-control">
+                <option value="de">독일어</option>
+                <option value="la">라틴어</option>
+                <option value="ru">러시아어</option>
+                <option value="mn">몽골어</option>
+                <option value="vi">베트남어</option>
+                <option value="sv">스웨덴어</option>
+                <option value="es">스페인어</option>
+                <option value="en" selected="selected">영어</option>
+                <option value="ja">일본어</option>
+                <option value="zh-CN">중국어</option>
+                <option value="it">이탈리아어</option>
+                <option value="cs">체코어</option>
+                <option value="th">태국어</option>
+                <option value="pt">포르투칼어</option>
+                <option value="fr">프랑스어</option>
+                <option value="hi">힌디어</option>
+                <!--<option value="gr"></option>-->
+            </select>
+        </div>
+        <br>
 		<!--<input type='hidden' name='csrfmiddlewaretoken' value='BZorpw5eWmIAwNOWxCUdcCw6fHKSdM7rpt0te0NrBdbTz0tZdA8EKkIz8KIiztTk' />-->
         {% csrf_token %}
         <div>
@@ -64,7 +87,7 @@
             </div>
         </div>
 		<div class="col-md-offset-10 form-group" style="padding-top:10%;">
-			<button type=submit class="btn btn-info">Compare</button>
+			<button type=submit class="btn btn-info">유사도 비교</button>
 		</div>
         </div>
 	</form>

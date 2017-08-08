@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 import json
 import time
 import cPickle
+import vocabulary
 
 def add_voca(request):
     ctx = {'title': '단어 추가'}
@@ -90,7 +91,7 @@ def voca_exam(request):
             whole_answer.append(word[-1])
         whole = zip(whole_test, whole_answer, user_answer)
         print whole_answer
-        ctx = {'result': result, 'whole': whole}
+        ctx = {'result': result, 'whole': whole, 'lang':request.GET.get('category')}
         ctx['title'] = 'ML(MyLang) Voca result'
         score = [int(result), time.time()]
         levels = [score] + json.loads(str(user.vocabulary_level))
@@ -167,6 +168,20 @@ def voca_exam(request):
         word.append(tmp[::])
         tmp.append(unicode(meaning.index(tmp_meaning) + 1))
         answer.append(tmp)
+    # print answer
+    if request.GET.get('category') != 'en':
+        answer2 = []
+        word = []
+        for tmp_word in answer:
+            tmp_fore = tmp_word[int(tmp_word[-1])]
+            try:
+                tmp_fore = vocabulary.change(tmp_fore, request.GET.get('category'))
+            except:
+                tmp_fore = tmp_word[0]
+            answer2.append([tmp_fore]+tmp_word[1:])
+            word.append([tmp_fore]+tmp_word[1:-1])
+        answer = answer2[::]
+    print answer[0][0], type(answer[0][0])
     tmp = tmp_answer()
     tmp.answer = pickle.dumps(answer)
     cur_date = int(time.time())
@@ -176,6 +191,7 @@ def voca_exam(request):
     ctx = {'test': word}
     ctx['title'] = 'ML(MyLang) Voca'
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['lang'] = request.GET.get('category')
     http = render(request, 'voca.html', ctx)
     http.set_cookie(key="youan", value=cur_date)
     return http
