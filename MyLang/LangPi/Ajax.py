@@ -33,7 +33,7 @@ def email_check_v2(request):
 def email_check(request):
     data = {'is_taken': user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists()}
     key = ''
-    for i in range(10):
+    for _ in range(10):
         key += chr(random.randrange(0x21, 0x7f))
     data['key'] = key
     with open('./LangPi/Secret', 'r') as f:

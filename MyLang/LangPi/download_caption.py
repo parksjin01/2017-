@@ -14,8 +14,8 @@ URL2 = 'http://downsub.com'
 country = {'en':'English', 'ja':'Japan', 'ko':'Korea'}
 
 def title(url):
-    id = url.split('?v=')[1]
-    html = urllib2.urlopen('https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&key=AIzaSyBf5cfsWLkaCmGPr4jtmyzeX2W0uSmvO1s' %id).read()
+    video_id = url.split('?v=')[1]
+    html = urllib2.urlopen('https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%s&key=AIzaSyBf5cfsWLkaCmGPr4jtmyzeX2W0uSmvO1s' %video_id).read()
     html = html.split('\n')
     new_html = []
     for sentence in html:

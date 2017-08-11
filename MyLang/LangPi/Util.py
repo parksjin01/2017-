@@ -22,7 +22,8 @@ def mypage_likedislike(request):
             elif selected in like_dislike['dislike']:
                 like_dislike['dislike'].remove(selected)
             user.like_dislike_voca = json.dumps(like_dislike)
-        except:
+        except Exception, e:
+            print e
             user_word = json.loads(user.extended_voca)
             if selected in user_word:
                 user_word.remove(selected)
@@ -39,14 +40,16 @@ def mypage_likedislike(request):
 
         like = like_dislike['like']
         dislike = like_dislike['dislike']
-    except:
+    except Exception, e:
+        print e
         error += "아직 추천단어/비추천단어를 설정하지 않으셨습니다."
 
     try:
         user_word = json.loads(user.extended_voca)
         assert len(user_word) != 0
 
-    except:
+    except Exception, e:
+        print e
         error += "아직 단어를 추가하지 않으셨습니다."
     ctx['like'] = like
     ctx['dislike'] = dislike
@@ -90,7 +93,8 @@ def mypage_vocabulary(request):
         assert len(voca_scores) != 0
         for score in voca_scores:
             voca.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
-    except:
+    except Exception, e:
+        print e
         error += 'You haven\'t do voca\n'
 
     ctx['voca'] = voca
@@ -128,7 +132,8 @@ def mypage_listening(request):
         assert len(listen_scores) != 0
         for score in listen_scores:
             listen.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
-    except:
+    except Exception, e:
+        print e
         error += 'You haven\'t do listening\n'
     ctx['listening'] = listen
     ctx['error'] = error
@@ -157,7 +162,8 @@ def mypage(request):
             reading.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
         if len(reading_scores) > 5:
             reading.append(['...', '...'])
-    except:
+    except Exception, e:
+        print e
         error += 'You haven\'t do reading\n'
     try:
         voca_scores = json.loads(user.vocabulary_level)
@@ -166,7 +172,8 @@ def mypage(request):
             voca.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
         if len(voca_scores) > 5:
             voca.append(['...', '...'])
-    except:
+    except Exception, e:
+        print e
         error += 'You haven\'t do voca\n'
     if user.message_box != '':
         print user.message_box, user.user_id
@@ -199,7 +206,8 @@ def home(request):
         message['user_id'] = Login.get_current_user(request).user_id
         for answer in answers:
             answer.delete()
-    except:
+    except Exception, e:
+        print e
         pass
     if request.method == 'POST':
         return redirect('/search/?key=' + request.POST.get('search_key') + '&e=0')

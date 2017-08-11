@@ -41,6 +41,7 @@ class Downloader(threading.Thread):
                 user.youtube = json.dumps(user_youtube)
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + vod.hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
         except Exception, e:
+            print e
             vod = youtube()
             titles = title(url)
             for i in range(101):
@@ -170,7 +171,8 @@ def dictation(request, name):
         return render(request, "login_please.html")
     try:
         his = history.objects.filter(cur_user=base64.b64encode(user.user_email))[0]
-    except:
+    except Exception, e:
+        print e
         his = history()
     vod.date = datetime.datetime.now()
     vod.save()
@@ -187,7 +189,8 @@ def dictation(request, name):
     his.cur_user = unicode(base64.b64encode(user.user_email))
     try:
         his.save()
-    except:
+    except Exception, e:
+        print e
         pass
     caption = vod.caption
     try:
@@ -202,7 +205,8 @@ def dictation(request, name):
             question, answer = analyze(caption, 20)
         else:
             question, answer = analyze(caption, 25)
-    except:
+    except Exception, e:
+        print e
         question, answer = analyze(caption)
     question = question.replace('\n', '</br>')
     answer = binascii.hexlify(pickle.dumps(answer))

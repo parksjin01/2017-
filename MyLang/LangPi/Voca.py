@@ -26,7 +26,8 @@ def add_voca(request):
         for w in word:
             try:
                 voca.objects.get(foreign__contains="V%s\n" %w[0])
-            except:
+            except Exception, e:
+                print e
                 final.append(w)
         user_word = json.loads(user.extended_voca)
         user_word += final
@@ -56,7 +57,8 @@ def voca_exam(request):
                     word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
                     like_dislike['like'].append([word_info.id, word])
                     word_info.save()
-                except:
+                except Exception, e:
+                    print e
                     pass
 
             for word in dislike:
@@ -66,7 +68,8 @@ def voca_exam(request):
                     word_info = voca.objects.get(foreign__contains = 'V'+word+'\n')
                     like_dislike['dislike'].append([word_info.id, word])
                     word_info.save()
-                except:
+                except Exception, e:
+                    print e
                     pass
 
             user.like_dislike_voca = json.dumps(like_dislike)

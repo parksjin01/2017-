@@ -13,11 +13,13 @@ import json
 def get_current_user(request):
     try:
         cur_user = request.COOKIES.get('ec')
-    except:
+    except Exception, e:
+        print e
         return -1
     try:
         user = user_info.objects.get(user_email=base64.b64decode(cur_user))
-    except:
+    except Exception, e:
+        print e
         return -1
     return user
 
@@ -31,7 +33,8 @@ def login(request):
             http.set_cookie(key="pc", value=hashlib.md5(user.user_email).hexdigest())
             http.set_cookie(key="ec", value=base64.b64encode(user.user_email))
             return http
-        except:
+        except Exception, e:
+            print e
             message = {'error': 'Incorrect Id or Password', 'title':'ML(MyLanguage) Login'}
             return render(request, 'login.html', message)
     return render(request, 'login.html', {'title':'ML(MyLanguage) Login'})
@@ -43,7 +46,8 @@ def register(request):
             user_info.objects.get(user_email=request.POST.get('user_email'))
             message = {'error': 'Email address is already inuse', 'title':'Error'}
             return render(request, 'register.html', message)
-        except:
+        except Exception, e:
+            print e
             new_user = user_info()
             new_user.user_id = request.POST.get('user_id')
             new_user.user_pw = hashlib.md5(request.POST.get('user_pw')).hexdigest()
@@ -80,6 +84,7 @@ def find_id(request):
             user.user_pw = hashlib.md5(tmp_pw).hexdigest()
             user.save()
         except Exception, e:
+            print e
             pass
         return redirect('/')
     return render(request, 'find-id.html', ctx)
