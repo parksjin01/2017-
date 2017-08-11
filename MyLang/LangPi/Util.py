@@ -216,8 +216,7 @@ def home(request):
         message['recommand'] = recommand
     except Exception, e:
         print e
-    finally:
-        return render(request, 'home.html', message)
+    return render(request, 'home.html', message)
 
 def recommandation(url, num, cur):
     video_id = url.split('?v=')[1]
@@ -302,8 +301,8 @@ def edit(request):
     user = Login.get_current_user(request)
     ctx['user_id'] = Login.get_current_user(request).user_id
     date = request.GET.get('date')
-    id = request.GET.get('id')
-    memo = board.objects.get(date=date, author=id)
+    uid = request.GET.get('id')
+    memo = board.objects.get(date=date, author=uid)
     if memo.author != user.user_id:
         ctx['authority'] = '1'
     if request.method == "POST":
