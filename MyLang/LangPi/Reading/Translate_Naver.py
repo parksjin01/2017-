@@ -5,7 +5,8 @@ client_id = "5N9UnYJLTu4LSl3Azjzq"
 client_secret = "UGN9ZT7WXg"
 
 def translate(string, src, dst):
-    if type(string) != str or type(src) != str or type(dst) != str:
+    # if type(string) != str or type(src) != str or type(dst) != str:
+    if isinstance(string, str) == False or isinstance(src, str) == False or isinstance(dst, str):
         return -1
     encText = string
     encText = urllib.pathname2url(encText)

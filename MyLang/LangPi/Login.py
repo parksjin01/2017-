@@ -85,7 +85,6 @@ def find_id(request):
             user.save()
         except Exception, e:
             print e
-            pass
         return redirect('/')
     return render(request, 'find-id.html', ctx)
 

@@ -208,13 +208,14 @@ def home(request):
             answer.delete()
     except Exception, e:
         print e
-        pass
     if request.method == 'POST':
         return redirect('/search/?key=' + request.POST.get('search_key') + '&e=0')
     try:
         h = history.objects.filter(cur_user=request.COOKIES.get('ec'))[0]
         recommand = pickle.loads(h.recommand)
         message['recommand'] = recommand
+    except Exception, e:
+        print e
     finally:
         return render(request, 'home.html', message)
 
@@ -275,8 +276,8 @@ def show_memo(request):
         ctx['user_id'] = Login.get_current_user(request).user_id
     href = "/board/edit?date=%s&id=%s"
     date = request.GET.get('date')
-    id = request.GET.get('id')
-    memo = board.objects.get(date=date, author=id)
+    uid = request.GET.get('id')
+    memo = board.objects.get(date=date, author=uid)
     if request.method == "POST":
         user = Login.get_current_user(request)
         if memo.author == user.user_id:
@@ -288,7 +289,7 @@ def show_memo(request):
     ctx['Author'] = memo.author
     if memo.author == Login.get_current_user(request).user_id:
         ctx['authority'] = '0'
-        ctx['href'] = href % (date, id)
+        ctx['href'] = href % (date, uid)
     else:
         ctx['authority'] = '1'
     return render(request, 'show_memo.html', ctx)

@@ -30,49 +30,51 @@ def analyze(caption, perc = 10):
     res = {'CC':[], 'CD':[], 'DT':[], 'EX':[], 'FW':[], 'IN':[], 'JJ':[], 'JJR':[], 'JJS':[], 'LS':[], 'MD':[], 'NN':[], 'NNP':[], 'NNPS':[], 'NNS':[], 'PDT':[], 'POS':[], 'PRP':[], 'RB':[], 'RBR':[], 'RBS':[], 'RP':[], 'SYM':[], 'TO':[], 'UH':[], 'VB':[], 'VBD':[], 'VBG':[], 'VBN':[], 'VBP':[], 'VBZ':[], 'WDT':[], 'WP':[], 'WP$':[], 'WRB':[]}
     question_idx = []
     question = ''
-    answer = [] 
+    answer = []
     token = nltk.word_tokenize(caption)
     pos = nltk.pos_tag(token)
     for i in range(len(token)):
         tmp = pos[i]
         try:
             res[tmp[1]].append(i)
-        except:
-            pass
+        except Exception, e:
+            print e
     cnt = int(len(token)*(perc/100.0))
     for pos_key in res.keys():
         tmp_len = int(cnt * float(len(res[pos_key]))/len(token))
         if tmp_len > 0:
             question_idx += list(np.random.choice(res[pos_key], tmp_len))
 
-    for i in range(len(token)):
+    # for i in range(len(token)):
+    for i, value in enumerate(token):
         if i in question_idx:
 	    tmp = '<input type=text name=blank></input>'
             if i<len(token)-1 and (token[i+1] == ',' or token[i+1] == '.'):
                 question += tmp
-                answer.append(token[i])
+                answer.append(value)
             elif i < len(token)-1 and 2 <= len(token[i+1]) and len(token[i+1]) < 5 and (token[i+1][0] == "'" or (token[i+1][1] == "'" and token[i+1][0] == 'n')):
                 question += tmp
-                answer.append(token[i])
+                answer.append(value)
             else:
                 question += tmp+' '
-                answer.append(token[i])
+                answer.append(value)
         else:
             if i < len(token)-1 and (token[i+1] == ',' or token[i+1] == '.'):
-                question += token[i]
+                question += value
             elif i < len(token)-1 and 2 <= len(token[i+1]) and len(token[i+1]) < 5 and (token[i+1][0] == "'" or (token[i+1][1] == "'" and token[i+1][0] == 'n')):
-                question += token[i]
+                question += value
             else:
-                question += token[i]+' '
+                question += value+' '
 
     return question.replace('` ', '\n'), answer
 
 def check_answer(user, answer):
     cnt_problem = len(answer)
     correct = 0
-    for idx in range(len(user)):
-	print user[idx]== answer[idx]
-        if user[idx].lower() == answer[idx].lower():
+    # for idx in range(len(user)):
+    for idx, value in enumerate(user):
+        print value== answer[idx]
+        if value.lower() == answer[idx].lower():
             print 1
             correct += 1
     return float(correct)/cnt_problem*100

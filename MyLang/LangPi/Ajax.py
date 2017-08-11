@@ -62,8 +62,8 @@ def get_voca_score(request):
         return render(request, "login_please.html")
     voca_scores = json.loads(user.vocabulary_level)[:30][::-1]
     data = []
-    for idx in range(len(voca_scores)):
-        data.append({"close": voca_scores[idx][0], "date": idx + 1})
+    for idx, value in enumerate(voca_scores):
+        data.append({"close": value[0], "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)
 
@@ -73,8 +73,10 @@ def get_read_score(request):
         return render(request, "login_please.html")
     read_scores = json.loads(user.readding_level)[:30][::-1]
     data = []
-    for idx in range(len(read_scores)):
-        data.append({"close": read_scores[idx][0].strip('%'), "date": idx + 1})
+    # for idx in range(len(read_scores)):
+    #     data.append({"close": read_scores[idx][0].strip('%'), "date": idx + 1})
+    for idx, value in enumerate(read_scores):
+        data.append({"close": value[0], "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)
 
@@ -84,7 +86,9 @@ def get_listening_score(request):
         return render(request, "login_please.html")
     listen_scores = json.loads(user.listening_level)[:30][::-1]
     data = []
-    for idx in range(len(listen_scores)):
-        data.append({"close": listen_scores[idx][0], "date": idx + 1})
+    # for idx in range(len(listen_scores)):
+    #     data.append({"close": listen_scores[idx][0], "date": idx + 1})
+    for idx, value in enumerate(listen_scores):
+        data.append({"close": value[0], "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)

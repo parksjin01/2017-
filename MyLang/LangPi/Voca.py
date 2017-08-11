@@ -59,7 +59,6 @@ def voca_exam(request):
                     word_info.save()
                 except Exception, e:
                     print e
-                    pass
 
             for word in dislike:
                 try:
@@ -70,7 +69,6 @@ def voca_exam(request):
                     word_info.save()
                 except Exception, e:
                     print e
-                    pass
 
             user.like_dislike_voca = json.dumps(like_dislike)
             user.save()

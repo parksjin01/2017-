@@ -53,7 +53,6 @@ class Downloader(threading.Thread):
                     break
                 except Exception, e:
                     print i, e
-                    continue
             if hashed_url != '':
                 print 'exited_loop'
                 vod.title = titles[0]
@@ -191,7 +190,6 @@ def dictation(request, name):
         his.save()
     except Exception, e:
         print e
-        pass
     caption = vod.caption
     try:
         score = pickle.loads(user.level)
