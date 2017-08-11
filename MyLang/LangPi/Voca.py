@@ -1,6 +1,6 @@
 # -*- encoding:utf-8 -*-
 
-from .models import voca, tmp_answer, user_info
+from .models import voca, tmp_answer
 import pickle
 import random
 import base64
@@ -8,7 +8,6 @@ import Login
 from django.shortcuts import render, redirect
 import json
 import time
-import cPickle
 import vocabulary
 
 def add_voca(request):
@@ -175,15 +174,19 @@ def voca_exam(request):
         for tmp_word in answer:
             tmp_fore = tmp_word[int(tmp_word[-1])]
             try:
-                tmp_fore = vocabulary.change(tmp_fore, request.GET.get('category'))
-            except:
+                tmp_fore, tmp_mean = vocabulary.change(tmp_fore, request.GET.get('category'))
+            except Exception, e:
+                print e
                 tmp_fore = tmp_word[0]
+                tmp_mean = tmp_word[int(tmp_word[-1])]
+            tmp_word[int(tmp_word[-1])] = tmp_mean
             answer2.append([tmp_fore]+tmp_word[1:])
             word.append([tmp_fore]+tmp_word[1:-1])
         answer = answer2[::]
     print answer[0][0], type(answer[0][0])
     tmp = tmp_answer()
     tmp.answer = pickle.dumps(answer)
+    print type(tmp.answer)
     cur_date = int(time.time())
     tmp.cur_date = cur_date
     tmp.cur_user = base64.b64encode(user.user_email)

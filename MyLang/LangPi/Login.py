@@ -31,7 +31,7 @@ def login(request):
             http.set_cookie(key="pc", value=hashlib.md5(user.user_email).hexdigest())
             http.set_cookie(key="ec", value=base64.b64encode(user.user_email))
             return http
-        except Exception, e:
+        except:
             message = {'error': 'Incorrect Id or Password', 'title':'ML(MyLanguage) Login'}
             return render(request, 'login.html', message)
     return render(request, 'login.html', {'title':'ML(MyLanguage) Login'})
@@ -63,7 +63,7 @@ def find_id(request):
                 data = f.read()
             data = json.loads(data)
             user = user_info.objects.get(user_email=request.POST.get('user_email'))
-            for i in range(10):
+            for _ in range(10):
                 tmp_id += key_pool[random.randrange(0, len(key_pool))]
                 tmp_pw += key_pool[random.randrange(0, len(key_pool))]
             message = 'Your new ID: %s\nYour new Password: %s\n' % (tmp_id, tmp_pw)

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 class youtube(models.Model):
@@ -19,7 +18,7 @@ class history(models.Model):
 	cur_user = models.TextField(default='')
 
 class tmp_answer(models.Model):
-	answer = models.TextField(default='')
+	answer = models.BinaryField(default='')
 	question = models.TextField(default='')
 	cur_date = models.IntegerField(default=0)
 	cur_user = models.TextField(default='')

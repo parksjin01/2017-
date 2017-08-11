@@ -6,10 +6,6 @@ import Listen
 import Read
 import Voca
 import Util
-from django.shortcuts import render, redirect
-from .models import *
-from .Listening.caption_util import *
-import time
 
 def login(request):
     return Login.login(request)

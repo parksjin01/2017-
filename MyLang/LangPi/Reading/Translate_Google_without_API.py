@@ -10,7 +10,6 @@ import json
 
 __all__ = ["get_tk"]
 
-import sys
 from datetime import datetime
 
 

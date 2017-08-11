@@ -199,7 +199,7 @@ def home(request):
         message['user_id'] = Login.get_current_user(request).user_id
         for answer in answers:
             answer.delete()
-    except Exception, e:
+    except:
         pass
     if request.method == 'POST':
         return redirect('/search/?key=' + request.POST.get('search_key') + '&e=0')
