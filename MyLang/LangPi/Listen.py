@@ -39,6 +39,7 @@ class Downloader(threading.Thread):
             else:
                 user_youtube.append(url)
                 user.youtube = json.dumps(user_youtube)
+                user.save()
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + vod.hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
         except Exception, e:
             print e
@@ -62,6 +63,10 @@ class Downloader(threading.Thread):
                 vod.caption = content
                 vod.date = datetime.datetime.now()
                 vod.save()
+                user_youtube = json.loads(user.youtube)
+                user_youtube.append(url)
+                user.youtube = json.dumps(user_youtube)
+                user.save()
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
         if user.message_box == '':
             message_box = [message]
@@ -281,11 +286,17 @@ def search(request):
     db = youtube.objects.filter(title__contains=key)
     if Login.get_current_user(request) != -1:
         context['user_id'] = Login.get_current_user(request).user_id
+    else:
+        return render(request, 'login_please.html')
+    user_youtube = json.loads(Login.get_current_user(request).youtube)
     if len(db) > 0:
         tmp_db = []
         for d in db:
             video_id = d.url.split('?v=')[1]
-            tmp_db.append(('/video/' + d.hashed_url, d.title, IMG_URL % video_id))
+            if d.url in user_youtube:
+                tmp_db.append(('/video/' + d.hashed_url, d.title, IMG_URL % video_id))
+            else:
+                tmp_db.append(('/video/add/'+video_id, d.title, IMG_URL %video_id))
         context['db'] = tmp_db
     if extend == '1':
         video = youtube_search(video_name=key, max_results=20)

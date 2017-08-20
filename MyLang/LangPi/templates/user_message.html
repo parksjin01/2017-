@@ -1,11 +1,26 @@
-<html>
-<head>
-	<title>Test Page</title>
-	<meta http-equiv="refresh" content="3; url=http://mylang.iptime.org:6789/"></meta>
-</head>
-<body>
-	{% if message %}
-	<p> {{ message }} </p>
-	{% endif %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+    node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+        node5 = document.getElementById('board');
+
+        node1.className = "active";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+        node5.className = "";
+        node5.className += "";
+
+</script>
+
+
+<pre>
+	선택하신 동영상에 해당하는 자막을 찾고있습니다.
+
+	자막을 찾아서 다운로드가 다되면 메시지로 알려드리도록 하겠습니다.
+</pre>
+{% endblock %}
