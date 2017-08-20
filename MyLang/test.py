@@ -1,9 +1,9 @@
-# from django.conf import settings
+from django.conf import settings
 from django.test import Client
 # import os
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'MyLang.settings'
-
-# settings.configure()
+#
+settings.configure()
 
 c = Client()
 response = c.get('/')

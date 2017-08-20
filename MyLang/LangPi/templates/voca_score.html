@@ -2,22 +2,22 @@
 {% block content %}
 <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
-        <li role="presentation"><a href="/mypage/">Home</a></li>
-        <li role="presentation"><a href="/mypage/listening/">Listening</a></li>
-        <li role="presentation"><a href="/mypage/reading/">Reading</a></li>
-        <li role="presentation" class="active"><a href="/mypage/vocabulary/">Vocabulary</a></li>
-        <li role="presentation"><a href="/mypage/message">Message</a></li>
-        <li role="presentation"><a href="/mypage/board">Board</a></li>
+        <li role="presentation"><a href="/mypage/">홈</a></li>
+        <li role="presentation"><a href="/mypage/listening/">듣기</a></li>
+        <li role="presentation"><a href="/mypage/reading/">읽기</a></li>
+        <li role="presentation" class="active"><a href="/mypage/vocabulary/">단어</a></li>
+        <li role="presentation"><a href="/mypage/message">메시지</a></li>
+        <li role="presentation"><a href="/mypage/board">게시판</a></li>
     </ul>
 </div>
 <div class="col-md-10">
 <div>
     {% if voca %}
     <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="/mypage/vocabulary/">Score</a></li>
-        <li role="presentation"><a href="/mypage/likedislike/">Like/Dislike</a></li>
+        <li role="presentation" class="active"><a href="/mypage/vocabulary/">점수</a></li>
+        <li role="presentation"><a href="/mypage/likedislike/">좋아요!/싫어요!</a></li>
     </ul>
-    <h1 class="page-header">Vocabulary score</h1>
+    <h1 class="page-header">단어 점수</h1>
     <div class="jumbotron" id="score_graph">
         <!--<h1>Here is space for chart/graph</h1>-->
         <!--It will be add soon-->
@@ -133,9 +133,9 @@ path {
 </div>
 <div>
     {% if error %}
-    <h1 class="page-header">Error message</h1>
+    <h1 class="page-header">에러 메시지</h1>
     <div class="panel panel-danger">
-    <div class="panel-heading">Error</div>
+    <div class="panel-heading">에러</div>
         <div class="panel-body">{{ error }}</div>
     </div>
     {% endif %}

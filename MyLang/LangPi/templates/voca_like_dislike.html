@@ -11,12 +11,12 @@
 </script>
 <div class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
-        <li role="presentation"><a href="/mypage/">Home</a></li>
-        <li role="presentation"><a href="/mypage/listening/">Listening</a></li>
-        <li role="presentation"><a href="/mypage/reading/">Reading</a></li>
-        <li role="presentation" class="active"><a href="/mypage/vocabulary/">Vocabulary</a></li>
-        <li role="presentation"><a href="/mypage/message">Message</a></li>
-        <li role="presentation"><a href="/mypage/board">Board</a></li>
+        <li role="presentation"><a href="/mypage/">홈</a></li>
+        <li role="presentation"><a href="/mypage/listening/">듣기</a></li>
+        <li role="presentation"><a href="/mypage/reading/">읽기</a></li>
+        <li role="presentation" class="active"><a href="/mypage/vocabulary/">단어</a></li>
+        <li role="presentation"><a href="/mypage/message">메시지</a></li>
+        <li role="presentation"><a href="/mypage/board">게시판</a></li>
     </ul>
 </div>
 <div class="col-md-10">
@@ -25,8 +25,8 @@
         {% csrf_token %}
     {% if like and dislike %}
     <ul class="nav nav-pills">
-        <li role="presentation"><a href="/mypage/vocabulary/">Score</a></li>
-        <li role="presentation" class="active"><a href="/mypage/likedislike/">Like/Dislike/User_Add</a></li>
+        <li role="presentation"><a href="/mypage/vocabulary/">점수</a></li>
+        <li role="presentation" class="active"><a href="/mypage/likedislike/">좋아요!/싫어요!/사용자 추가단어</a></li>
     </ul>
     <div>
         <div class="col-md-2"><h3>좋아요!</h3></div>

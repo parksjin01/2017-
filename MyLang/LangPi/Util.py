@@ -273,6 +273,8 @@ def show_memo(request):
     ctx = {'title': '게시판'}
     if Login.get_current_user(request) != -1:
         ctx['user_id'] = Login.get_current_user(request).user_id
+    else:
+        return render(request, 'login_please.html', ctx)
     href = "/board/edit?date=%s&id=%s"
     date = request.GET.get('date')
     uid = request.GET.get('id')
@@ -332,7 +334,15 @@ def mypage_board(request):
     memo = board.objects.filter(author__exact=user.user_id)
     message = []
     for tmp in memo:
-        message.append([tmp.title, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(tmp.date))), tmp.category,
+        if tmp.category == 'notice':
+            category = '공지사항'
+        elif tmp.category == 'free':
+            category = '자유게시판'
+        elif tmp.category == 'qa':
+            category = 'Q&A'
+        elif tmp.category == '2dev':
+            category = '개발자에게'
+        message.append([tmp.title, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(tmp.date))), category,
                         href % (tmp.date, tmp.author)])
     ctx['memo'] = message
     return render(request, 'mypage_board.html', ctx)

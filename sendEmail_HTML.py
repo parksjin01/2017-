@@ -9,36 +9,19 @@ with open('./MyLang/LangPi/Secret', 'r') as f:
     secret = json.loads(f.read())
 
 html = """<!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%; width: 100%">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <title>Test Page</title>
+   <meta charset="UTF-8">
+   <title>Test</title>
 </head>
-<body>
-<header class="navbar-fixed-top" style="background-color: white; height: 10%; width:100%">
-<div class="container-fluid" style="background-color: white">
-    <div class="col-sm-12" id="menu">
-        <a href="/" class="col-sm-9" style="text-decoration: none;"><h1>ML   <small>MyLang</small></h1></a>
-    </div>
+<body style="height: 100%; width: 100%;">
+<div style="background-color: #1976d2; height: 10%; width: 100%; display: table">
+   <div style="display: table-cell; vertical-align: middle">
+       <a href="" style="color:#fff;display:inline-block;font-size:2.1rem;padding:0; text-decoration: none">MyLang</a>
+   </div>
 </div>
-</header>
-<div class="container col-sm-12" role="main" style="position: absolute;top: 20%">
-    <div class="container" style="text-align: center">
-    당신의 아이디는 무엇입니까?
-    </div>
-    <footer style=" width:100% background-color: lightgrey; height: 15%">
-    <div class="col-sm-offset-2">
-        <h2 class="col-sm-2"><a href="https://github.com/parksjin01" style="color: black; text-decoration:none;">Damotorie</a></h2>
-        <div class="col-sm-10">
-            <h5><a href="#" class="col-sm-12">Copyright</a></h5>
-            <span class="text-center">이 페이지는 <b>***</b>개발팀에 의해 만들어진 교육용 홈페이지입니다.<br>다른 어떤 목적으로도 사용하실수 없습니다.</span>
-        </div>
-    </div>
-</footer>
+<div style="border:thin black solid;">
+       <div style="padding-top: 20px; padding-left: 15px; padding-bottom: 20px; padding-right: 15px;">아래의 이메일 인증코드를 입력해주세요<br/><br/>이메일 인증코드:<br/>[*6HMTwfSwg]</div>
 </div>
 </body>
 </html>
@@ -51,5 +34,5 @@ msg['Subject'] = 'Your temporary ID and Password'
 smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
 smtp.ehlo()
 smtp.login(secret['id'], secret['pw'])
-smtp.sendmail('parksjin01@naver.com', ['parksjin01@gmail.com'], msg.as_string())
+smtp.sendmail('parksjin01@naver.com', ['parksjin01@naver.com'], msg.as_string())
 smtp.close()

@@ -130,7 +130,7 @@ def voca_exam(request):
     else:
         question = 40
     test = set()
-    while len(test) < question:
+    while len(test) < question*2:
         random_number = random.randrange(num+len(user_word))
         if random_number < num:
             random_voca = pickle.loads(voca.objects.get(id=random_number + 3335).foreign)['en']
@@ -170,20 +170,27 @@ def voca_exam(request):
         answer.append(tmp)
     # print answer
     if request.GET.get('category') != 'en':
+        idx = 0
         answer2 = []
         word = []
         for tmp_word in answer:
+            if idx == question:
+                break
             tmp_fore = tmp_word[int(tmp_word[-1])]
             try:
+                idx += 1
                 tmp_fore, tmp_mean = vocabulary.change(tmp_fore, request.GET.get('category'))
             except Exception, e:
-                print e
-                tmp_fore = tmp_word[0]
-                tmp_mean = tmp_word[int(tmp_word[-1])]
+                continue
+                # print e
+                # tmp_fore = tmp_word[0]
+                # tmp_mean = tmp_word[int(tmp_word[-1])]
             tmp_word[int(tmp_word[-1])] = tmp_mean
             answer2.append([tmp_fore]+tmp_word[1:])
             word.append([tmp_fore]+tmp_word[1:-1])
         answer = answer2[::]
+    answer = answer[:question]
+    word = word[:question]
     print answer[0][0], type(answer[0][0])
     tmp = tmp_answer()
     tmp.answer = pickle.dumps(answer)

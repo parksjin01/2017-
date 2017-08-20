@@ -1,3 +1,5 @@
+# -*- encoding:utf-8 -*-
+
 from .models import user_info
 import random
 import smtplib
@@ -7,22 +9,44 @@ from django.http import JsonResponse
 import Login
 from django.shortcuts import render
 import json
+import string
+
+# html = """
+#             %s
+# """
 
 def email_check_v2(request):
     data = {'is_taken': user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists()}
+    key_poll = string.ascii_letters + '0123456789'
     key = ''
     for _ in range(10):
-        key += chr(random.randrange(0x21, 0x7f))
+        key += key_poll[random.randrange(len(key_poll))]
     data['key'] = key
     with open('./LangPi/Secret', 'r') as f:
         secret = f.read()
     secret = json.loads(secret)
     if user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists() == True:
-        message = 'Your validation key: %s\n' % (key)
-        msg = MIMEText(message)
+        message = '''<!DOCTYPE html>
+<html lang="en" style="height: 100%; width: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body style="height: 100%; width: 100%;">
+<div style="background-color: #1976d2; height: 10%; width: 100%; display: table">
+    <div style="display: table-cell; vertical-align: middle">
+        <a href="" style="color:#fff;display:inline-block;font-size:2.1rem;padding:0; text-decoration: none">MyLang</a>
+    </div>
+</div>
+<div style="border:thin black solid;">
+        <div style="padding-top: 20px; padding-left: 15px; padding-bottom: 20px; padding-right: 15px;">아래의 이메일 인증코드를 입력해주세요<br/><br/>이메일 인증코드:<br/>['''+key+''']</div>
+</div>
+</body>
+</html>'''
+        msg = MIMEText(message, 'html')
         msg['To'] = email.utils.formataddr(('To User', request.GET.get('email')))
         msg['From'] = email.utils.formataddr(('From Mylang Web', 'parksjin01@naver.com'))
-        msg['Subject'] = 'Your temporary ID and Password'
+        msg['Subject'] = 'ML(MyLang) 임시 비밀번호 발급용 이메일 인증코드입니다.'
         smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
         smtp.ehlo()
         smtp.login(secret['id'], secret['pw'])
@@ -32,19 +56,36 @@ def email_check_v2(request):
 
 def email_check(request):
     data = {'is_taken': user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists()}
+    key_poll = string.ascii_letters + '0123456789'
     key = ''
     for _ in range(10):
-        key += chr(random.randrange(0x21, 0x7f))
+        key += key_poll[random.randrange(len(key_poll))]
     data['key'] = key
     with open('./LangPi/Secret', 'r') as f:
         secret = f.read()
     secret = json.loads(secret)
     if user_info.objects.filter(user_email__iexact=request.GET.get('email')).exists() == False:
-        message = 'Your validation key: %s\n' % (key)
-        msg = MIMEText(message)
+        message = '''<!DOCTYPE html>
+<html lang="en" style="height: 100%; width: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body style="height: 100%; width: 100%;">
+<div style="background-color: #1976d2; height: 10%; width: 100%; display: table">
+    <div style="display: table-cell; vertical-align: middle">
+        <a href="" style="color:#fff;display:inline-block;font-size:2.1rem;padding:0; text-decoration: none">MyLang</a>
+    </div>
+</div>
+<div style="border:thin black solid;">
+        <div style="padding-top: 20px; padding-left: 15px; padding-bottom: 20px; padding-right: 15px;">아래의 이메일 인증코드를 입력해주세요<br/><br/>이메일 인증코드:<br/>['''+key+''']</div>
+</div>
+</body>
+</html>'''
+        msg = MIMEText(message, 'html')
         msg['To'] = email.utils.formataddr(('To User', request.GET.get('email')))
         msg['From'] = email.utils.formataddr(('From Mylang Web', 'parksjin01@naver.com'))
-        msg['Subject'] = 'Your temporary ID and Password'
+        msg['Subject'] = 'ML(MyLang) 이메일 인증코드입니다.'
         smtp = smtplib.SMTP_SSL('smtp.naver.com', 465)
         smtp.ehlo()
         smtp.login(secret['id'], secret['pw'])
@@ -76,7 +117,7 @@ def get_read_score(request):
     # for idx in range(len(read_scores)):
     #     data.append({"close": read_scores[idx][0].strip('%'), "date": idx + 1})
     for idx, value in enumerate(read_scores):
-        data.append({"close": value[0], "date": idx+1})
+        data.append({"close": value[0].strip('%'), "date": idx+1})
     # data = data[::-1]
     return JsonResponse(data, safe=False)
 
