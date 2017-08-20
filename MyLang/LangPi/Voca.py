@@ -13,6 +13,7 @@ import vocabulary
 def add_voca(request):
     ctx = {'title': '단어 추가'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).user_id
     if request.method == 'POST':
         word = []
         final = []
@@ -43,6 +44,7 @@ def voca_exam(request):
         if user == -1:
             return render(request, "login_please.html")
         ctx['user_id'] = Login.get_current_user(request).user_id
+        ctx['number'] = Login.get_current_user(request).user_id
         if request.POST.get('method') == unicode('1'):
             like_dislike = json.loads(user.like_dislike_voca)
             if like_dislike == unicode('0') or like_dislike == str('0') or like_dislike == 0:
@@ -202,6 +204,7 @@ def voca_exam(request):
     ctx = {'test': word}
     ctx['title'] = 'ML(MyLang) Voca'
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     ctx['lang'] = request.GET.get('category')
     http = render(request, 'voca.html', ctx)
     http.set_cookie(key="youan", value=cur_date)

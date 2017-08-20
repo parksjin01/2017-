@@ -31,6 +31,7 @@ def mypage_likedislike(request):
         user.save()
     ctx = {'title': 'ML(MyLang) mypage'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     error = ''
     try:
         like_dislike = json.loads(user.like_dislike_voca)
@@ -62,6 +63,7 @@ def mypage_message(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     if user.message_box != '':
         print user.message_box
         message_boxs = json.loads(user.message_box)
@@ -86,6 +88,7 @@ def mypage_vocabulary(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     error = ''
     voca = []
     try:
@@ -106,6 +109,7 @@ def mypage_reading(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     error = ''
     reading = []
     try:
@@ -125,6 +129,7 @@ def mypage_listening(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
     ctx = {'title': 'ML(MyLang) mypage'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     error = ''
     listen = []
     try:
@@ -141,6 +146,7 @@ def mypage_listening(request):
 
 def mypage(request):
     user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
+    user.new_message = "0"
     error = ''
     listen = []
     reading = []
@@ -194,6 +200,7 @@ def mypage(request):
     ctx = {'listening': listen, 'reading': reading, 'voca': voca, 'message_box': message_box, 'error': error}
     ctx['title'] = 'ML(MyLang) mypage'
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     print ctx
     return render(request, 'mypage.html', ctx)
 
@@ -204,6 +211,7 @@ def home(request):
         user_email = request.COOKIES.get('ec')
         answers = tmp_answer.objects.filter(cur_user=user_email)
         message['user_id'] = Login.get_current_user(request).user_id
+        message['number'] = Login.get_current_user(request).new_message
         for answer in answers:
             answer.delete()
     except Exception, e:
@@ -237,6 +245,7 @@ def write(request):
     if Login.get_current_user(request) == -1:
         return render(request, 'login_please.html')
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     ctx['category'] = request.GET.get('c')
     if request.method == "POST":
         user = Login.get_current_user(request)
@@ -259,6 +268,7 @@ def bullet_board(request):
     ctx = {'title': '게시판'}
     if Login.get_current_user(request) != -1:
         ctx['user_id'] = Login.get_current_user(request).user_id
+        ctx['number'] = Login.get_current_user(request).new_message
     ctx['category'] = request.GET.get('c')
     memo = board.objects.filter(category__exact=ctx['category'])
     message = []
@@ -273,6 +283,7 @@ def show_memo(request):
     ctx = {'title': '게시판'}
     if Login.get_current_user(request) != -1:
         ctx['user_id'] = Login.get_current_user(request).user_id
+        ctx['number'] = Login.get_current_user(request).new_message
     else:
         return render(request, 'login_please.html', ctx)
     href = "/board/edit?date=%s&id=%s"
@@ -302,6 +313,7 @@ def edit(request):
         return render(request, 'login_please.html')
     user = Login.get_current_user(request)
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     date = request.GET.get('date')
     uid = request.GET.get('id')
     memo = board.objects.get(date=date, author=uid)
@@ -331,6 +343,7 @@ def mypage_board(request):
     href = "/board/show?date=%s&id=%s"
     ctx = {'title': '게시판'}
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     memo = board.objects.filter(author__exact=user.user_id)
     message = []
     for tmp in memo:

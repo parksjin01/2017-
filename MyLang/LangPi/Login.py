@@ -58,6 +58,11 @@ def register(request):
 
 def find_id(request):
     ctx = {'title':"아이디/비밀번호 찾기"}
+    user = get_current_user(request)
+    if user == -1:
+        return render(request, 'login_please.html')
+    ctx['user_id'] = user.user_id
+    ctx['number'] = user.new_message
     if request.method == 'POST':
         key_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         tmp_id = ''
@@ -91,6 +96,7 @@ def find_id(request):
 def change_id(request):
     ctx = {'title':'아이디 변경'}
     ctx['user_id'] = get_current_user(request).user_id
+    ctx['number'] = get_current_user(request).new_message
     if request.method == 'POST':
         next_id = request.POST.get('user_id')
         next_pw = hashlib.md5(request.POST.get('user_pw')).hexdigest()

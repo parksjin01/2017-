@@ -43,6 +43,9 @@
         var node1_h4 = document.createElement('h5');
         var node2_h4 = document.createElement('h5');
         var node3_h4 = document.createElement('h5');
+        var node_badge = document.createElement('span');
+        node_badge.className = "badge";
+        node_badge.innerHTML = {{ number }}
         node1_h4.className += "col-sm-1";
         node2_h4.className += "col-sm-1";
         node3_h4.className += "col-sm-1";
@@ -55,7 +58,12 @@
 	    node3_a.href = "/mypage/";
         node1_a.appendChild(document.createTextNode("로그아웃"));
 	    node2_a.appendChild(document.createTextNode("아이디/비밀번호 변경"));
-	    node3_a.appendChild(document.createTextNode("{{ user_id }}의 정보"));
+	    node3_a.appendChild(document.createTextNode("{{ user_id }}"));
+	    {% if number %}
+	        {% if number != "0" %}
+	            node3_a.appendChild(node_badge);
+	        {% endif %}
+	    {% endif %}
 	    node1_h4.appendChild(node1_a);
 	    node2_h4.appendChild(node2_a);
 	    node3_h4.appendChild(node3_a);
@@ -66,7 +74,7 @@
         {
             throw 1;
         }
-    }catch(Exception){
+    }catch(e){
         var node1_h4 = document.createElement('h5');
         var node2_h4 = document.createElement('h5');
         node1_h4.className += "col-sm-1";

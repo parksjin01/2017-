@@ -36,11 +36,12 @@ class Downloader(threading.Thread):
             vod.save()
             if url in user_youtube:
                 message = ['비디오가 이미 추가되어있습니다.', time.time(), 1]
+                user.new_message = str(int(user.new_message)+1)
             else:
                 user_youtube.append(url)
                 user.youtube = json.dumps(user_youtube)
-                user.save()
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + vod.hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
+                user.new_message = str(int(user.new_message) + 1)
         except Exception, e:
             print e
             vod = youtube()
@@ -49,6 +50,7 @@ class Downloader(threading.Thread):
                 try:
                     if i == 100:
                         message = ['비디오에 맞는 자막을 찾을수 없습니다. 다른 비디오를 찾아주세요.', time.time(), 1]
+                        user.new_message = str(int(user.new_message) + 1)
                         break
                     content, hashed_url = caption_from_downsub(url)
                     break
@@ -68,6 +70,7 @@ class Downloader(threading.Thread):
                 user.youtube = json.dumps(user_youtube)
                 user.save()
                 message = ['비디오가 추가되었습니다. 바로 <a href=/video/' + hashed_url + '>여기에서</a>  확인해보세요', time.time(), 1]
+                user.new_message = str(int(user.new_message) + 1)
         if user.message_box == '':
             message_box = [message]
         else:
@@ -156,6 +159,7 @@ def dictation(request, name):
 
         message['score'] = score
         message['user_id'] = Login.get_current_user(request).user_id
+        message['number'] = Login.get_current_user(request).new_message
         user = user_info.objects.get(user_email=base64.b64decode(request.COOKIES.get('ec')))
         level = []
         if user.listening_level == '':
@@ -227,6 +231,7 @@ def dictation(request, name):
 
     message['title'] = 'ML(MyLang) Listening'
     message['user_id'] = Login.get_current_user(request).user_id
+    message['number'] = Login.get_current_user(request).new_message
     # return HttpResponse('\n'.join(message))
     http = render(request, 'dictation.html', message)
     http.set_cookie(key="youan", value=cur_date)
@@ -258,6 +263,7 @@ def video_list(request):
     ctx['video'] = video
     ctx['title'] = 'ML(MyLang) Video List'
     ctx['user_id'] = Login.get_current_user(request).user_id
+    ctx['number'] = Login.get_current_user(request).new_message
     return render(request, 'show_list.html', ctx)
 
 def add_video(request):

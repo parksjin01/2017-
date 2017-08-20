@@ -31,6 +31,7 @@ class user_info(models.Model):
 	vocabulary_level = models.TextField(default='''[]''')
 	readding_level = models.TextField(default='''[]''')
 	message_box = models.TextField(default='''[]''')
+	new_message = models.CharField(default='0', max_length=255)
 	like_dislike_voca = models.TextField(default = '{"like":[], "dislike":[]}')
 	extended_voca = models.TextField(default='[]')
 	youtube = models.TextField(default='[]')

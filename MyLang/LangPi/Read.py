@@ -20,10 +20,12 @@ def reading(request):
         user.save()
         ctx = {'score': score, 'fore': request.POST.get('foreign'), 'kor': request.POST.get('kor'),
                'test': request.POST.get('test'), 'title':'ML(MyLang) Reading', 'error':'0', 'user_id':Login.get_current_user(request).user_id}
+        ctx['number'] = Login.get_current_user(request).new_message
         return render(request, 'reading.html', ctx)
     ctx = {'title':'ML(MyLang)', 'error':'0'}
     if Login.get_current_user(request) != -1:
         ctx['user_id'] = Login.get_current_user(request).user_id
+        ctx['number'] = Login.get_current_user(request).new_message
     else:
         return render(request, 'login_please.html')
     return render(request, 'reading.html', ctx)
