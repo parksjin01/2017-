@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+        node1 = document.getElementById('home');
+        node2 = document.getElementById('video');
+        node3 = document.getElementById('read');
+        node4 = document.getElementById('voca');
+        node5 = document.getElementById('board');
+
+        node1.className = "";
+        node2.className = "";
+        node3.className = "";
+        node4.className = "";
+        node5.className = "";
+        node1.className += " active";
+
+</script>
+
+<div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation"><a href="/mypage/">홈</a></li>
+        <li role="presentation"><a href="/mypage/listening/">듣기</a></li>
+        <li role="presentation"><a href="/mypage/reading/">읽기</a></li>
+        <li role="presentation"><a href="/mypage/vocabulary/">단어</a></li>
+        <li role="presentation"><a href="/mypage/message">메시지</a></li>
+        <li role="presentation"><a href="/mypage/board">게시판</a></li>
+        <li role="presentation" style="border: thin red solid; border-radius:6px; background-color:red; color:white;"><a href="/mypage/delete?p=0" style="color:inherit;">회원탈퇴</a></li>
+    </ul>
+</div>
+<div class="col-md-10">
+    {% if p == "0" %}
+        {{ content|safe }}
+    {% endif %}
+    {% if p == "1" %}
+        {{ content1|safe }}
+        {% csrf_token %}
+        {{ content2|safe }}
+    {% endif %}
+    {% if p == "2" %}
+        <script>
+            document.cookie = "ic=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "pc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	        document.cookie = "ec=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        </script>
+        {{ content|safe }}
+    {% endif %}
+</div>
+{% endblock %}

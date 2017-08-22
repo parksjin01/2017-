@@ -104,3 +104,6 @@ def voca_exam(request):
 
 def add_voca(request):
     return Voca.add_voca(request)
+
+def delete(request):
+    return Login.delete(request)

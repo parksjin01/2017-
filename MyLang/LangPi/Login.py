@@ -107,3 +107,51 @@ def change_id(request):
         user.save()
         return redirect('/')
     return render(request, 'change-id.html', ctx)
+
+def delete(request):
+    user = get_current_user(request)
+    ctx = {}
+    ctx['title'] = "회원탈퇴"
+    ctx['user_id'] = user.user_id
+    if request.method == "POST":
+        if user.user_pw == hashlib.md5(request.POST.get('user_pw')).hexdigest():
+            ctx['p'] = '2'
+            ctx['content'] = '<p class="alert alert-danger" style="font-size: 2.1rem">회원탈퇴가 완료되었습니다.</p>'
+            return render(request, 'mypage_delete.html', ctx)
+        else:
+            ctx['p'] = '0'
+            ctx['content'] = '<p class="alert alert-danger" style="font-size: 2.1rem">비밀번호가 맞지 않아 회원탈퇴가 완료되지 않았습니다.</p>'
+            return render(request, 'mypage_delete.html', ctx)
+    if request.GET.get('p') == '0':
+        ctx['content'] = """
+            <p class="alert alert-danger" style="font-size: 2.1rem">정말 회원탈퇴를 하실 건가요?</p>
+            <br/>
+            <br/>
+            <br/>
+            <span class="btn btn-danger col-sm-offset-9 col-sm-1"><a href="/mypage/delete?p=0" style="color:white; text-decoration:none;">아니요</a></span>
+            <span class="btn btn-danger col-sm-offset-1 col-sm-1"><a href="/mypage/delete?p=1" style="color:white; text-decoration:none;">네</a></span>
+            """
+        ctx['p'] = '0'
+        return render(request, 'mypage_delete.html', ctx)
+
+    elif request.GET.get('p') == '1':
+        ctx['content1'] = """
+                <p class="alert alert-danger" style="font-size: 2.1rem">비밀번호를 다시한번 입력해주세요</p>
+                <br/>
+                <br/>
+                <br/>
+                <form method="POST" action="">
+                """
+        ctx['content2'] = """
+                <div class="form-group">
+                <label class="col-sm-2 control-label">비밀번호</label>
+                <div class="col-sm-3">
+                <input type="password" name="user_pw" onkeyup="minimum_length()" id="user_pw" class="form-control" placeholder="Password">
+                </div>
+                <span id="pw_status"></span>
+                </div>
+                <button type="submit" class="col-sm-offset-10 col-sm-2 btn btn-danger">탈퇴</button>
+                </form>
+                """
+        ctx['p'] = '1'
+        return render(request, 'mypage_delete.html', ctx)

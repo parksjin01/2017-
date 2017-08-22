@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'mypage/likedislike/$', mypage_likedislike, name='mypage_likedislike'),
     url(r'^mypage/message/$', mypage_message, name='mypage_message'),
     url(r'^mypage/board/$', mypage_board, name='mypage_board'),
+    url(r'mypage/delete/', delete, name='mypage_delete'),
     url(r'get_voca_score/$', get_voca_score, name='get_voca_score'),
     url(r'get_read_score/$', get_read_score, name='get_read_score'),
     url(r'get_listen_score/$', get_listen_score, name='get_listen_score'),
