@@ -7,6 +7,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+#독일어 사전 검색
 def c2de(word):
     request = urllib2.Request('http://dedic.naver.com/search.nhn?range=all&q=%s' %word)
     html = urllib2.urlopen(request).read()
@@ -14,12 +15,14 @@ def c2de(word):
     mean = BeautifulSoup.BeautifulSoup(html).findAll('strong', attrs={'class':'gma'})[0].text
     return word, mean.strip('&#39;')
 
+#라틴어 사전 검색
 def c2la(word):
     request = urllib2.Request('http://ladic.naver.com/api/la/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     json_result = json.loads(urllib2.urlopen(request).read())
     result = json_result['searchResult']['searchMeanList']['items'][1]
     return result['entry'], json_result['query']
 
+#러시아 사전 검색
 def c2ru(word):
     request = urllib2.Request('http://rudic.naver.com/api/ru/search.nhn?&query=%s&dictName=alldict&lh=true' % word)
     request.add_header('user-agent',
@@ -38,6 +41,7 @@ def c2ru(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#몽골어 사전검색
 def c2mn(word):
     request = urllib2.Request('http://mndic.naver.com/api/mn/search.nhn?&query=%s&dictName=alldict&lh=true' % word)
     request.add_header('user-agent',
@@ -56,6 +60,7 @@ def c2mn(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#베트남 단어검색
 def c2vi(word):
     request = urllib2.Request('http://vndic.naver.com/api/vn/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -72,6 +77,7 @@ def c2vi(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#스웨덴 단어검색
 def c2sv(word):
     request = urllib2.Request('http://svdic.naver.com/api/sv/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -88,6 +94,7 @@ def c2sv(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#스페인어 사전검색
 def c2es(word):
     request = urllib2.Request('http://spdic.naver.com/search.nhn?query=%s' % word)
     if '/search.nhn' in urllib2.urlopen(request).geturl():
@@ -105,6 +112,7 @@ def c2es(word):
     # word = BeautifulSoup.BeautifulSoup(html).findAll('span', attrs={'class': 'autolink'})[0].text
     return word, mean
 
+#일본어 사전검색
 def c2ja(word):
     request = urllib2.Request('http://jpdic.naver.com/search.nhn?dic_where=jpdic&query=%s' %word)
     request.add_header('user-agent',
@@ -123,6 +131,7 @@ def c2ja(word):
     return tag[1].text+'('+tag[0].text+')', BeautifulSoup.BeautifulSoup(html).findAll('span', attrs={'class':'maintitle'})[0].text
     # return BeautifulSoup.BeautifulSoup(html).findAll('em')[0].text.strip('(').strip(')'), BeautifulSoup.BeautifulSoup(html).findAll('span', attrs={'class':'maintitle'})[0].text
 
+#중국어 단어검색
 def c2zh(word):
     idx = 0
     request = urllib2.Request('http://cndic.naver.com/search/all?q=%s' %word)
@@ -135,6 +144,7 @@ def c2zh(word):
     result = span_tag.text
     return result.split('。')[0], mean
 
+#이탈리아어 단어검색
 def c2it(word):
     request = urllib2.Request('http://itdic.naver.com/api/it/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -151,6 +161,7 @@ def c2it(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#체코어 단어검색
 def c2cs(word):
     request = urllib2.Request('http://csdic.naver.com/api/cs/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -159,6 +170,7 @@ def c2cs(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#태국어 단어검색
 def c2th(word):
     request = urllib2.Request('http://thdic.naver.com/api/th/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -175,6 +187,7 @@ def c2th(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#포르투갈어 단어검색
 def c2pt(word):
     request = urllib2.Request('http://ptdic.naver.com/api/pt/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -191,6 +204,7 @@ def c2pt(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
+#프랑스 단어검색
 def c2fr(word):
     request = urllib2.Request('http://frdic.naver.com/search.nhn?q=%s' %word)
     html = urllib2.urlopen(request).read()
@@ -203,6 +217,7 @@ def c2fr(word):
     mean = soup.findAll('span', attrs={'class':'fra'})[0].text.split(',')[0]
     return word, mean
 
+#힌두어 단어검색
 def c2hi(word):
     request = urllib2.Request('http://hidic.naver.com/api/hi/search.nhn?&query=%s&dictName=alldict&lh=true' %word)
     request.add_header('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36')
@@ -219,7 +234,7 @@ def c2hi(word):
     result = result['searchResult']['searchMeanList']['items'][0]
     return result['entry'], mean
 
-
+#영어단어와 국가코드를 이용하여 해당 국가의 단어로 바꿔준다
 def change(word, lang):
     if lang == 'de':
         return c2de(word)
