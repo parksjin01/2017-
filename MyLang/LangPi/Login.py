@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 import email.utils
 import json
 
+#이메일로 현재 로그인한 유저판별
 def get_current_user(request):
     try:
         cur_user = request.COOKIES.get('ec')
@@ -23,6 +24,7 @@ def get_current_user(request):
         return -1
     return user
 
+#로그인할때 쿠키설정
 def login(request):
     if request.method == 'POST':
         try:
@@ -39,13 +41,17 @@ def login(request):
             return render(request, 'login.html', message)
     return render(request, 'login.html', {'title':'ML(MyLanguage) Login'})
 
+#회원가입
 def register(request):
     ctx = {'title':'회원가입'}
     if request.method == 'POST':
+		#이메일 중복확인
         try:
             user_info.objects.get(user_email=request.POST.get('user_email'))
-            message = {'error': 'Email address is already inuse', 'title':'Error'}
+            message = {'에러': '이미 존재하는 이메일입니다.', 'title':'Error'}
             return render(request, 'register.html', message)
+			
+		#회원가입시 입력한 정보저장
         except Exception, e:
             print e
             new_user = user_info()
@@ -56,14 +62,21 @@ def register(request):
             return redirect('/login/')
     return render(request, 'register.html', ctx)
 
+#아이디/비밀번호 찾기
 def find_id(request):
     ctx = {'title':"아이디/비밀번호 찾기"}
-    user = get_current_user(request)
+    
+	###########################################
+	user = get_current_user(request)
+	#로그인이 되어있지않은경우 'login_please.html'로 이동
     if user == -1:
         return render(request, 'login_please.html')
-    ctx['user_id'] = user.user_id
+    ###########################################
+	
+	ctx['user_id'] = user.user_id
     ctx['number'] = user.new_message
     if request.method == 'POST':
+		#임시 ID/PW의 키풀
         key_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         tmp_id = ''
         tmp_pw = ''
@@ -76,6 +89,7 @@ def find_id(request):
                 tmp_id += key_pool[random.randrange(0, len(key_pool))]
                 tmp_pw += key_pool[random.randrange(0, len(key_pool))]
             message = 'Your new ID: %s\nYour new Password: %s\n' % (tmp_id, tmp_pw)
+			#임시 ID/PW 발급
             msg = MIMEText(message)
             msg['To'] = email.utils.formataddr(('To User', request.POST.get('user_email')))
             msg['From'] = email.utils.formataddr(('From Mylang Web', 'parksjin01@naver.com'))
@@ -93,6 +107,7 @@ def find_id(request):
         return redirect('/')
     return render(request, 'find-id.html', ctx)
 
+#아이디 변경
 def change_id(request):
     ctx = {'title':'아이디 변경'}
     ctx['user_id'] = get_current_user(request).user_id
@@ -108,11 +123,14 @@ def change_id(request):
         return redirect('/')
     return render(request, 'change-id.html', ctx)
 
+#회원탈퇴 함수
 def delete(request):
     user = get_current_user(request)
     ctx = {}
     ctx['title'] = "회원탈퇴"
     ctx['user_id'] = user.user_id
+	#비밀번호 맞을경우  회원정보 삭제
+	#비밀번호 틀렸을경우 삭제페이지로 이동
     if request.method == "POST":
         if user.user_pw == hashlib.md5(request.POST.get('user_pw')).hexdigest():
             ctx['p'] = '2'
@@ -122,6 +140,7 @@ def delete(request):
             ctx['p'] = '0'
             ctx['content'] = '<p class="alert alert-danger" style="font-size: 2.1rem">비밀번호가 맞지 않아 회원탈퇴가 완료되지 않았습니다.</p>'
             return render(request, 'mypage_delete.html', ctx)
+	#회원탈퇴 희망여부 재확인
     if request.GET.get('p') == '0':
         ctx['content'] = """
             <p class="alert alert-danger" style="font-size: 2.1rem">정말 회원탈퇴를 하실 건가요?</p>
@@ -133,7 +152,7 @@ def delete(request):
             """
         ctx['p'] = '0'
         return render(request, 'mypage_delete.html', ctx)
-
+	#유저 확인을 위한 비밀번호 재입력
     elif request.GET.get('p') == '1':
         ctx['content1'] = """
                 <p class="alert alert-danger" style="font-size: 2.1rem">비밀번호를 다시한번 입력해주세요</p>
