@@ -35,6 +35,7 @@ class user_info(models.Model):
 	like_dislike_voca = models.TextField(default = '{"like":[], "dislike":[]}')
 	extended_voca = models.TextField(default='[]')
 	youtube = models.TextField(default='[]')
+	uid = models.CharField(default='0', max_length=255)
 
 class voca(models.Model):
 	foreign = models.TextField(default='')
@@ -47,5 +48,16 @@ class board(models.Model):
 	text = models.TextField()
 	author = models.CharField(max_length=256)
 	date = models.TextField()
-	comment = models.TextField()
+	comment = models.TextField(default='[]')
 	category = models.TextField()
+	uid = models.CharField(default='0', max_length=255)
+	up = models.TextField(default='0')
+	down = models.TextField(default='0')
+	recommanded = models.TextField(default='[]')
+	hidden = models.TextField(default='F')
+
+class alerted_board(models.Model):
+	date = models.TextField()
+	author = models.CharField(max_length=256)
+	uid = models.CharField(default='0', max_length=255)
+	comment = models.TextField()

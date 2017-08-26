@@ -107,3 +107,18 @@ def add_voca(request):
 
 def delete(request):
     return Login.delete(request)
+
+def add_memo_comment(request):
+    return Util.add_memo_comment(request)
+
+def delete_reply(request):
+    return Util.delete_reply(request)
+
+def alert_reply(request):
+    return Util.alert_reply(request)
+
+def memo_recommand(request):
+    return Util.memo_recommand(request)
+
+def memo_reply_recommand(request):
+    return Util.me

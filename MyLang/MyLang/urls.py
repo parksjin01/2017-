@@ -52,4 +52,9 @@ urlpatterns = [
     url(r'board/show', show_memo, name='show_menu'),
     url(r'board/write', write, name='write'),
     url(r'board/', bullet_board, name='board'),
+    url(r'add/comment', add_memo_comment),
+    url(r'memo/delete', delete_reply),
+    url(r'memo/alert', alert_reply),
+    url(r'memo/recommand', memo_recommand),
+    url(r'memo/reply/recommand', memo_reply_recommand),
 ]

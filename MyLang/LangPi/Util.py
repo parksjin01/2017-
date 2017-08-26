@@ -2,7 +2,7 @@
 
 import base64
 from django.shortcuts import render, redirect
-from .models import user_info, tmp_answer, history, board
+from .models import user_info, tmp_answer, history, board, alerted_board
 import json
 import pickle
 import time
@@ -98,7 +98,7 @@ def mypage_vocabulary(request):
             voca.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
     except Exception, e:
         print e
-        error += 'You haven\'t do voca\n'
+        error += '아직 한번도 단어시험을 보신적이 없습니다.\n'
 
     ctx['voca'] = voca
     ctx['error'] = error
@@ -119,7 +119,7 @@ def mypage_reading(request):
             reading.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
     except Exception, e:
         print e
-        error += 'You haven\'t do reading\n'
+        error += '아직 한번도 읽기시험을 보신적이 없습니다.\n'
     ctx['reading'] = reading
     ctx['error'] = error
 
@@ -139,7 +139,7 @@ def mypage_listening(request):
             listen.append([time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(score[1])), score[0]])
     except Exception, e:
         print e
-        error += 'You haven\'t do listening\n'
+        error += '아직 한번도 듣기시험을 보신적이 없습니다.\n'
     ctx['listening'] = listen
     ctx['error'] = error
     return render(request, 'listening_score.html', ctx)
@@ -160,7 +160,7 @@ def mypage(request):
             listen.append(['...', '...'])
     except Exception, e:
         print e
-        error += 'You haven\'t do listening\n'
+        error += '아직 한번도 듣기시험을 보신적이 없습니다.\n'
     try:
         reading_scores = json.loads(user.readding_level)
         assert len(reading_scores) != 0
@@ -170,7 +170,7 @@ def mypage(request):
             reading.append(['...', '...'])
     except Exception, e:
         print e
-        error += 'You haven\'t do reading\n'
+        error += '아직 한번도 읽기시험을 보신적이 없습니다.\n'
     try:
         voca_scores = json.loads(user.vocabulary_level)
         assert len(voca_scores) != 0
@@ -180,7 +180,7 @@ def mypage(request):
             voca.append(['...', '...'])
     except Exception, e:
         print e
-        error += 'You haven\'t do voca\n'
+        error += '아직 한번도 단어시험을 보신적이 없습니다.\n'
     if user.message_box != '':
         print user.message_box, user.user_id
         message_boxs = json.loads(user.message_box)
@@ -255,11 +255,14 @@ def write(request):
         memo.author = user.user_id
         memo.date = str(time.time())
         memo.category = request.POST.get('category')
+        memo.uid = user.uid
+        memo.hidden = request.POST.get('hidden')
         if memo.category == 'notice' and (memo.author != "parksjin01" and memo.author != "damotorie"):
             ctx['authority'] = '1'
             return render(request, 'write.html', ctx)
         memo.save()
-        return redirect('/')
+        redirect_url = '/board/?c='+request.POST.get('category')
+        return redirect(redirect_url)
     return render(request, 'write.html', ctx)
 
 def bullet_board(request):
@@ -284,6 +287,7 @@ def show_memo(request):
     if Login.get_current_user(request) != -1:
         ctx['user_id'] = Login.get_current_user(request).user_id
         ctx['number'] = Login.get_current_user(request).new_message
+        ctx['uid'] = Login.get_current_user(request).uid
     else:
         return render(request, 'login_please.html', ctx)
     href = "/board/edit?date=%s&id=%s"
@@ -294,12 +298,28 @@ def show_memo(request):
         user = Login.get_current_user(request)
         if memo.author == user.user_id:
             memo.delete()
-            return redirect('/')
+            redirect_url = '/board/?c=' + request.POST.get('category')
+            return redirect(redirect_url)
     ctx['Title'] = memo.title
     ctx['Content'] = memo.text
     ctx['Date'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(date)))
     ctx['Author'] = memo.author
-    if memo.author == Login.get_current_user(request).user_id:
+    ctx['comments'] = json.loads(memo.comment)
+    ctx['url'] = '/add/comment?date=%s&id=%s' %(date, uid)
+    ctx['up'] = memo.up
+    ctx['down'] = memo.down
+    ctx['recommand_url'] = '/memo/recommand?date=%s&id=%s' %(date, uid)
+    ctx['reply_recommand_url'] = '/memo/reply/recommand?date=%s&id=%s' %(date, uid)
+    ctx['done'] = Login.get_current_user(request).uid not in json.loads(memo.recommanded)
+    ctx['same'] = Login.get_current_user(request).uid == memo.uid
+    ctx['category'] = memo.category
+    if memo.hidden == 'T':
+        ctx['hidden'] = memo.uid != Login.get_current_user(request).uid
+    else:
+        ctx['hidden'] = False
+    print ctx['hidden']
+    # print Login.get_current_user(request).uid == memo.uid
+    if memo.uid == Login.get_current_user(request).uid:
         ctx['authority'] = '0'
         ctx['href'] = href % (date, uid)
     else:
@@ -330,7 +350,8 @@ def edit(request):
             ctx['authority'] = '1'
             return render(request, 'write.html', ctx)
         memo.save()
-        return redirect('/')
+        redirect_url = '/board/?c=' + request.POST.get('category')
+        return redirect(redirect_url)
     ctx['Title'] = memo.title
     ctx['Content'] = memo.text
     ctx['category'] = memo.category
@@ -359,3 +380,60 @@ def mypage_board(request):
                         href % (tmp.date, tmp.author)])
     ctx['memo'] = message
     return render(request, 'mypage_board.html', ctx)
+
+def add_memo_comment(request):
+    cur_board = board.objects.get(date=request.GET.get('date'), author=request.GET.get('id'))
+    comments = json.loads(cur_board.comment)
+    comment = []
+    comment.append(Login.get_current_user(request).user_id)
+    comment.append(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(time.time()))))
+    comment.append('/memo/alert?date=%s&id=%s&num=%s' %(request.GET.get('date'), request.GET.get('id'), len(comments)))
+    comment.append('/memo/delete?date=%s&id=%s&num=%s' % (request.GET.get('date'), request.GET.get('id'), len(comments)))
+    comment.append('/memo/reply?date=%s&id=%s&num=%s' %(request.GET.get('date'), request.GET.get('id'), len(comments)))
+    comment.append(request.POST.get('comment'))
+    comment.append(Login.get_current_user(request).uid)
+    comments.append(comment)
+    cur_board.comment = json.dumps(comments)
+    cur_board.save()
+    return redirect('/board/show?date=%s&id=%s' %(request.GET.get('date'), request.GET.get('id')))
+    # return render('reingoin')
+
+def delete_reply(request):
+    cur_board = board.objects.get(date=request.GET.get('date'), author=request.GET.get('id'))
+    comments = json.loads(cur_board.comment)
+    idx = request.GET.get('num')
+    comments[int(idx)] = '0'
+    cur_board.comment = json.dumps(comments)
+    cur_board.save()
+    return redirect('/board/show?date=%s&id=%s' % (request.GET.get('date'), request.GET.get('id')))
+
+def alert_reply(request):
+    cur_board = board.objects.get(date=request.GET.get('date'), author=request.GET.get('id'))
+    comments = json.loads(cur_board.comment)
+    idx = request.GET.get('num')
+    comments[int(idx)] = comments[int(idx)]+['alerted']
+    cur_board.comment = json.dumps(comments)
+    cur_board.save()
+    comment = alerted_board()
+    comment.date = request.GET.get('date')
+    comment.author = request.GET.get('id')
+    comment.uid = Login.get_current_user(request).uid
+    comment.comment = comments[int(idx)][5]
+    comment.save()
+    return redirect('/board/show?date=%s&id=%s' % (request.GET.get('date'), request.GET.get('id')))
+
+def memo_recommand(request):
+    cur_board = board.objects.get(date=request.GET.get('date'), author=request.GET.get('id'))
+    updown = request.POST.get('updown')
+    print updown
+    recommanded = json.loads(cur_board.recommanded)
+    cur_user = Login.get_current_user(request)
+    if cur_user.uid not in recommanded:
+        if updown == "1":
+            cur_board.up = str(int(cur_board.up)+1)
+        else:
+            cur_board.down = str(int(cur_board.down)+1)
+        recommanded.append(cur_user.uid)
+        cur_board.recommanded = json.dumps(recommanded)
+        cur_board.save()
+    return redirect('/board/show?date=%s&id=%s' % (request.GET.get('date'), request.GET.get('id')))

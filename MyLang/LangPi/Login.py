@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import base64
-from .models import user_info
+from .models import user_info, history
 from django.shortcuts import render, redirect
 import hashlib
 import random
@@ -9,6 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 import email.utils
 import json
+import time
 
 def get_current_user(request):
     try:
@@ -48,10 +49,12 @@ def register(request):
             return render(request, 'register.html', message)
         except Exception, e:
             print e
+            create_date = str(int(time.time()))
             new_user = user_info()
             new_user.user_id = request.POST.get('user_id')
             new_user.user_pw = hashlib.md5(request.POST.get('user_pw')).hexdigest()
             new_user.user_email = request.POST.get('user_email')
+            new_user.uid = hashlib.md5(new_user.user_id+new_user.user_pw+new_user.user_email+create_date).hexdigest()
             new_user.save()
             return redirect('/login/')
     return render(request, 'register.html', ctx)
@@ -117,6 +120,12 @@ def delete(request):
         if user.user_pw == hashlib.md5(request.POST.get('user_pw')).hexdigest():
             ctx['p'] = '2'
             ctx['content'] = '<p class="alert alert-danger" style="font-size: 2.1rem">회원탈퇴가 완료되었습니다.</p>'
+            try:
+                tmp_history = history.objects.get(cur_user=base64.b64encode(user.user_email))
+                tmp_history.delete()
+            except:
+                print 'No!!!'
+            user.delete()
             return render(request, 'mypage_delete.html', ctx)
         else:
             ctx['p'] = '0'
@@ -128,8 +137,8 @@ def delete(request):
             <br/>
             <br/>
             <br/>
-            <span class="btn btn-danger col-sm-offset-9 col-sm-1"><a href="/mypage/delete?p=0" style="color:white; text-decoration:none;">아니요</a></span>
-            <span class="btn btn-danger col-sm-offset-1 col-sm-1"><a href="/mypage/delete?p=1" style="color:white; text-decoration:none;">네</a></span>
+            <a href="/" style="color:white; text-decoration:none;"><span class="btn btn-danger col-sm-offset-9 col-sm-1">아니요</span></a>
+            <a href="/mypage/delete/?p=1" style="color:white; text-decoration:none;"><span class="btn btn-danger col-sm-offset-1 col-sm-1">네</span></a>
             """
         ctx['p'] = '0'
         return render(request, 'mypage_delete.html', ctx)

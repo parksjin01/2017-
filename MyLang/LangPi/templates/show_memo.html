@@ -6,14 +6,12 @@
         node3 = document.getElementById('read');
         node4 = document.getElementById('voca');
         node5 = document.getElementById('board');
-
         node1.className = "";
         node2.className = "";
         node3.className = "";
         node4.className = "";
         node5.className = "";
         node5.className += " active";
-
     function go(){
     var form = document.getElementById('form');
     var res = confirm("정말 삭제하실건가요?");
@@ -21,12 +19,49 @@
     {
         alert("삭제되었습니다.");
         form.submit()
-    }else
+    }
+    }
+
+    function recommand(number){
+    var res_node = document.getElementById('recommandation');
+    var form = document.getElementById('form_recommandation');
+
+    if (number == "1")
     {
-        alert("삭제가 취소되었습니다.");
+        res_node.value = "1";
     }
+    else if (number == "2")
+    {
+        res_node.value = "2";
     }
+
+    form.submit();
+    }
+
+    function reply_recommand(number){
+    var res_node = document.getElementById('reply');
+    var form = document.getElementById('reply_recommandation');
+
+    if (number == "1")
+    {
+        res_node.value = "1";
+    }
+    else if (number == "2")
+    {
+        res_node.value = "2";
+    }
+
+    form.submit();
+    }
+
 </script>
+<style>
+    .input-group-addon {
+    max-width:200px;// if you want width please write here //
+    text-align:left;
+    color:white;
+}
+</style>
 <div class="container">
         <div>
             <h3 class="page-header">제목</h3>
@@ -39,11 +74,30 @@
         <div>
             <h3 class="page-header">게시글</h3>
             <div class="panel panel-default">
+                {% if hidden %}
+                <div class="panel-body" style="height: 800px; background-color:lightgrey">
+                    비공개 게시글입니다.
+                </div>
+                {% else %}
                 <div class="panel-body" style="height: 800px;">
                     {{ Content|linebreaks }}
                 </div>
+                {% endif %}
             </div>
         </div>
+    <form id="form_recommandation" action="{{ recommand_url }}" method="POST">
+        {% csrf_token %}
+        <div>
+            {% if done %}
+                <button onclick="recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-offset-4 col-sm-2 glyphicon glyphicon-thumbs-up" aria-hidden="true">추천 {{ up }}</button>
+                <button onclick="recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-2 glyphicon glyphicon-thumbs-down">비추천 {{ down }}</button>
+            {% else %}
+                <button disabled="disabled" onclick="recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-offset-4 col-sm-2 glyphicon glyphicon-thumbs-up" aria-hidden="true">추천 {{ up }}</button>
+                <button disabled="disabled" onclick="recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-2 glyphicon glyphicon-thumbs-down">비추천 {{ down }}</button>
+            {% endif %}
+            <input name="updown" hidden type="text" id="recommandation">
+        </div>
+    </form>
         <div>
             <span style="font-size: 20px;"><label class="label label-default col-md-offset-8">작성일자</label> <span style="padding-left:30px;">{{ Date }}</span></span>
             <br>
@@ -53,16 +107,101 @@
         <br>
     {% if authority == "0" %}
         <a href="{{ href }}"><span class="btn btn-info col-md-offset-8">수정</span></a>
-    {% else %}
-        <a href="#"><span class="btn btn-info col-md-offset-8" onclick="alert('글을 수정할 권한이 없습니다.');">수정</span></a>
     {% endif %}
     {% if authority == "0" %}
         <span style="padding-left:40px;"><span class="btn btn-info" onclick="go()">삭제</span></span>
-    {% else %}
-        <span style="padding-left:40px;"><span class="btn btn-info" onclick="alert('글을 삭제할 권리가 없습니다.');">삭제</span></span>
     {% endif %}
     <form id="form" method="post">
+        <input type="text" hidden="hidden" name="category" value={{ category }}>
         {% csrf_token %}
+    </form>
+    <h3 class="page-header">댓글</h3>
+    {% if comments %}
+    {% for comment in comments %}
+    {% if comment != '0' %}
+    {% if comment.7 == 'alerted' %}
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ comment.0 }} <small>{{ comment.1 }}</h3>
+        </div>
+        <div class="panel-body">
+            이 댓글은 신고로 블라인드처리 되었습니다.
+        </div>
+    </div>
+    {% else %}
+    {% if same == True %}
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ comment.0 }} <small>{{ comment.1 }} <a href="{{ comment.2 }}"> 신고</a>
+            {% if uid == comment.6 %}
+                <a href="{{ comment.3 }}"> 삭제</a>
+                {% endif %}
+            </small><span style="float: right"><a href="{{ comment.4 }}"> 댓글</a></span> </h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-9">
+                {{ comment.5 }}
+            </div>
+            <div class="col-sm-3">
+                <form id="reply_recommandation" action="{{ reply_recommand_url }}" method="POST">
+                {% csrf_token %}
+                    <div>
+                        {% if done %}
+                            <button onclick="reply_recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-3 glyphicon glyphicon-thumbs-up" aria-hidden="true"></button>
+                            <button onclick="reply_recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-3 glyphicon glyphicon-thumbs-down"></button>
+                        {% else %}
+                            <button disabled="disabled" onclick="reply_recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-offset-4 col-sm-2 glyphicon glyphicon-thumbs-up" aria-hidden="true"></button>
+                            <button disabled="disabled" onclick="reply_recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-2 glyphicon glyphicon-thumbs-down"></button>
+                        {% endif %}
+                        <input name="reply_updown" hidden type="text" id="reply">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ comment.0 }} <small>{{ comment.1 }} <a href="{{ comment.2 }}"> 신고</a>
+            {% if uid == comment.6 %}
+                <a href="{{ comment.3 }}"> 삭제</a>
+                {% endif %}
+            </small><span style="float: right"><a href="{{ comment.4 }}"> 댓글</a></span> </h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-9">
+                {{ comment.5 }}
+            </div>
+            <div class="col-sm-3">
+                <form id="reply_recommandation" action="{{ reply_recommand_url }}" method="POST">
+                {% csrf_token %}
+                    <div>
+                        {% if done %}
+                            <button onclick="reply_recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-3 glyphicon glyphicon-thumbs-up" aria-hidden="true"></button>
+                            <button onclick="reply_recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-3 glyphicon glyphicon-thumbs-down"></button>
+                        {% else %}
+                            <button disabled="disabled" onclick="reply_recommand('1')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-offset-4 col-sm-2 glyphicon glyphicon-thumbs-up" aria-hidden="true"></button>
+                            <button disabled="disabled" onclick="reply_recommand('2')" type="button" style="border: none; background-color: white; font-size: 150%;" class="col-sm-2 glyphicon glyphicon-thumbs-down"></button>
+                        {% endif %}
+                        <input name="reply_updown" hidden type="text" id="reply">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <form id="comment" method="POST" action={{ url }}>
+        {% csrf_token %}
+        <div id="exampleWrapper">
+        <div class="input-group col-md-12">
+            <textarea name="comment" class="form-control custom-control" rows="3" style="resize:none" placeholder="댓글"></textarea>
+            <span class="input-group-addon btn btm-small btn-info" onclick="document.getElementById('comment').submit()" id="submitMyForm">Send</span>
+        </div>
+    </div>
     </form>
 </div>
 {% endblock %}

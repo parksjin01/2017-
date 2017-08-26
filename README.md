@@ -5,6 +5,12 @@
 
 NLP language education
 
+### Version 1.1.0
+- Now you can write reply to other people's text
+- You can recommand text or not
+- You can report other reply
+- Now you can select text as show as public or private
+
 ### Version 1.0.0
 - Most of funtion is working(Except Listening, I'm trying to change other language)
 - You can check listening skill and improve it with listening page

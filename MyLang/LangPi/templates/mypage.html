@@ -6,7 +6,7 @@
         <li role="presentation"><a href="/mypage/listening/">듣기</a></li>
         <li role="presentation"><a href="/mypage/reading/">읽기</a></li>
         <li role="presentation"><a href="/mypage/vocabulary/">단어</a></li>
-        <li role="presentation"><a href="/mypage/message">메시지</a></li>
+        <li role="presentation"><a href="/mypage/message">알람</a></li>
         <li role="presentation"><a href="/mypage/board">게시판</a></li>
         <li role="presentation" style="border: thin red solid; border-radius:6px;"><a href="/mypage/delete?p=0">회원탈퇴</a></li>
     </ul>
@@ -67,14 +67,14 @@
     {% if error %}
     <h1 class="page-header">에러</h1>
     <div class="panel panel-danger">
-    <div class="panel-heading">Error</div>
+    <div class="panel-heading">에러 메시지</div>
         <div class="panel-body">{{ error }}</div>
     </div>
     {% endif %}
 </div>
 <div>
 	{% if message_box %}
-    <h1 class="page-header">메시지<a href="/mypage/message/" style="color: grey; font-size:13px;">    더보기</a></h1>
+    <h1 class="page-header">알람<a href="/mypage/message/" style="color: grey; font-size:13px;">    더보기</a></h1>
 		{% for message in message_box %}
 <!--<p><span>{{ message.0|safe }}</span><span>{{ message.1|safe }}</span><span>{{ message.2|safe }}</span></br>-->
     {% if message.2 == 1 %}
