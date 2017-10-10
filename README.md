@@ -5,6 +5,9 @@
 
 NLP language education
 
+Youtube: [Running video](https://www.youtube.com/watch?v=FehexbqJMpY&t=19s)
+- Don't running server always so see this video to know how to use and what does this web doing.
+
 ### Version 1.1.0
 - Now you can write reply to other people's text
 - You can recommand text or not
